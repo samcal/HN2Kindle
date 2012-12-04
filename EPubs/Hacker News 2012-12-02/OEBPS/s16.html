@@ -1,0 +1,302 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>How script kiddies can hijack your browser to steal your password</title>
+  <style type="text/css">
+h1 { text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>How script kiddies can hijack your browser to steal your password</h1>
+  <p>
+    &lt;!DOCTYPE html&gt;
+&lt;!--[if lt IE 7]&gt; &lt;html lang="en-us" class="no-js lt-ie9 lt-ie8 lt-ie7"&gt; &lt;![endif]--&gt;
+&lt;!--[if IE 7]&gt;    &lt;html lang="en-us" class="no-js lt-ie9 lt-ie8"&gt; &lt;![endif]--&gt;
+&lt;!--[if IE 8]&gt;    &lt;html lang="en-us" class="no-js ie8 lt-ie9"&gt; &lt;![endif]--&gt;
+&lt;!--[if IE 9]&gt;    &lt;html lang="en-us" class="no-js ie9"&gt; &lt;![endif]--&gt;
+&lt;!--[if gt IE 8]&gt;&lt;!--&gt;  &lt;!--&lt;![endif]--&gt;
+&lt;!-- Chartbeat timestamp --&gt;
+var _sf_startpt=(new Date()).getTime()
+How script kiddies can hijack your browser to steal your password | Ars Technica
+    ars = {"ASSETS":"http:\/\/cdn.arstechnica.net\/wp-content\/themes\/arstechnica\/assets","HOME":"http:\/\/arstechnica.com","CIVIS":"\/civis","THEME":"light","VIEW":"grid","MOBILE":false,"AD":{"kw":"kw=security;kw=int;","kw_arr":["security","int"],"zone":"int","empty":"\/public\/shared\/scripts\/empty.html","loader":"\/public\/shared\/scripts\/ad-loader-frame.html"},"TOTAL":54550,"UNREAD":0,"RECENT":[171919,171527,171594,171681,171600,171137,171874,171825,171769,171171,171515,171611,171467,171628,171788,171786,171547,171582,171566,171316,171525,171470,171459,171424,171376],"LOGINS":true,"COMMENTS":false};
+&lt;!--[if lte IE 8]&gt;&lt;script type="text/javascript" src="http://cdn.arstechnica.net/wp-content/themes/arstechnica/assets/js/modernizr/modernizr.js"&gt;&lt;/script&gt;&lt;![endif]--&gt;
+&lt;!-- Favicons, etc --&gt;
+&lt;!-- C-razy IE9 stuff --&gt;
+&lt;!-- Begin Metadata --&gt;
+&lt;!-- End Metadata --&gt;
+&lt;!-- cache hit --&gt;
+&lt;!--
+	generated 21 seconds ago
+	generated in 0.172 seconds
+	served from batcache in 0.003 seconds
+	expires in 279 seconds
+--&gt;
+ars.masthead_ad()
+ArsTechnica
+Home
+Main Menu
+Information Technology
+Technology Lab
+Product News &amp;amp; Reviews
+Gear &amp;amp; Gadgets
+Business of Technology
+Ministry of Innovation
+Security &amp;amp; Hacktivism
+Risk Assessment
+Civilization &amp;amp; Discontents
+Law &amp;amp; Disorder
+The Apple Ecosystem
+Infinite Loop
+Gaming &amp;amp; Entertainment
+Opposable Thumbs
+Science &amp;amp; Exploration
+The Scientific Method
+Site Theme
+Dark on light
+Light on dark
+Explore Ars
+Staff Blogs
+Feature Archive
+Ars Jobs
+Staff Directory
+Contact Us
+Featured Disciplines
+Productivity
+Cloud
+Gadgets
+Tablets
+Space
+My Stories: 0
+New Since Last Visit
+See more news stories
+We Recommend
+My Discussions
+Log in to track your discussions.
+Jobs
+Forums
+Subscribe Now
+Log In
+Search
+  ars.ARTICLE = {"url":"http:\/\/arstechnica.com\/security\/2012\/12\/how-script-kiddies-can-hijack-your-browser-to-steal-your-password\/","short_url":"http:\/\/ars.to\/Vk6lq4","title":"How script kiddies can hijack your browser to steal your password","author":329388,"id":171594,"topic":"1187984","promoted":[],"single_page":false};
+ Risk Assessment
+ /
+Security &amp;amp; Hacktivism
+How script kiddies can hijack your browser to steal your password
+Technique also works for any data entered into a browser's search box.
+  by Dan Goodin
+  -  Dec 2, 2012 11:30 pm UTC
+Hacking
+Privacy
+24
+A demonstration showing a site that hijacks a browsers search function and intercepts the contents.
+h43z.koding.com
+Be careful what you type on your computer while surfing the Web. It very well could be funneled to a script kiddie who has appropriated a handful of lines of code and inserted it into his site.
+The hack has been possible for years, but two proofs of concept published this month graphically demonstrate just how easy it is for even savvy people to fall for it. Both demonstrations use JavaScript to hijack the search command found in all standard browsers. The script is activated when a user presses the ctrl+f or ⌘+f keys, causing whatever is typed after that to be sent to a server under the control of the website operator rather than to the browser's search box.
+Proofs of concept here and here show how this method could be used to trick people into divulging their password or credit card number respectively. The pages pose as lists that catalog leaked user data and invite visitors to search it to see if their information is included.
+To be sure, the demos are crude. The search bars that are opened are only a rough approximation of the search bars found in Google's Chrome browser. And of course, they look nothing like the search interfaces found in Internet Explorer, Firefox, or other browsers. But as security expert Bruce Schneier once noted, exploits only get better. There's nothing stopping a determined attacker from improving the hacks so they present an authentic-looking box that's customized for whatever browser and operating system an end user happens to be using. Other browser functions, such as the ctrl+s or ⌘+s save commands, could also be intercepted and replaced with a fake dialog box that instructs users to enter their administrator password.
+The "browser event hijacking" hack uses JavaScript's preventDefault function, which cancels an operation while allowing all remaining handlers for the event to be executed. The code for the password-stealing demo looks like this:
+$(window).keydown(function(evt){
+                if((evt.which == "70" &amp;amp;&amp;amp; (evt.metaKey || evt.ctrlKey))){
+                        console.log("STRG+F");
+                        evt.preventDefault();
+                        /* display fake search */
+                        $("#searchbox").slideDown(110);
+                        $('#search').focus();
+More technical details about the exploits are here and here.
+Neohapsis blogger Ben Toews said he raised the issue with members of Google's Chrome team and "it was labeled as a low-priority issue." He said he's not sure he disagrees with the assessment, but thinks the issue needs to be addressed.
+There are at least two possible solutions to reduce threats like these. One is tweaking the user interface so search boxes are in a part of the browser that can't be confused with Web content. Browser designers who wanted to adopt this approach might be able to learn from changes Microsoft has made to recent versions of Windows that cause Web content to be shaded when sensitive system messages are being displayed. An alternate fix could involve displaying a warning when sites call preventDefault to cancel events registered as a browser key binding.
+Given the frequency of posts purporting to contain passwords, credit card numbers, and other details leaked from popular websites, it's not a stretch to think plenty of people use the search feature to see if their personal information is included. If you've ever typed data into a browser search box that you wouldn't want outsiders to see, you're in good company.
+"This is has been possible for quite some time," said Jeremiah Grossman, CTO of Web security firm WhiteHat Security. He went on to say it would be easy for even security-savvy people to fall for such a scheme. "I couldn't tell you with any certainty I haven't."
+Expand full story
+Reader comments 24
+&lt;!-- cache hit --&gt;
+Dan Goodin  / Dan is the IT Security Editor at Ars Technica, which he joined in 2012 after working for The Register, the Associated Press, Bloomberg News, and other publications.
+@dangoodin001
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+&amp;larr; Older Story
+Newer Story &amp;rarr;
+You May Also Like
+&lt;!-- cache miss --&gt;
+ars.sidebar_ad("top")
+Top Feature Story
+Feature Story (2 pages)
+Dear ITU, please don't bill Internet use like phone calls
+Telcos lobby for drastic change, think content networks getting a free ride.
+93
+Stay in the know with
+Follow Ars on Facebook
+Follow Ars on Twitter
+Follow Ars on Google Plus
+Sign Up for the Ars Newsletter
+Sign up for the Ars Technica Dispatch, which delivers links to the most popular articles, journals, and multimedia features via e-mail to your inbox every week.
+Your email address:
+I understand and agree that registration on or use of this site constitutes agreement to its User Agreement and Privacy Policy.
+Follow Ars with RSS
+&amp;gt; Main site RSS feed (all content)
+&amp;gt; View a list of all our RSS feeds
+The Ars Podcast
+It's the Ars Technicast! Listen to our staff discuss the issues of the day.
+&amp;gt; View podcast archive
+Latest News
+heard no evil
+New filing: Apple knew almost nothing about jury foreman in Samsung case
+Review: Acer's C7 Chromebook is $199 and feelin' fine (relatively)
+Dating sites help you find love by browsing reddit, watching lolcats
+Clearest indication yet that polar ice sheets are melting fast
+The pursuit of connection: the $120K Lexus app and car combo
+Ars JobsAccount Manager Great Opportunity to 48K!!!!!!!!!!CA-San Mateo, Job Description: Great Opportunity for an Account Manager to $48,000.00: Rewarding pos&amp;hellip;Project ManagerIA-Des Moines, Looking for a well spoken and hard working Technical Project Manager. The ideal candi&amp;hellip;Cloud - Executive ArchitectMA-Boston, We are looking to hire Executive level Architects, who have previous experience in anEnte&amp;hellip;See more job listings
+ars.sidebar_ad("bottom")
+Site Links
+About Us
+Advertise with us
+Contact Us
+Reprints
+Subscriptions
+Subscribe to Ars
+More Reading
+RSS Feeds
+Newsletters
+Conde Nast Sites
+Reddit
+Wired
+Vanity Fair
+Style
+Details
+Visit our sister sites
+- - - - - - - - - - - - - -
+GQ
+Concierge
+Epicurious
+Men.Style.com
+Style.com
+Wired.com
+Lipstick.com
+NutritionData
+Allure
+Architectural Digest
+Bon App&amp;eacute;tit
+Brides
+Cond&amp;eacute; Nast Portfolio
+Glamour
+Golf Digest
+Golf World
+Lucky
+Self
+Teen Vogue
+The New Yorker
+Vanity Fair
+W
+Subscribe to a magazine
+View All Titles
+- - - - - - - - - - - - - -
+Allure
+Architectural Digest
+Bon App&amp;eacute;tit
+Brides
+Cond&amp;eacute; Nast Portfolio
+Cond&amp;eacute; Nast Traveler
+Details
+Elegant Bride
+Glamour
+Golf Digest
+Golf World
+GQ
+Lucky
+Modern Bride
+Self
+Teen Vogue
+The New Yorker
+Vanity Fair
+Vogue
+W
+Wired
+View Mobile Site
+			© 2012 Condé Nast. All rights reserved
+			Use of this Site constitutes acceptance of our User Agreement (effective 3/21/12) and Privacy Policy (effective 3/21/12), and Ars Technica Addendum (effective 5/17/2012)
+Your California Privacy Rights
+			The material on this site may not be reproduced, distributed, transmitted, cached or otherwise used, except with the prior written permission of Condé Nast.
+Ad Choices
+&lt;!-- Google Analytics start --&gt;
+	var _gaq = _gaq || [];
+  _gaq.push(
+    ['_setAccount', 'UA-31997-1'],
+    ['_setCustomVar', 1, 'view', "grid"],
+    ['_setCustomVar', 2, 'theme', "light"],
+    ['_setCustomVar', 3, 'logged_in', "false"],
+    ['_setCustomVar', 4, 'show_comments', "false"],
+    ['_trackPageview']
+  );
+	(function() {
+	  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+&lt;!-- Google Analytics end --&gt;
+&lt;!-- Parse.ly start --&gt;
+  (function(d) {
+    var site = "arstechnica.com",
+    b = d.body,
+    e = d.createElement("div");
+    e.innerHTML = '&lt;span id="parsely-cfg" data-parsely-site="'+site+'"&gt;&lt;/span&gt;';
+    e.id = "parsely-root";
+    e.style.display = "none";
+    b.appendChild(e);
+  })(document);
+  (function(s, p, d) {
+    var h=d.location.protocol, i=p+"-"+s,
+    e=d.getElementById(i), r=d.getElementById(p+"-root"),
+    u=h==="https:"?"d1z2jf7jlzjs58.cloudfront.net"
+      :"static."+p+".com";
+    if (e) return;
+    e = d.createElement(s); e.id = i; e.async = true;
+    e.src = h+"//"+u+"/p.js"; r.appendChild(e);
+  })("script", "parsely", document);
+&lt;!-- Parse.ly end --&gt;
+&lt;!-- Chartbeat start --&gt;
+    var _sf_async_config={};
+    /** CONFIGURATION START **/
+    _sf_async_config.uid = 27113;
+    _sf_async_config.domain = "arstechnica.com";
+    /** CONFIGURATION END **/
+    (function(){
+      function loadChartbeat() {
+        window._sf_endpt=(new Date()).getTime();
+        var e = document.createElement("script");
+        e.setAttribute("language", "javascript");
+        e.setAttribute("type", "text/javascript");
+        e.setAttribute("src",
+           (("https:" == document.location.protocol) ?
+             "https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/" :
+             "http://static.chartbeat.com/") +
+           "js/chartbeat.js");
+        document.body.appendChild(e);
+      }
+      var oldonload = window.onload;
+      window.onload = (typeof window.onload != "function") ?
+         loadChartbeat : function() { oldonload(); loadChartbeat(); };
+    })();
+&lt;!-- Chartbeat end --&gt;
+&lt;!-- Omniture start --&gt;
+    var s_account = 'conde-arstechnica';
+    var s_linkInternalFilters = 'javascript:,arstechnica.com';
+    var s_trackingServer = 'stats2.arstechnica.com';
+    var s_trackingServerSecure = 'sstats.arstechnica.com';
+    s.pageName = "http://arstechnica.com/security/2012/12/how-script-kiddies-can-hijack-your-browser-to-steal-your-password/";
+    s.prop1 = "";
+    s.prop2 = "";
+    s.prop5 = "blog";
+    s.events = "";
+    s.prop6 = "security"
+s.prop7 = "security/2012"
+s.prop8 = "security/2012/12"
+s.prop9 = "security/2012/12/how-script-kiddies-can-hijack-your-browser-to-steal-your-password"
+s.prop3 = "Security";
+s.hier1 = "security,2012,12,how-script-kiddies-can-hijack-your-browser-to-steal-your-password";
+    var s_code=s.t();
+    if(s_code) document.write(s_code);
+ if(navigator.appVersion.indexOf('MSIE')&gt;=0)document.write(unescape('%3C')+'\!-'+'-')
+&lt;!-- Omniture end --&gt;
+&lt;!-- Lotame/Crwdcntrl --&gt;
+  </p>
+</body>
+</html>

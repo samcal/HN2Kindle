@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Understanding The Fourier Transform</title>
+  <style type="text/css">
+h1 { text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>Understanding The Fourier Transform</h1>
+  <p>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;!-- Properties for embedding sites (like facebook or google+) to use. --&gt;
+&lt;!-- /embedding properties --&gt;
+#AltDevBlogADay &amp;raquo; Understanding the Fourier transform
+&lt;!-- LESS DEBUG
+  &lt;script type="text/javascript"&gt; less = { env: 'development' }; &lt;/script&gt;
+  --&gt;
+&lt;!-- Stylesheet --&gt;
+&lt;!-- LESS DEVELOPMENT
+  &lt;link rel="stylesheet" href="http://www.altdevblogaday.com/wp-content/themes/macton-isabella/css/altdevblogaday.less" type="text/less" media="print,screen"  /&gt;
+  --&gt;
+&lt;!-- Fonts --&gt;
+&lt;!-- Twitter --&gt;
+&lt;!-- Facebook --&gt;
+&lt;!-- jQuery --&gt;
+&lt;!-- Google jsaspi --&gt;
+#AltDevBlogADay
+ &lt;!-- #icons --&gt;
+Author login
+ &lt;!-- #sidebar div.header --&gt;
+Authors
+Search
+About
+#AltDevConf
+ &lt;!-- #sidebar --&gt;
+Stuart Riffle
+Follow @StuartRiffle
+            I'm a graphics/systems programmer with 14 years in the industry, and my credits include Madden, Bond, and Need for Speed. I'm currently doing the indie thing. My specialties are optimization, rendering, concurrency, and compilers. I am delighted by all the pretty colors.
+Find me:
+@StuartRiffle
+Pure Energy Games &lt;!-- $url_count --&gt;
+ &lt;!-- ($author-&gt;twitter_profile || $author-&gt;url_count) --&gt;
+&lt;!-- $has_links --&gt;
+I post in:
+#gamedevGame designGeneral InterestProgrammingVisual Arts
+&lt;!-- $(author-&gt;categories) --&gt;
+ &lt;!-- .author-profile --&gt;
+ &lt;!-- .header --&gt;
+Instapaper Text
+Share:
+Twitter
+Facebook
+Reddit
+Google+
+Understanding the Fourier transform
+Yes, I realize that after reading the title of this post, 99% of potential readers just kept scrolling. So to the few of you who clicked on it, welcome! Don&amp;#8217;t worry, this won&amp;#8217;t take long.
+A very long time ago, I was curious how to detect the strength of the bass and treble in music, in order to synchronize some graphical effects. I had no idea how to do such a thing, so I tried to figure it out, but I didn&amp;#8217;t get very far. Eventually I learned that I needed something called a Fourier transform, so I took a trip to the library and looked it up (which is what we had to do back in those days).
+What I found was the Discrete Fourier Transform (DFT), which looks like this:
+This formula, as anyone can see, makes no sense at all. I decided that Fourier must have been speaking to aliens, because if you gave me all the time and paper in the world, I would not have been able to come up with that.
+Eventually, I was able to visualize how it works, which was a bit of a lightbulb for me. That&amp;#8217;s what I want to write about today: an intuitive way to picture the Fourier transform. This may be obvious to you, but it wasn&amp;#8217;t to me, so if you work with audio or rendering, I hope there&amp;#8217;s something here you find useful.
+Disclaimer: my math skills are pitch-patch at best, and this is just intended to be an informal article, so please don&amp;#8217;t expect a rigorous treatment. However, I will do my best not to flat-out lie about anything, and I&amp;#8217;m sure people will set me straight if I get something wrong.
+A quick bit of background &amp;#8211; what does the Fourier transform do? It translates between two different ways to represent a signal:
+The time domain representation (a series of evenly spaced samples over time)
+The frequency domain representation (the strength and phase of waves, at different frequencies, that can be used to reconstruct the signal)
+The picture on the left shows 3 cycles of a sine wave, and the picture on the right shows the Fourier transform of those samples. The output bars show energy at 3 cycles (and, confusingly enough, negative 3 cycles&amp;#8230; more on that below).
+The  inputs and outputs are actually complex numbers, so to feed a real signal (like  some music) into the Fourier transform,  we just set all the  imaginary components to zero. And to check the  strength of the  frequency information, we just look at the  magnitude of the  outputs, and ignore the phase. But let&amp;#8217;s never mind all that for now.
+What are we trying to accomplish? We&amp;#8217;ve got a sampled signal, and we want to extract frequency information from it. The Fourier transform works on a periodic, or looping signal. This seems like a problem, since we don&amp;#8217;t actually have any signals like that. In practice, you just take a small slice of a longer signal, fade both ends to zero so that they can be joined (which is a whole topic unto itself), and pretend it&amp;#8217;s a loop.
+Let&amp;#8217;s make things simple and say that our loop repeats once per second.
+Picture it as a bead, sliding up and down along a thin rod, tracing out the signal. So as this bead is bobbing up and down, look what happens if we spin the rod at a rate of, say, 10 revolutions per second:
+We get a scribble, as you&amp;#8217;d expect. And it is roughly centered on the origin.
+Now, let&amp;#8217;s assume we know there&amp;#8217;s some energy in the signal at 3 Hz, and we want to measure it. What that means is that on top of whatever else is causing the signal to wobble around, we&amp;#8217;ve added a wave that oscillates 3 times per second. It has a high point every 1/3 of a second, and corresponding low points in between, also spaced 1/3 of a second apart. You can probably see now how we might be able to detect it&amp;#8230; let&amp;#8217;s try spinning our signal at a matching rate of 3 revolutions per second.
+Since the signal completes a rotation every 1/3 of a second, all the high points in our 3 Hz wave line up at the same part of the rotation, and this pulls the whole scribble off-center. How can we quantify that? The easiest way would be to record a bunch of points as we rotate, and average them to find their midpoint:
+It makes sense that the distance of this midpoint from the origin is proportional to the strength of the signal, because as the high points in our signal get higher, they will move the scribble farther away. But what if the signal contains no energy at 3 Hz? Let&amp;#8217;s remove the 3 Hz wave and see:
+Now there is nothing to pull the scribble off center, and all of the other oscillations tend to (approximately) balance each other out.
+This looks promising as a way to detect energy at a given frequency. Time to translate it into math! For a looping signal of N samples:
+(Raising e to an imaginary power produces rotation around a unit circle in the complex plane, according to Euler&amp;#8217;s formula. How? Magic, as far as I can tell. But apparently it&amp;#8217;s true).
+So this equation is a little different from what we started with. I&amp;#8217;ve added a normalization factor of 1/N, and changed the sign of the exponent. I also rearranged the terms slightly for clarity. This form is normally called the inverse DFT, which is confusing, but apparently the difference between the DFT and IDFT is a matter of convention, and can depend on the application. So, let&amp;#8217;s call that close enough.
+Anyway, once you can &amp;#8220;see&amp;#8221; what&amp;#8217;s going on in your head, a lot of the quirks of working with the DFT become much less mysterious. If you&amp;#8217;ve had to work with DFT output before, you may have wondered:
+Why does the first element in the result (k=0) contain the DC offset? Because in that case, our samples don&amp;#8217;t spin at all, so all we&amp;#8217;re doing is averaging them.
+Why doesn&amp;#8217;t the DC offset affect the frequency information? Because adding a constant value to all the samples just makes the whole scribble bigger, which doesn&amp;#8217;t affect the midpoint.
+Why does the second half of the output array contain a mirror image of the first half? It&amp;#8217;s just our old friend aliasing. When calculating the last element (k=N-1), we&amp;#8217;re rotating by (N-1)/N at each step, which is almost all of the way around. This is the same as taking small steps (1/N) in the wrong direction. That&amp;#8217;s why the result at (k=N-1) has the same magnitude as (k=1). It&amp;#8217;s equivalent to processing a negative frequency of (k=-1).
+Why does a sine wave with amplitude 1.0 come out of the DFT as 0.5? When we spin the sine wave, we get a circle of diameter 1.0, but it&amp;#8217;s midpoint is only half that distance away from the origin.
+Where is the other half of the energy then? It&amp;#8217;s hiding in the negative frequency part!
+Hopefully this was more helpful than confusing.
+And if you&amp;#8217;d like to get updates on my game development work, come subscribe to my RSS feed at pureenergygames.com!
+&amp;nbsp;
+&lt;!-- article --&gt;
+&amp;nbsp;
+&lt;!-- post --&gt;
+Share:
+Twitter
+Facebook
+Reddit
+Google+
+&lt;!-- DISQUS --&gt;
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'altdevblogaday';
+        // The following are highly recommended additional parameters. Remove the slashes in front to use.
+        var disqus_identifier = "content-5769";
+        var disqus_url        = "http://www.altdevblogaday.com/2011/05/17/understanding-the-fourier-transform/";
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+&lt;!-- /DISQUS --&gt;
+ &lt;!-- div.comment-container --&gt;
+ &lt;!-- div.box.visible --&gt;
+ &lt;!-- #content --&gt;
+    // &lt;![CDATA[
+        var disqus_shortname = 'altdevblogaday';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i &lt; nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1) {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('rel'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) url = url[0];
+                    else url = url[1]
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+                        s.src = 'http' + '://' + 'disqus.com/forums/' + disqus_shortname + '/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    //]]&gt;
+/* &lt;![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]&gt; */
+	st_go({v:'ext',j:'1:1.7',blog:'24522286',post:'5769'});
+	var load_cmc = function(){linktracker_init(24522286,5769,2);};
+	if ( typeof addLoadEvent != 'undefined' ) addLoadEvent(load_cmc);
+	else load_cmc();
+&lt;!-- DISQUS --&gt;
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'altdevblogaday';
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function () {
+          var s = document.createElement('script'); s.async = true;
+          s.type = 'text/javascript';
+          s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+          (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+      }());
+&lt;!-- /DISQUS --&gt;
+&lt;!-- Dynamic page generated in 1.045 seconds. --&gt;
+&lt;!-- Cached page generated by WP-Super-Cache on 2012-12-03 03:44:20 --&gt;
+&lt;!-- super cache --&gt;
+  </p>
+</body>
+</html>

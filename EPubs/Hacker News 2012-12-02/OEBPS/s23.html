@@ -1,0 +1,945 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>The State of Statistics in Julia</title>
+  <style type="text/css">
+h1 { text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>The State of Statistics in Julia</h1>
+  <p>
+    &lt;!DOCTYPE html&gt;
+The State of Statistics in Julia
+&lt;!-- Should give access to MathJax !--&gt;
+AudioPlayer.setup("http://www.johnmyleswhite.com/notebook/wp-content/plugins/audio-player/assets/player.swf?ver=2.0.4.1", {width:"290",animation:"yes",encode:"yes",initialvolume:"60",remaining:"no",noinfo:"no",buffer:"5",checkpolicy:"no",rtl:"no",bg:"f8f8f8",text:"666666",leftbg:"eeeeee",lefticon:"666666",volslider:"666666",voltrack:"FFFFFF",rightbg:"cccccc",rightbghover:"999999",righticon:"666666",righticonhover:"ffffff",track:"FFFFFF",loader:"9FFFB8",border:"666666",tracker:"DDDDDD",skip:"666666",pagebg:"FFFFFF",transparentpagebg:"yes"});
+
+						ol.footnotes li {list-style-type:decimal;}
+						ol.footnotes{color:#666666;}
+John Myles White&amp;quot;He who refuses to do arithmetic is doomed to talk nonsense.&amp;quot;
+&lt;!-- #header --&gt;
+&lt;!-- #header-container --&gt;
+Browse: Home / 2012 / December / 02 / The State of Statistics in Julia
+The State of Statistics in JuliaBy John Myles White on 12.2.2012
+Updated 12.2.2012: Added sample output based on a suggestion from Stefan Karpinski.
+Introduction
+Over the last few weeks, the Julia core team has rolled out a demo version of Julia&amp;#8217;s package management system. While the Julia package system is still very much in beta, it nevertheless provides the first plausible way for non-expert users to see where Julia&amp;#8217;s growing community of developers is heading.
+To celebrate some of the amazing work that&amp;#8217;s already been done to make Julia usable for day-to-day data analysis, I&amp;#8217;d like to give a brief overview of the state of statistical programming in Julia. There are now several packages that, taken as a whole, suggest that Julia may really live up to its potential and become the next generation language for data analysis.
+Getting Julia Installed
+If you&amp;#8217;d like to try out Julia for yourself, you&amp;#8217;ll first need to clone the current Julia repo from GitHub and then build Julia from source as described in the Julia README. Compiling Julia for the first time can take up to two hours, but updating Julia afterwards will be quite fast once you&amp;#8217;ve gotten a working copy of the language and its dependencies installed on your system. After you have Julia built, you should add its main directory to your path and then open up the Julia REPL by typing julia at the command line.
+Installing Packages
+Once Julia&amp;#8217;s REPL is running, you can use the following commands to start installing packages:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+julia&amp;gt; require&amp;#40;&amp;quot;pkg&amp;quot;&amp;#41;
+&amp;nbsp;
+julia&amp;gt; Pkg.init&amp;#40;&amp;#41;
+Initialized empty Git repository in /Users/johnmyleswhite/.julia/.git/
+Cloning into 'METADATA'...
+remote: Counting objects: 443, done.
+remote: Compressing objects: 100% &amp;#40;208/208&amp;#41;, done.
+remote: Total 443 &amp;#40;delta 53&amp;#41;, reused 423 &amp;#40;delta 33&amp;#41;
+Receiving objects: 100% &amp;#40;443/443&amp;#41;, 38.98 KiB, done.
+Resolving deltas: 100% &amp;#40;53/53&amp;#41;, done.
+&amp;#91;master &amp;#40;root-commit&amp;#41; dbd486e&amp;#93; empty package repo
+ 2 files changed, 4 insertions&amp;#40;+&amp;#41;
+ create mode 100644 .gitmodules
+ create mode 160000 METADATA
+ create mode 100644 REQUIRE
+&amp;nbsp;
+julia&amp;gt; Pkg.add&amp;#40;&amp;quot;DataFrames&amp;quot;, &amp;quot;Distributions&amp;quot;, &amp;quot;MCMC&amp;quot;, &amp;quot;Optim&amp;quot;, &amp;quot;NHST&amp;quot;, &amp;quot;Clustering&amp;quot;&amp;#41;
+Installing DataFrames: v0.0.0
+Cloning into 'DataFrames'...
+remote: Counting objects: 1340, done.
+remote: Compressing objects: 100% &amp;#40;562/562&amp;#41;, done.
+remote: Total 1340 &amp;#40;delta 760&amp;#41;, reused 1229 &amp;#40;delta 655&amp;#41;
+Receiving objects: 100% &amp;#40;1340/1340&amp;#41;, 494.79 KiB, done.
+Resolving deltas: 100% &amp;#40;760/760&amp;#41;, done.
+Installing Distributions: v0.0.0
+Cloning into 'Distributions'...
+remote: Counting objects: 49, done.
+remote: Compressing objects: 100% &amp;#40;30/30&amp;#41;, done.
+remote: Total 49 &amp;#40;delta 8&amp;#41;, reused 49 &amp;#40;delta 8&amp;#41;
+Receiving objects: 100% &amp;#40;49/49&amp;#41;, 17.29 KiB, done.
+Resolving deltas: 100% &amp;#40;8/8&amp;#41;, done.
+Installing MCMC: v0.0.0
+Cloning into 'MCMC'...
+warning: no common commits
+remote: Counting objects: 155, done.
+remote: Compressing objects: 100% &amp;#40;97/97&amp;#41;, done.
+remote: Total 155 &amp;#40;delta 66&amp;#41;, reused 140 &amp;#40;delta 51&amp;#41;
+Receiving objects: 100% &amp;#40;155/155&amp;#41;, 256.68 KiB, done.
+Resolving deltas: 100% &amp;#40;66/66&amp;#41;, done.
+Installing NHST: v0.0.0
+Cloning into 'NHST'...
+remote: Counting objects: 20, done.
+remote: Compressing objects: 100% &amp;#40;18/18&amp;#41;, done.
+remote: Total 20 &amp;#40;delta 2&amp;#41;, reused 19 &amp;#40;delta 1&amp;#41;
+Receiving objects: 100% &amp;#40;20/20&amp;#41;, 4.31 KiB, done.
+Resolving deltas: 100% &amp;#40;2/2&amp;#41;, done.
+Installing Optim: v0.0.0
+Cloning into 'Optim'...
+remote: Counting objects: 497, done.
+remote: Compressing objects: 100% &amp;#40;191/191&amp;#41;, done.
+remote: Total 497 &amp;#40;delta 318&amp;#41;, reused 476 &amp;#40;delta 297&amp;#41;
+Receiving objects: 100% &amp;#40;497/497&amp;#41;, 79.68 KiB, done.
+Resolving deltas: 100% &amp;#40;318/318&amp;#41;, done.
+Installing Options: v0.0.0
+Cloning into 'Options'...
+remote: Counting objects: 10, done.
+remote: Compressing objects: 100% &amp;#40;8/8&amp;#41;, done.
+remote: Total 10 &amp;#40;delta 1&amp;#41;, reused 6 &amp;#40;delta 0&amp;#41;
+Receiving objects: 100% &amp;#40;10/10&amp;#41;, done.
+Resolving deltas: 100% &amp;#40;1/1&amp;#41;, done.
+Installing Clustering: v0.0.0
+Cloning into 'Clustering'...
+remote: Counting objects: 38, done.
+remote: Compressing objects: 100% &amp;#40;28/28&amp;#41;, done.
+remote: Total 38 &amp;#40;delta 7&amp;#41;, reused 38 &amp;#40;delta 7&amp;#41;
+Receiving objects: 100% &amp;#40;38/38&amp;#41;, 7.77 KiB, done.
+Resolving deltas: 100% &amp;#40;7/7&amp;#41;, done.
+That will get you started with some of the core tools for doing statistical programming in Julia. You&amp;#8217;ll probably also want to install another package called &amp;#8220;RDatasets&amp;#8221;, which provides access to 570 of the classic data sets available in R. This package has a much larger file size than the others, which is why I recommend installing it after you&amp;#8217;ve first installed the other packages:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+require&amp;#40;&amp;quot;pkg&amp;quot;&amp;#41;
+&amp;nbsp;
+julia&amp;gt; Pkg.add&amp;#40;&amp;quot;RDatasets&amp;quot;&amp;#41;
+Installing RDatasets: v0.0.0
+Cloning into 'RDatasets'...
+remote: Counting objects: 609, done.
+remote: Compressing objects: 100% &amp;#40;588/588&amp;#41;, done.
+remote: Total 609 &amp;#40;delta 21&amp;#41;, reused 605 &amp;#40;delta 17&amp;#41;
+Receiving objects: 100% &amp;#40;609/609&amp;#41;, 10.56 MiB | 1.15 MiB/s, done.
+Resolving deltas: 100% &amp;#40;21/21&amp;#41;, done.
+Assuming that you&amp;#8217;ve gotten everything working, you can then type the following to load Fisher&amp;#8217;s classic Iris data set:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+julia&amp;gt; load&amp;#40;&amp;quot;RDatasets&amp;quot;&amp;#41;
+Warning: redefinition of constant NARule ignored.
+Warning: New definition ==&amp;#40;NAtype,Any&amp;#41; is ambiguous with ==&amp;#40;Any,AbstractArray&amp;#123;T,N&amp;#125;&amp;#41;.
+         Make sure ==&amp;#40;NAtype,AbstractArray&amp;#123;T,N&amp;#125;&amp;#41; is defined first.
+Warning: New definition ==&amp;#40;Any,NAtype&amp;#41; is ambiguous with ==&amp;#40;AbstractArray&amp;#123;T,N&amp;#125;,Any&amp;#41;.
+         Make sure ==&amp;#40;AbstractArray&amp;#123;T,N&amp;#125;,NAtype&amp;#41; is defined first.
+Warning: New definition replace!&amp;#40;PooledDataVec&amp;#123;S&amp;#125;,NAtype,T&amp;#41; is ambiguous with replace!&amp;#40;PooledDataVec&amp;#123;S&amp;#125;,T,NAtype&amp;#41;.
+         Make sure replace!&amp;#40;PooledDataVec&amp;#123;S&amp;#125;,NAtype,NAtype&amp;#41; is defined first.
+Warning: New definition promote_rule&amp;#40;Type&amp;#123;AbstractDataVec&amp;#123;T&amp;#125;&amp;#125;,Type&amp;#123;T&amp;#125;&amp;#41; is ambiguous with promote_rule&amp;#40;Type&amp;#123;AbstractDataVec&amp;#123;S&amp;#125;&amp;#125;,Type&amp;#123;T&amp;#125;&amp;#41;.
+         Make sure promote_rule&amp;#40;Type&amp;#123;AbstractDataVec&amp;#123;T&amp;#125;&amp;#125;,Type&amp;#123;T&amp;#125;&amp;#41; is defined first.
+Warning: New definition ^&amp;#40;NAtype,T&amp;lt;:Union&amp;#40;String,Number&amp;#41;&amp;#41; is ambiguous with ^&amp;#40;Any,Integer&amp;#41;.
+         Make sure ^&amp;#40;NAtype,_&amp;lt;:Integer&amp;#41; is defined first.
+Warning: New definition ^&amp;#40;DataVec&amp;#123;T&amp;#125;,Number&amp;#41; is ambiguous with ^&amp;#40;Any,Integer&amp;#41;.
+         Make sure ^&amp;#40;DataVec&amp;#123;T&amp;#125;,Integer&amp;#41; is defined first.
+Warning: New definition ^&amp;#40;DataFrame,Union&amp;#40;NAtype,Number&amp;#41;&amp;#41; is ambiguous with ^&amp;#40;Any,Integer&amp;#41;.
+         Make sure ^&amp;#40;DataFrame,Integer&amp;#41; is defined first.
+&amp;nbsp;
+julia&amp;gt; using DataFrames
+&amp;nbsp;
+julia&amp;gt; using RDatasets
+&amp;nbsp;
+julia&amp;gt; iris = data&amp;#40;&amp;quot;datasets&amp;quot;, &amp;quot;iris&amp;quot;&amp;#41;
+DataFrame  &amp;#40;150,6&amp;#41;
+              Sepal.Length Sepal.Width Petal.Length Petal.Width     Species
+&amp;#91;1,&amp;#93;        1          5.1         3.5          1.4         0.2    &amp;quot;setosa&amp;quot;
+&amp;#91;2,&amp;#93;        2          4.9         3.0          1.4         0.2    &amp;quot;setosa&amp;quot;
+&amp;#91;3,&amp;#93;        3          4.7         3.2          1.3         0.2    &amp;quot;setosa&amp;quot;
+&amp;#91;4,&amp;#93;        4          4.6         3.1          1.5         0.2    &amp;quot;setosa&amp;quot;
+&amp;#91;5,&amp;#93;        5          5.0         3.6          1.4         0.2    &amp;quot;setosa&amp;quot;
+&amp;#91;6,&amp;#93;        6          5.4         3.9          1.7         0.4    &amp;quot;setosa&amp;quot;
+&amp;#91;7,&amp;#93;        7          4.6         3.4          1.4         0.3    &amp;quot;setosa&amp;quot;
+&amp;#91;8,&amp;#93;        8          5.0         3.4          1.5         0.2    &amp;quot;setosa&amp;quot;
+&amp;#91;9,&amp;#93;        9          4.4         2.9          1.4         0.2    &amp;quot;setosa&amp;quot;
+&amp;#91;10,&amp;#93;      10          4.9         3.1          1.5         0.1    &amp;quot;setosa&amp;quot;
+&amp;#91;11,&amp;#93;      11          5.4         3.7          1.5         0.2    &amp;quot;setosa&amp;quot;
+&amp;#91;12,&amp;#93;      12          4.8         3.4          1.6         0.2    &amp;quot;setosa&amp;quot;
+&amp;#91;13,&amp;#93;      13          4.8         3.0          1.4         0.1    &amp;quot;setosa&amp;quot;
+&amp;#91;14,&amp;#93;      14          4.3         3.0          1.1         0.1    &amp;quot;setosa&amp;quot;
+&amp;#91;15,&amp;#93;      15          5.8         4.0          1.2         0.2    &amp;quot;setosa&amp;quot;
+&amp;#91;16,&amp;#93;      16          5.7         4.4          1.5         0.4    &amp;quot;setosa&amp;quot;
+&amp;#91;17,&amp;#93;      17          5.4         3.9          1.3         0.4    &amp;quot;setosa&amp;quot;
+&amp;#91;18,&amp;#93;      18          5.1         3.5          1.4         0.3    &amp;quot;setosa&amp;quot;
+&amp;#91;19,&amp;#93;      19          5.7         3.8          1.7         0.3    &amp;quot;setosa&amp;quot;
+&amp;#91;20,&amp;#93;      20          5.1         3.8          1.5         0.3    &amp;quot;setosa&amp;quot;
+  :
+&amp;#91;131,&amp;#93;    131          7.4         2.8          6.1         1.9 &amp;quot;virginica&amp;quot;
+&amp;#91;132,&amp;#93;    132          7.9         3.8          6.4         2.0 &amp;quot;virginica&amp;quot;
+&amp;#91;133,&amp;#93;    133          6.4         2.8          5.6         2.2 &amp;quot;virginica&amp;quot;
+&amp;#91;134,&amp;#93;    134          6.3         2.8          5.1         1.5 &amp;quot;virginica&amp;quot;
+&amp;#91;135,&amp;#93;    135          6.1         2.6          5.6         1.4 &amp;quot;virginica&amp;quot;
+&amp;#91;136,&amp;#93;    136          7.7         3.0          6.1         2.3 &amp;quot;virginica&amp;quot;
+&amp;#91;137,&amp;#93;    137          6.3         3.4          5.6         2.4 &amp;quot;virginica&amp;quot;
+&amp;#91;138,&amp;#93;    138          6.4         3.1          5.5         1.8 &amp;quot;virginica&amp;quot;
+&amp;#91;139,&amp;#93;    139          6.0         3.0          4.8         1.8 &amp;quot;virginica&amp;quot;
+&amp;#91;140,&amp;#93;    140          6.9         3.1          5.4         2.1 &amp;quot;virginica&amp;quot;
+&amp;#91;141,&amp;#93;    141          6.7         3.1          5.6         2.4 &amp;quot;virginica&amp;quot;
+&amp;#91;142,&amp;#93;    142          6.9         3.1          5.1         2.3 &amp;quot;virginica&amp;quot;
+&amp;#91;143,&amp;#93;    143          5.8         2.7          5.1         1.9 &amp;quot;virginica&amp;quot;
+&amp;#91;144,&amp;#93;    144          6.8         3.2          5.9         2.3 &amp;quot;virginica&amp;quot;
+&amp;#91;145,&amp;#93;    145          6.7         3.3          5.7         2.5 &amp;quot;virginica&amp;quot;
+&amp;#91;146,&amp;#93;    146          6.7         3.0          5.2         2.3 &amp;quot;virginica&amp;quot;
+&amp;#91;147,&amp;#93;    147          6.3         2.5          5.0         1.9 &amp;quot;virginica&amp;quot;
+&amp;#91;148,&amp;#93;    148          6.5         3.0          5.2         2.0 &amp;quot;virginica&amp;quot;
+&amp;#91;149,&amp;#93;    149          6.2         3.4          5.4         2.3 &amp;quot;virginica&amp;quot;
+&amp;#91;150,&amp;#93;    150          5.9         3.0          5.1         1.8 &amp;quot;virginica&amp;quot;
+&amp;nbsp;
+julia&amp;gt; head&amp;#40;iris&amp;#41;
+DataFrame  &amp;#40;6,6&amp;#41;
+          Sepal.Length Sepal.Width Petal.Length Petal.Width  Species
+&amp;#91;1,&amp;#93;    1          5.1         3.5          1.4         0.2 &amp;quot;setosa&amp;quot;
+&amp;#91;2,&amp;#93;    2          4.9         3.0          1.4         0.2 &amp;quot;setosa&amp;quot;
+&amp;#91;3,&amp;#93;    3          4.7         3.2          1.3         0.2 &amp;quot;setosa&amp;quot;
+&amp;#91;4,&amp;#93;    4          4.6         3.1          1.5         0.2 &amp;quot;setosa&amp;quot;
+&amp;#91;5,&amp;#93;    5          5.0         3.6          1.4         0.2 &amp;quot;setosa&amp;quot;
+&amp;#91;6,&amp;#93;    6          5.4         3.9          1.7         0.4 &amp;quot;setosa&amp;quot;
+&amp;nbsp;
+julia&amp;gt; tail&amp;#40;iris&amp;#41;
+DataFrame  &amp;#40;6,6&amp;#41;
+            Sepal.Length Sepal.Width Petal.Length Petal.Width     Species
+&amp;#91;1,&amp;#93;    145          6.7         3.3          5.7         2.5 &amp;quot;virginica&amp;quot;
+&amp;#91;2,&amp;#93;    146          6.7         3.0          5.2         2.3 &amp;quot;virginica&amp;quot;
+&amp;#91;3,&amp;#93;    147          6.3         2.5          5.0         1.9 &amp;quot;virginica&amp;quot;
+&amp;#91;4,&amp;#93;    148          6.5         3.0          5.2         2.0 &amp;quot;virginica&amp;quot;
+&amp;#91;5,&amp;#93;    149          6.2         3.4          5.4         2.3 &amp;quot;virginica&amp;quot;
+&amp;#91;6,&amp;#93;    150          5.9         3.0          5.1         1.8 &amp;quot;virginica&amp;quot;
+Now that you can see that Julia can handle complex data sets, let&amp;#8217;s talk a little bit about the packages that make statistical analysis in Julia possible.
+The DataFrames Package
+The DataFrames package provides data structures for working with tabular data in Julia. At a minimum, this means that DataFrames provides tools for dealing with individual columns of missing data, which are called DataVec&amp;#8216;s. A collection of DataVec&amp;#8216;s allows one to build up a DataFrame, which provides a tabular data structure like that used by R&amp;#8217;s data.frame type.
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+julia&amp;gt; load&amp;#40;&amp;quot;DataFrames&amp;quot;&amp;#41;
+&amp;nbsp;
+julia&amp;gt; using DataFrames
+&amp;nbsp;
+julia&amp;gt; data = &amp;#123;&amp;quot;Value&amp;quot; =&amp;gt; &amp;#91;1, 2, 3&amp;#93;, &amp;quot;Label&amp;quot; =&amp;gt; &amp;#91;&amp;quot;A&amp;quot;, &amp;quot;B&amp;quot;, &amp;quot;C&amp;quot;&amp;#93;&amp;#125;
+Warning: imported binding for data overwritten in module Main
+&amp;#123;&amp;quot;Label&amp;quot;=&amp;gt;&amp;#91;&amp;quot;A&amp;quot;, &amp;quot;B&amp;quot;, &amp;quot;C&amp;quot;&amp;#93;,&amp;quot;Value&amp;quot;=&amp;gt;&amp;#91;1, 2, 3&amp;#93;&amp;#125;
+&amp;nbsp;
+julia&amp;gt; df = DataFrame&amp;#40;data&amp;#41;
+DataFrame  &amp;#40;3,2&amp;#41;
+        Label Value
+&amp;#91;1,&amp;#93;      &amp;quot;A&amp;quot;     1
+&amp;#91;2,&amp;#93;      &amp;quot;B&amp;quot;     2
+&amp;#91;3,&amp;#93;      &amp;quot;C&amp;quot;     3
+&amp;nbsp;
+julia&amp;gt; df&amp;#91;&amp;quot;Value&amp;quot;&amp;#93;
+3-element DataVec&amp;#123;Int64&amp;#125;
+&amp;nbsp;
+&amp;#91;1,2,3&amp;#93;
+&amp;nbsp;
+julia&amp;gt; df&amp;#91;1, &amp;quot;Value&amp;quot;&amp;#93; = NA
+NA
+&amp;nbsp;
+&amp;nbsp;
+julia&amp;gt; head&amp;#40;df&amp;#41;
+DataFrame  &amp;#40;3,2&amp;#41;
+        Label Value
+&amp;#91;1,&amp;#93;      &amp;quot;A&amp;quot;    NA
+&amp;#91;2,&amp;#93;      &amp;quot;B&amp;quot;     2
+&amp;#91;3,&amp;#93;      &amp;quot;C&amp;quot;     3
+Distributions
+The Distributions package provides tools for working with probability distributions in Julia. It reifies distributions as types in Julia&amp;#8217;s large type hierarchy, which means that quite generic names like rand can be used to sample from complex distributions:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+julia&amp;gt; load&amp;#40;&amp;quot;Distributions&amp;quot;&amp;#41;
+julia&amp;gt; using Distributions
+&amp;nbsp;
+julia&amp;gt; x = rand&amp;#40;Normal&amp;#40;11.0, 3.0&amp;#41;, 10_000&amp;#41;
+10000-element Float64 Array:
+  6.87693
+ 13.3676
+  7.25008
+  8.82833
+ 10.6911
+  7.1004
+ 13.7449
+  5.96412
+  8.57957
+ 15.2737
+  ⋮
+  4.89007
+ 15.1509
+  6.32376
+  7.83847
+ 14.4476
+ 14.2974
+  9.74783
+  9.67398
+ 14.4992
+&amp;nbsp;
+julia&amp;gt; mean&amp;#40;x&amp;#41;
+11.00366217730023
+&amp;nbsp;
+julia&amp;gt; var&amp;#40;x&amp;#41;
+Warning: Possible conflict in library symbol ddot_
+9.288938550823996
+Optim
+The Optim package provides tools for numerical optimization of arbitrary functions in Julia. It provides a function, optimize, which works a bit like R&amp;#8217;s optim function.
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+julia&amp;gt; load&amp;#40;&amp;quot;Optim&amp;quot;&amp;#41;
+julia&amp;gt; using Optim
+&amp;nbsp;
+julia&amp;gt; f = v -&amp;gt; &amp;#40;10.9 - v&amp;#91;1&amp;#93;&amp;#41;^2 + &amp;#40;7.3 - v&amp;#91;2&amp;#93;&amp;#41;^2
+#&amp;lt;function&amp;gt;
+&amp;nbsp;
+julia&amp;gt; initial_guess = &amp;#91;0.0, 0.0&amp;#93;
+2-element Float64 Array:
+ 0.0
+ 0.0
+&amp;nbsp;
+julia&amp;gt; results = optimize&amp;#40;f, initial_guess&amp;#41;
+Warning: Possible conflict in library symbol dcopy_
+OptimizationResults&amp;#40;&amp;quot;Nelder-Mead&amp;quot;,&amp;#91;0.333333, 0.333333&amp;#93;,&amp;#91;10.9, 7.29994&amp;#93;,3.2848148720460163e-9,38,true&amp;#41;
+&amp;nbsp;
+julia&amp;gt; results.minimum
+2-element Float64 Array:
+ 10.9
+  7.29994
+MCMC
+The MCMC package provides tools for sampling from arbitrary probability distributions using Markov Chain Monte Carlo. It provides functions like slice_sampler, which allows one to sample from a (potentially unnormalized) density function using Radford Neal&amp;#8217;s slice sampling algorithm.
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+julia&amp;gt; load&amp;#40;&amp;quot;MCMC&amp;quot;&amp;#41;
+&amp;nbsp;
+julia&amp;gt; using MCMC
+&amp;nbsp;
+julia&amp;gt; d = Normal&amp;#40;17.29, 1.0&amp;#41;
+Normal&amp;#40;17.29,1.0&amp;#41;
+&amp;nbsp;
+julia&amp;gt; f = x -&amp;gt; logpdf&amp;#40;d, x&amp;#41;
+#&amp;lt;function&amp;gt;
+&amp;nbsp;
+julia&amp;gt; &amp;#91;slice_sampler&amp;#40;0.0, f&amp;#41; for i in 1:100&amp;#93;
+100-element &amp;#40;Float64,Float64&amp;#41; Array:
+ &amp;#40;2.7589100475626323,-106.49522613611775&amp;#41;
+ &amp;#40;22.840595204318323,-16.323492094305458&amp;#41;
+ &amp;#40;0.11800384424353683,-148.35766451986206&amp;#41;
+ &amp;#40;25.507580447082677,-34.68325273534245&amp;#41;
+ &amp;#40;25.794565860846134,-37.08275877393945&amp;#41;
+ &amp;#40;25.898128716394307,-37.96887853221083&amp;#41;
+ &amp;#40;9.309878825853284,-32.76010551023705&amp;#41;
+ &amp;#40;30.824102772255355,-92.50490745818972&amp;#41;
+ &amp;#40;9.108789186504177,-34.38504372063516&amp;#41;
+ &amp;#40;25.547686903330494,-35.01363502992266&amp;#41;
+ ⋮
+ &amp;#40;5.795001414731885,-66.98643477086263&amp;#41;
+ &amp;#40;15.50115292212293,-2.518925467219337&amp;#41;
+ &amp;#40;12.046429369881345,-14.666455009726143&amp;#41;
+ &amp;#40;17.25455052645699,-0.919566865791911&amp;#41;
+ &amp;#40;25.494698549206657,-34.57747767488159&amp;#41;
+ &amp;#40;1.8340810959111111,-120.36165311809079&amp;#41;
+ &amp;#40;2.7112428736526177,-107.18901820771696&amp;#41;
+ &amp;#40;9.21203292192012,-33.54571459047587&amp;#41;
+ &amp;#40;19.12274407701784,-2.5984139591266584&amp;#41;
+NHST
+The NHST package provides tools for testing standard statistical hypotheses using null hypothesis significance testing tools like the t-test and the chi-squared test.
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+julia&amp;gt; load&amp;#40;&amp;quot;Distributions&amp;quot;&amp;#41;
+&amp;nbsp;
+julia&amp;gt; using Distributions
+&amp;nbsp;
+julia&amp;gt; load&amp;#40;&amp;quot;NHST&amp;quot;&amp;#41;
+&amp;nbsp;
+julia&amp;gt; using NHST
+&amp;nbsp;
+julia&amp;gt; d1 = Normal&amp;#40;17.29, 1.0&amp;#41;
+Normal&amp;#40;17.29,1.0&amp;#41;
+&amp;nbsp;
+julia&amp;gt; d2 = Normal&amp;#40;0.0, 1.0&amp;#41;
+Normal&amp;#40;0.0,1.0&amp;#41;
+&amp;nbsp;
+julia&amp;gt; x = rand&amp;#40;d1, 1_000&amp;#41;
+1000-element Float64 Array:
+ 15.7085
+ 18.585
+ 16.6036
+ 18.962
+ 17.8715
+ 16.6814
+ 17.9676
+ 16.8924
+ 16.6022
+ 17.9813
+  ⋮
+ 17.1339
+ 17.3964
+ 18.6184
+ 16.7238
+ 18.5003
+ 16.1618
+ 17.9198
+ 17.4928
+ 18.715
+&amp;nbsp;
+julia&amp;gt; y = rand&amp;#40;d2, 1_000&amp;#41;
+1000-element Float64 Array:
+  0.664885
+  0.147182
+  0.96265
+  0.24282
+  1.881
+ -0.632478
+  0.539297
+  0.996562
+ -0.483302
+  0.514629
+  ⋮
+  2.06249
+ -0.549444
+  0.857575
+ -1.47464
+ -2.33243
+  0.510751
+ -0.381069
+ -1.49165
+  0.0521203
+&amp;nbsp;
+julia&amp;gt; t_test&amp;#40;x, y&amp;#41;
+HypothesisTest&amp;#40;&amp;quot;t-Test&amp;quot;,&amp;#123;&amp;quot;t&amp;quot;=&amp;gt;392.2838409538002&amp;#125;,&amp;#123;&amp;quot;df&amp;quot;=&amp;gt;1989.732411290855&amp;#125;,0.0,&amp;#91;17.1535, 17.3293&amp;#93;,&amp;#123;&amp;quot;mean of x&amp;quot;=&amp;gt;17.24357323225425,&amp;quot;mean of y&amp;quot;=&amp;gt;0.0021786523177457794&amp;#125;,0.0,&amp;quot;two-sided&amp;quot;,&amp;quot;Welch Two Sample t-test&amp;quot;,&amp;quot;x and y&amp;quot;,1989.732411290855&amp;#41;
+Clustering
+The Clustering package provides tools for doing simple k-means style clustering.
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+julia&amp;gt; load&amp;#40;&amp;quot;Clustering&amp;quot;&amp;#41;
+&amp;nbsp;
+julia&amp;gt; using Clustering
+&amp;nbsp;
+julia&amp;gt; srand&amp;#40;1&amp;#41;
+&amp;nbsp;
+julia&amp;gt; n = 100
+100
+&amp;nbsp;
+julia&amp;gt; x = vcat&amp;#40;randn&amp;#40;n, 2&amp;#41;, randn&amp;#40;n, 2&amp;#41; .+ 10&amp;#41;
+200x2 Float64 Array:
+  0.0575636  -0.112322
+ -1.8329     -0.101326
+  0.370699   -0.956183
+  1.31816    -1.44351
+  0.787598    0.148386
+  0.712214   -1.293
+ -1.8578     -1.06208
+ -0.746303   -0.0439182
+  1.12082    -2.00616
+  0.364646   -1.09331
+  ⋮
+ 10.1974     10.5583
+ 11.0832      8.92082
+ 11.5414     11.6022
+  9.0453     11.5093
+  8.86714    10.4233
+ 10.7336     10.7201
+  8.60415     9.13942
+  8.62482     8.51701
+ 10.5044     10.3841
+&amp;nbsp;
+julia&amp;gt; true_assignments = vcat&amp;#40;zeros&amp;#40;n&amp;#41;, ones&amp;#40;n&amp;#41;&amp;#41;
+200-element Float64 Array:
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ ⋮
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+&amp;nbsp;
+julia&amp;gt; results = k_means&amp;#40;x, 2&amp;#41;
+Warning: Possible conflict in library symbol dgesdd_
+Warning: Possible conflict in library symbol dsyrk_
+Warning: Possible conflict in library symbol dgemm_
+KMeansOutput&amp;#40;&amp;#91;1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1  ...  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2&amp;#93;,2x2 Float64 Array:
+ -0.0166203  -0.248904
+ 10.0418     10.0074  ,3,422.9820560670007,true&amp;#41;
+&amp;nbsp;
+julia&amp;gt; results.assignments
+200-element Int64 Array:
+ 1
+ 1
+ 1
+ 1
+ 1
+ 1
+ 1
+ 1
+ 1
+ 1
+ ⋮
+ 2
+ 2
+ 2
+ 2
+ 2
+ 2
+ 2
+ 2
+ 2
+While all of this software is still quite new and often still buggy, being able to work with these tools through a simple package systems had made me more excited than ever before about the future of Julia as a language for data analysis. There is, of course, one thing conspicuously lacking right now: a really powerful visualization toolkit for interactive graphics like that provided by R&amp;#8217;s ggplot2 package. Hopefully something will come into being within the next few months.
+&lt;!-- .entry-content --&gt;
+Posted in Julia, Programming, Statistics  | 6 Responses
+&lt;!-- .hentry --&gt;
+6 responses to &amp;#8220;The State of Statistics in Julia&amp;#8221;
+Tim&lt;!-- .comment-author .vcard --&gt; 12.2.2012 at 2:45 pm | Permalink
+What might be really nice would be to effectively leapfrog the state of much R graphics and do something like &amp;#8216;tabplotd3&amp;#8242;, which pipes everything to d3 via Rook.  Julia seems ideally suited to this step as a default and it would provide capabilities currently not found elsewhere.  I hope it&amp;#8217;s doable.  I&amp;#8217;ve written a few packages that spit out (semi-static) d3 visualizations from R and they were always a big hit.
+&lt;!-- .comment-text --&gt;
+&lt;!-- .comment --&gt;
+John Myles White&lt;!-- .comment-author .vcard --&gt; 12.2.2012 at 2:54 pm | Permalink
+I definitely agree that using D3 is the way to go for now. I&amp;#8217;m hoping to get to that in a month or two.
+&lt;!-- .comment-text --&gt;
+&lt;!-- .comment --&gt;
+Tim&lt;!-- .comment-author .vcard --&gt; 12.2.2012 at 3:09 pm | Permalink
+By the way, thanks much for this post and others like it regarding Julia for stats.  Much obliged.
+&lt;!-- .comment-text --&gt;
+&lt;!-- .comment --&gt;
+John Myles White&lt;!-- .comment-author .vcard --&gt; 12.2.2012 at 4:00 pm | Permalink
+Happy to do it. The more people we can get interested in Julia, the faster it will grow into a usable option for day-to-day work.
+&lt;!-- .comment-text --&gt;
+&lt;!-- .comment --&gt;
+bootz&lt;!-- .comment-author .vcard --&gt; 12.2.2012 at 4:50 pm | Permalink
+Julia seems interesting, but I am missing a &amp;#8220;Julia vs. X&amp;#8221; or &amp;#8220;Why Julia?&amp;#8221; blog posts (with something more then benchmark results and REPL access&amp;#8230;)
+&lt;!-- .comment-text --&gt;
+&lt;!-- .comment --&gt;
+Stefan Karpinski&lt;!-- .comment-author .vcard --&gt; 12.2.2012 at 5:47 pm | Permalink
+@bootz: Does this blog post from when we originally announced Julia back in February fit the bill?
+http://julialang.org/blog/2012/02/why-we-created-julia/
+Or is that too &amp;#8220;visiony&amp;#8221;? There&amp;#8217;s also a technical report which has a fair amount of discussion of the motivations behind creating the language:
+http://julialang.org/images/julia-dynamic-2012-tr.pdf
+&lt;!-- .comment-text --&gt;
+&lt;!-- .comment --&gt; &lt;!-- .comment-list --&gt;
+&lt;!-- .comment-navigation --&gt;
+&lt;!-- #comments --&gt;
+Leave a Reply Click here to cancel reply.
+Name *
+Email *
+Website
+Comment
+Notify me of followup comments via e-mail
+&lt;!-- #respond --&gt;
+&lt;!-- #comments-template --&gt;
+&amp;laquo; Previous &lt;!-- .navigation-links --&gt;
+&lt;!-- .content .hfeed --&gt;
+&lt;!-- #container --&gt;
+Copyright &amp;#169; 2012 John Myles White.
+Powered by WordPress and Hybrid.
+&lt;!-- #footer --&gt;
+&lt;!-- #footer-container --&gt;
+&lt;!-- #body-container --&gt;
+&lt;!-- Dynamic Page Served (once) in 0.476 seconds --&gt;
+&lt;!-- Cached page served by WP-Cache --&gt;
+  </p>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>A Primer on Cheap Software Defined Radios</title>
+  <style type="text/css">
+h1 { text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>A Primer on Cheap Software Defined Radios</h1>
+  <p>
+&lt;!DOCTYPE html&gt;
+&lt;!--[if IEMobile 7 ]&gt;&lt;html class="no-js iem7"&gt;&lt;![endif]--&gt;
+&lt;!--[if lt IE 9]&gt;&lt;html class="no-js lte-ie8"&gt;&lt;![endif]--&gt;
+&lt;!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]&gt;&lt;!--&gt;&lt;!--&lt;![endif]--&gt;
+A Primer on Cheap Software Defined Radios - Yuval Adam
+&lt;!-- http://t.co/dKP3o1e --&gt;
+&lt;!--Fonts from Google"s Web font directory at http://google.com/webfonts --&gt;
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-17515962-4']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+Yuval Adam
+RSS
+Blog
+Archives
+About Me
+A Primer on Cheap Software Defined Radios
+Dec 2nd, 2012
+I&amp;#8217;ve always been fascinated by radio. I clearly remember discovering numbers stations at the age of 9 using my grandparent&amp;#8217;s old shortwave radio, and I was fascinated by the concept of stuff being broadcast over the air - discounting FM radio which was ordinary.
+Actually, I&amp;#8217;ve always wanted to buy a frequency scanner and learn more about radio, but never got around to actually doing so, something didn&amp;#8217;t feel right. Last week, the right thing I was waiting for was found - an open-source software stack and a $15 USB dongle turn my desktop computer into a software defined radio. Essentially, this means that anyone can, very cheaply, pull data out of thin air (literally), and analyze it using code.
+Up until now, SDR could only be achieved using expensive equipment, and using proprietary drivers and software. The $15 SDR option is a serious breakthrough in making the SDR world more accessible. As with most new technologies, the open-source SDR world is still not very user-friendly, and in this post I&amp;#8217;ll try to outline the basic stuff a beginner should know when entering this world.
+The basis for SDR is GNU Radio, which is an open source toolkit that provides all the necessary mathematical building blocks to begin implementing SDR. In essence, GNU Radio is a set of APIs that allow to build usable SDR programs. An important part of GNU Radio is the GNU Radio Companion which is a simple GUI that allows to connect various signal processing components into a single graph and generate code from it. The thing is that, for most basic cases, we don&amp;#8217;t really want to write the signal processing code ourselves.
+Let&amp;#8217;s go back to the hardware part. Up until now, if you wanted to do SDR you had to use expensive receivers, such as the Icom R2500. Naturally, these proprietary products natively supported Windows PCs, and you could forget about Linux, not to mention seeing any code for the software or drivers. Granted, USRP devices were much more open and accessible, but the hardware was still very expensive, and posed a high barrier of entry for novice users that just wanted to play around.
+As it turns out, it&amp;#8217;s possible to use cheap DVT-B USB dongles (like this one) and hack them into proper SDR receivers. DVB-T is a worldwide standard for digital TV broadcast, and apparently the cheap tuners that are manufactured en masse are just the thing we can use to do poor&amp;#8217;s man SDR.
+The software that we use to handle the cheap dongles is rtl-sdr and is the core of the setup. Now, setting up the entire stack is the tricky part. The GNU Radio stack has lots of dependencies, both C and Python libs, and has no easy, cross-platform, way of setting up. I actually kind of gave up on my Mac setup, and took me several hours to get shit running on my Linux box. Other than throwing a bunch of links, I really don&amp;#8217;t have any better installation instructions that the ones out there. There will be lots of errors and dependency issues along the way, it&amp;#8217;s a matter of sifting through wikis and lots of Googling &amp;#8216;till something works. Here are some links that should cover most of what you&amp;#8217;ll need:
+Installing GNU Radio
+Installing GNU Radio OsmoSDR
+Building rtl-sdr
+GNU Radio homebrew recipies (Mac OS X only, obviously)
+rtl-sdr community subreddit
+Fortunately, all tools use standard autoconf and cmake toolchains, so the installation procedure for most packages will be similar. If all went well, at this point, we&amp;#8217;ll want to see the following test running smoothly:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+$ rtl_test -t
+Found 1 device(s):
+  0:  ezcap USB 2.0 DVB-T/DAB/FM dongle
+Using device 0: ezcap USB 2.0 DVB-T/DAB/FM dongle
+Found Elonics E4000 tuner
+Supported gain values (18): -1.0 1.5 4.0 6.5 9.0 11.5 14.0 16.5 19.0 21.5 24.0 29.0 34.0 42.0 43.0 45.0 47.0 49.0
+Benchmarking E4000 PLL...
+[E4K] PLL not locked for 51000000 Hz!
+[E4K] PLL not locked for 2227000000 Hz!
+[E4K] PLL not locked for 1114000000 Hz!
+[E4K] PLL not locked for 1241000000 Hz!
+E4K range: 52 to 2226 MHz
+E4K L-band gap: 1114 to 1241 MHz
+After getting the dongle and the drivers all setup we want to listen to some stuff! As I mentioned earlier, building various signal processing flows is totally beyond the scope for what we&amp;#8217;re trying to do, all we want is a simple tuner with some knobs to twist, and eventually hear some sound coming out the speakers. The most easiest receiver software I&amp;#8217;ve found so far is gqrx (also on Github).
+Gqrx is very easy to grok, even for beginners with no experience listening to the radio waves. Start off by picking a frequency that you know should be active, broadcast FM radio is the obvious choice here, and just tinker with the knobs until it sounds reasonable. Learn what the difference between AM and FM is. Learn how the FM filter works. Play with the squelch levels to silence the white noise on channels that aren&amp;#8217;t always active. From my experience, it takes a while to understand how everything comes together.
+After playing around with broadcast FM, you can advance to other  transmissions: air traffic, ham radio, police and fire services, navigation beacons, GPS, GSM, POCSAG, P25. Each of these subjects is an entire post in and of itself.
+The final point I want to make is that listening to radio waves has lots of nuances to it. The stock antenna shipped with the dongles is absolutely insufficient to receive anything other than strong signals. If you&amp;#8217;re serious in doing SDR, you&amp;#8217;ll have to invest time researching proper antenna setups and reducing noise.
+Nonetheless, this cheap SDR setup is mind-blowing in how easy it can be to start playing around with stuff that used to be extremely expensive.
+Posted by Yuval Adam
+Dec 2nd, 2012
+Tweet
+&amp;laquo; Deploying Periodical Tasks on Heroku
+Comments
+Please enable JavaScript to view the comments powered by Disqus.
+Recent Posts
+A Primer on Cheap Software Defined Radios
+Deploying Periodical Tasks on Heroku
+An Open Toolchain for the TI Stellaris
+Setting up an ARM EABI toolchain on Mac OS X
+Flask and PostgreSQL on Heroku
+GitHub Repos
+Status updating...
+@yuvadm on GitHub
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+        github.showRepos({
+            user: 'yuvadm',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+Latest Tweets
+Status updating...
+    $.domReady(function(){
+      getTwitterFeed("yuvadm", 4, false);
+    });
+Follow @yuvadm
+  Copyright &amp;copy; 2012 - Yuval Adam -
+  Powered by Octopress
+      var disqus_shortname = 'y3xz';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.y3xz.com/blog/2012/12/02/a-primer-on-cheap-software-defined-radios/';
+        var disqus_url = 'http://blog.y3xz.com/blog/2012/12/02/a-primer-on-cheap-software-defined-radios/';
+        var disqus_script = 'embed.js';
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+    (function(){
+      var hn_like = document.createElement('iframe');
+      hn_like.frameborder="no";
+      hn_like.scrolling="no";
+      hn_like.height="28px";
+      hn_like.width="115px";
+      hn_like.src = "http://hnlike.com/upvote.php?link="
+                    + encodeURIComponent(document.location)
+                    + "&amp;title="
+                    + encodeURIComponent("A Primer on Cheap Software Defined Radios");
+      hn_like.innerHTML="iframes not supported by your browser";
+      var twitter = document.getElementsByClassName("twitter-share-button")[0];
+      twitter.parentNode.insertBefore(
+        hn_like,
+        twitter
+      );
+    })();
+  </p>
+</body>
+</html>

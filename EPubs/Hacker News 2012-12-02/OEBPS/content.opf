@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<opf:package xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" unique-identifier="bookid" version="2.0">
+  <opf:metadata>
+    <dc:identifier id="bookid">urn:uuid:e3629e84-3d0c-11e2-ab56-0025bce5a8aa</dc:identifier>
+    <dc:language>en-US</dc:language>
+    <dc:title>Hacker News 2012-12-02</dc:title>
+    <dc:creator opf:role="aut">Sam Calvert</dc:creator>
+  </opf:metadata>
+  <opf:manifest>
+    <opf:item id="ncxtoc" media-type="application/x-dtbncx+xml" href="toc.ncx"/>
+    <opf:item id="html_1" media-type="application/xhtml+xml" href="title-page.html"/>
+    <opf:item id="html_10" media-type="application/xhtml+xml" href="s8.html"/>
+    <opf:item id="html_11" media-type="application/xhtml+xml" href="s9.html"/>
+    <opf:item id="html_12" media-type="application/xhtml+xml" href="s10.html"/>
+    <opf:item id="html_13" media-type="application/xhtml+xml" href="s11.html"/>
+    <opf:item id="html_14" media-type="application/xhtml+xml" href="s12.html"/>
+    <opf:item id="html_15" media-type="application/xhtml+xml" href="s13.html"/>
+    <opf:item id="html_16" media-type="application/xhtml+xml" href="s14.html"/>
+    <opf:item id="html_17" media-type="application/xhtml+xml" href="s15.html"/>
+    <opf:item id="html_18" media-type="application/xhtml+xml" href="s16.html"/>
+    <opf:item id="html_19" media-type="application/xhtml+xml" href="s17.html"/>
+    <opf:item id="html_2" media-type="application/xhtml+xml" href="toc.html"/>
+    <opf:item id="html_20" media-type="application/xhtml+xml" href="s18.html"/>
+    <opf:item id="html_21" media-type="application/xhtml+xml" href="s19.html"/>
+    <opf:item id="html_22" media-type="application/xhtml+xml" href="s20.html"/>
+    <opf:item id="html_23" media-type="application/xhtml+xml" href="s21.html"/>
+    <opf:item id="html_24" media-type="application/xhtml+xml" href="s22.html"/>
+    <opf:item id="html_25" media-type="application/xhtml+xml" href="s23.html"/>
+    <opf:item id="html_26" media-type="application/xhtml+xml" href="s24.html"/>
+    <opf:item id="html_27" media-type="application/xhtml+xml" href="s25.html"/>
+    <opf:item id="html_28" media-type="application/xhtml+xml" href="s26.html"/>
+    <opf:item id="html_29" media-type="application/xhtml+xml" href="s27.html"/>
+    <opf:item id="html_3" media-type="application/xhtml+xml" href="s1.html"/>
+    <opf:item id="html_30" media-type="application/xhtml+xml" href="s28.html"/>
+    <opf:item id="html_31" media-type="application/xhtml+xml" href="s29.html"/>
+    <opf:item id="html_32" media-type="application/xhtml+xml" href="s30.html"/>
+    <opf:item id="html_4" media-type="application/xhtml+xml" href="s2.html"/>
+    <opf:item id="html_5" media-type="application/xhtml+xml" href="s3.html"/>
+    <opf:item id="html_6" media-type="application/xhtml+xml" href="s4.html"/>
+    <opf:item id="html_7" media-type="application/xhtml+xml" href="s5.html"/>
+    <opf:item id="html_8" media-type="application/xhtml+xml" href="s6.html"/>
+    <opf:item id="html_9" media-type="application/xhtml+xml" href="s7.html"/>
+  </opf:manifest>
+  <opf:spine toc="ncxtoc">
+    <opf:itemref idref="html_1" linear="yes"/>
+    <opf:itemref idref="html_2" linear="no"/>
+    <opf:itemref idref="html_3" linear="yes"/>
+    <opf:itemref idref="html_4" linear="yes"/>
+    <opf:itemref idref="html_5" linear="yes"/>
+    <opf:itemref idref="html_6" linear="yes"/>
+    <opf:itemref idref="html_7" linear="yes"/>
+    <opf:itemref idref="html_8" linear="yes"/>
+    <opf:itemref idref="html_9" linear="yes"/>
+    <opf:itemref idref="html_10" linear="yes"/>
+    <opf:itemref idref="html_11" linear="yes"/>
+    <opf:itemref idref="html_12" linear="yes"/>
+    <opf:itemref idref="html_13" linear="yes"/>
+    <opf:itemref idref="html_14" linear="yes"/>
+    <opf:itemref idref="html_15" linear="yes"/>
+    <opf:itemref idref="html_16" linear="yes"/>
+    <opf:itemref idref="html_17" linear="yes"/>
+    <opf:itemref idref="html_18" linear="yes"/>
+    <opf:itemref idref="html_19" linear="yes"/>
+    <opf:itemref idref="html_20" linear="yes"/>
+    <opf:itemref idref="html_21" linear="yes"/>
+    <opf:itemref idref="html_22" linear="yes"/>
+    <opf:itemref idref="html_23" linear="yes"/>
+    <opf:itemref idref="html_24" linear="yes"/>
+    <opf:itemref idref="html_25" linear="yes"/>
+    <opf:itemref idref="html_26" linear="yes"/>
+    <opf:itemref idref="html_27" linear="yes"/>
+    <opf:itemref idref="html_28" linear="yes"/>
+    <opf:itemref idref="html_29" linear="yes"/>
+    <opf:itemref idref="html_30" linear="yes"/>
+    <opf:itemref idref="html_31" linear="yes"/>
+    <opf:itemref idref="html_32" linear="yes"/>
+  </opf:spine>
+  <opf:guide>
+    <opf:reference href="title-page.html" type="title-page" title="Title Page"/>
+    <opf:reference href="toc.html" type="toc" title="Table of Contents"/>
+  </opf:guide>
+</opf:package>

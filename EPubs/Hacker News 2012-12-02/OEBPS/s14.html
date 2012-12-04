@@ -1,0 +1,1623 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Never mind talent: Practice, practice, practice</title>
+  <style type="text/css">
+h1 { text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>Never mind talent: Practice, practice, practice</h1>
+  <p>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+Never mind talent: Practice, practice, practice
+	//Objects to interact with server
+	var CMSUtil = {
+		interactWithServer: function(form, isAjax, buildObjectFunction,
+									returnFunction, action, servlet,
+									extraFields){
+			if(isAjax == true &amp;&amp; returnFunction != null){
+            	var queryString = Form.serialize(form);
+				if(queryString != null){
+					if(action != null){
+						queryString += "&amp;action=" + action + "&amp;isAjax=Y";
+					}else{
+            			queryString += "&amp;isAjax=Y";
+            		}
+            		if(extraFields){
+            			queryString += extraFields;
+            		}
+            		var handlerFunction = function(originalRequest){
+            			var response = "(" + originalRequest.responseText + ")";
+            			response = eval(response);
+						buildObjectFunction(response);
+            			returnFunction(response);
+            		}
+					var myAjax = new Ajax.Request(servlet,
+    					{method: 'post', postBody: queryString, onComplete: handlerFunction}
+					);
+				}
+            }else{
+ 				this.submitUserFormNoAJAX(form, action, servlet);
+			}
+		},
+		submitUserFormNoAJAX: function(form, action, servlet){
+			if(servlet == null) return null;
+    	    form.action = servlet;
+    	    if(action != null) {
+    	    	var actionField = document.createElement('input');
+    	    	actionField.setAttribute('name', 'action');
+  					actionField.setAttribute('type', 'hidden');
+  					actionField.value = action;
+    	    	form.appendChild(actionField);
+    	    }
+    		form.submit();
+    	}
+	}
+	var Action = {
+		attachAction: function(form, isAjax, returnFunction){
+			var action = "";
+			if(isAjax){
+				action = "attachActionAJAX";
+			} else {
+				action = "attachAction";
+			}
+			CMSUtil.interactWithServer(form, isAjax, Action.buildAction, returnFunction, action, "/s");
+		},
+		deleteAction: function(form, isAjax, returnFunction){
+        	var action = "";
+        	if(isAjax){
+        		action = "deleteActionAJAX";
+        	} else {
+        		action = "deleteAction";
+        	}
+        	CMSUtil.interactWithServer(form, isAjax, Action.deletedAction, returnFunction, action, "/s");
+        },
+		buildAction: function(response){
+			if(response.success == true){
+				Action.actionID = response.actionID;
+				Action.contentID = response.contentID;
+				Action.commentID = response.commentID;
+				Action.contentTypeID = response.contentTypeID;
+				Action.actionDate = response.actionDate;
+				Action.userID = response.userID;
+				Action.actionType = response.actionType;
+				Action.slugLine = response.slugLine;
+			} else {
+			 	Action.error = response.error;
+			}
+		},
+		deletedAction: function(response){
+			if(response.success == true){
+				Action.actionID = response.actionID;
+			} else {
+				Action.error = response.error;
+			}
+		}
+	}
+	var Ranking = {
+		insertRanking: function(form, isAjax, returnFunction){
+			CMSUtil.interactWithServer(form, isAjax, Ranking.buildRanking, returnFunction, "rankComment", "/p");
+		},
+		buildRanking: function(response){
+			if(response.success == true){
+				Ranking.success = true;
+				Ranking.objectId = response.objectId;
+				Ranking.type = response.type;
+				Ranking.ipAddress = response.ipAddress;
+				Ranking.rankDate = response.rankDate;
+				Ranking.upRanking = response.upRanking;
+				Ranking.downRanking = response.downRanking;
+			} else {
+				Ranking.error = response.error;
+			}
+		}
+	}
+	var Rating = {
+		addRating: function(form, isAjax, returnFunction){
+			var action = "";
+			if(isAjax){
+				action = "addRatingAJAX";
+			} else {
+				action = "addRating";
+			}
+            CMSUtil.interactWithServer(form, isAjax, Rating.buildRating, returnFunction, action, "/s");
+        },
+        insertRating: function(form, isAjax, returnFunction){
+			var extraQueryStr = null;
+			if(isAjax){
+				extraQueryStr = getFieldsForForm();
+			}else{
+				addFieldsToForm(form);
+			}
+			CMSUtil.interactWithServer(form, isAjax, Comment.buildComment, returnFunction, "insertComment", "/c", extraQueryStr);
+		},
+		buildRating: function(response){
+			if(response.success == true){
+				Rating.id = response.id;
+				Rating.rating = response.rating;
+				Rating.upvote = response.upvote;
+				Rating.downvote = response.downvote;
+				Rating.type = response.type;
+				Rating.date = response.date;
+				Rating.ipAddress = response.ipAddress;
+			}else{
+				Rating.error = response.error;
+			}
+		}
+	}
+	var User = {
+		createUser: function(form, isAjax, returnFunction){
+		    var action = "";
+			if(isAjax){
+				action = "createProfileAJAX";
+			} else {
+				action = "createProfile";
+			}
+            CMSUtil.interactWithServer(form, isAjax, User.buildUser, returnFunction, action, "/s");
+		},
+		loginUser: function(form, isAjax, returnFunction){
+			var action = "";
+			if(isAjax){
+				action = "doLoginProfileAJAX";
+			} else {
+				action = "doLoginProfile";
+			}
+        	CMSUtil.interactWithServer(form, isAjax, User.buildUser, returnFunction, action, "/s");
+		},
+		updateUser: function(form, isAjax, returnFunction){
+			var action = "";
+			if(isAjax){
+				action = "updateProfileAJAX";
+			} else {
+				action = "updateProfile";
+			}
+			CMSUtil.interactWithServer(form, isAjax, User.buildUser, returnFunction, action, "/s");
+		},
+		updateRegistration: function(form, isAjax, returnFunction){
+			var action = "";
+			if(isAjax){
+				action = "updateRegistrationAJAX";
+			} else {
+				action = "updateReg";
+			}
+			CMSUtil.interactWithServer(form, isAjax, User.buildUser, returnFunction, action, "/s");
+		},
+		updateProfilePassword: function(form, isAjax, returnFunction){
+			var action = "";
+			if(isAjax){
+				action = "updateProfilePasswordAJAX";
+			} else {
+				action = "updateProfilePassword";
+			}
+			CMSUtil.interactWithServer(form, isAjax, User.buildUser, returnFunction, action, "/s");
+		},
+		insertProfilePic: function(form, isAjax, returnFunction){
+			var action = "";
+			if(isAjax){
+				//not implemented as of yet
+				return;
+				//action = "updateImageAJAX";
+			} else {
+				action = "updateImage";
+			}
+			CMSUtil.interactWithServer(form, isAjax, User.buildUser, returnFunction, action, "/s");
+		},
+		buildUser: function(response){
+			if(response.success == true){
+				User.username = response.username;
+				User.email = response.email;
+				User.firstName = response.firstName;
+				User.lastName = response.lastName;
+				User.birthDate = response.birthDate;
+				User.createDate = response.createDate;
+				User.title = response.title;
+				User.company = response.company;
+				User.address1 = response.address1;
+				User.address2 = response.address2;
+				User.city = response.city;
+				User.state = response.state;
+				User.zipcode = response.zipcode;
+				User.country = response.country;
+				User.custom1 = response.custom1;
+				User.custom2 = response.custom2;
+				User.custom3 = response.custom3;
+				User.custom4 = response.custom4;
+				User.custom5 = response.custom5;
+				User.custom6 = response.custom6;
+				User.custom7 = response.custom7;
+				User.custom8 = response.custom8;
+				User.custom9 = response.custom9;
+			}else{
+				User.error = response.error;
+				User.errorMsg = response.errorMsg;
+				User.errorCode = response.errorCode;
+			}
+		}
+	}
+	var UserContent = {
+		insertContent: function(form, isAjax, returnFunction){
+			var extraQueryStr = null;
+			if(isAjax){
+				extraQueryStr = getFieldsForForm();
+			}else{
+				addFieldsToForm(form);
+			}
+			UserContent.messages = null;
+			CMSUtil.interactWithServer(form, isAjax, UserContent.buildContent, returnFunction, extraQueryStr, "/d");
+		},
+		editContent: function(form, isAjax, returnFunction){
+			CMSUtil.interactWithServer(form, isAjax, UserContent.buildContent, returnFunction, null, "/d");
+		},
+		buildContent: function(response){
+			if(response.success == true){
+				for (var i=0; i&lt; response.fields.length; i++){
+					var field = response.fields[i];
+					UserContent[field] = response[field];
+				}
+				UserContent.contentID = response.contentID;
+				UserContent.contentType = response.contentType;
+				UserContent.title = response.title;
+				UserContent.status = response.status;
+			} else {
+				UserContent.error = response.error;
+				UserContent.messages = response.messages;
+			}
+		}
+	}
+	var Comment = {
+		insertComment: function(form, isAjax, returnFunction){
+			var extraQueryStr = null;
+			if(isAjax){
+				extraQueryStr = getFieldsForForm();
+			}else{
+				addFieldsToForm(form);
+			}
+			CMSUtil.interactWithServer(form, isAjax, Comment.buildComment, returnFunction, "insertComment", "/c", extraQueryStr);
+		},
+		deleteComment: function(form, isAjax, returnFunction){
+			var extraQueryStr = null;
+			if(isAjax){
+				extraQueryStr = getFieldsForForm();
+			}else{
+				addFieldsToForm(form);
+			}
+			CMSUtil.interactWithServer(form, isAjax, Comment.nullifyComment, returnFunction, "deleteComment", "/c", extraQueryStr);
+		},
+		updateComment: function(form, isAjax, returnFunction){
+			var extraQueryStr = null;
+			if(isAjax){
+				extraQueryStr = getFieldsForForm();
+			} else {
+				addFieldsToForm(form);
+			}
+			CMSUtil.interactWithServer(form, isAjax, Comment.buildComment, returnFunction, "updateComment", "/c", extraQueryStr);
+		},
+		buildComment: function(response){
+						Comment.name = null;
+			Comment.website = null;
+			Comment.title = null;
+			Comment.comment = null;
+			Comment.email = null;
+			Comment.rating = null;
+			Comment.ratingType = null;
+			Comment.commentType = null;
+			Comment.flagged = false;
+			Comment.isAuthor = false;
+			Comment.error = null;
+			Comment.status = null;
+			Comment.level = 0;
+			Comment.parentID = 0;
+			Comment.threadID = 0;
+			Comment.id = 0;
+			Comment.extID = null;
+			if(response.success == true){
+				Comment.name = response.name;
+				Comment.comment = response.comment;
+				Comment.email = response.email;
+				Comment.website = response.website;
+				Comment.title = response.title;
+				Comment.isAuthor = response.isAuthor;
+				Comment.flagged = response.flagged;
+				Comment.status = response.status;
+				Comment.rating = response.rating;
+				Comment.ratingType = response.ratingType;
+				Comment.commentType = response.commentType;
+				if(Comment.status == "AUTHOR"){
+					Comment.isAuthor = true;
+				} else if(Comment.status != "APPROVED") {
+					Comment.flagged = true;
+				}
+			    Comment.id = response.id;
+			    Comment.threadID = response.threadID;
+			    Comment.parentID = response.parentID;
+			    Comment.level = response.level;
+			    Comment.extID = response.extID;
+			} else {
+				Comment.error = response.error;
+			}
+		},
+		nullifyComment: function(response){
+			if(response.success == true){
+				Comment.comment = null;
+				Comment.email = null;
+				Comment.website = null;
+				Comment.title = null;
+				Comment.isAuthor = null;
+				Comment.flagged = null;
+				Comment.status = null;
+				Comment.id = 0;
+			    Comment.threadID = 0;
+			    Comment.parentID = 0;
+			    Comment.level = 0;
+			    Comment.extID = null;
+			} else {
+				Comment.error = response.error;
+			}
+		}
+	}
+	var Clickability = Clickability || {};
+	Clickability.SMTK = {
+		kP : 0,
+		aT : 0,
+		myInterval : null,
+		xPos : -1,
+		yPos : -1,
+		firstX : -1,
+		firstY : -1,
+		intervals : 0,
+		cid :  181637371 ,
+		did :  168261 ,
+		d : 0,
+		mT : 0
+	}
+	Clickability.SMTK.myInterval = window.setInterval(timedMousePos,250);
+	document.onkeypress = lK;
+	window.onload = rAT;
+		Clickability.Comment = Comment;
+		var p;
+	var kP = 0;
+	var	aT = 0;
+	var myInterval = Clickability.SMTK.myInterval;
+	var xPos = -1;
+	var yPos = -1;
+	var firstX = -1;
+	var firstY = -1;
+	var intervals = 0;
+	var d = 0;
+	var mT = 0;
+	var cid =  181637371 ;
+	var did =  168261 ;
+	function getMousePos(p) {
+		if(!p)var p = window.event;
+		if (p.pageX || p.pageY) {
+			Clickability.SMTK.xPos = p.pageX;
+			Clickability.SMTK.yPos = p.pageY;
+		} else if (p.clientX || p.clientY) {
+			Clickability.SMTK.xPos = p.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+			Clickability.SMTK.yPos = p.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+		}
+	}
+	function lK() {
+		Clickability.SMTK.kP++;
+	}
+	function rAT() {
+		Clickability.SMTK.aT = new Date();
+	}
+	function timedMousePos() {
+		document.onmousemove = getMousePos;
+		if (Clickability.SMTK.xPos &gt;= 0 &amp;&amp; Clickability.SMTK.yPos &gt;= 0) {
+			var newX = Clickability.SMTK.xPos;
+			var newY = Clickability.SMTK.yPos;
+			Clickability.SMTK.intervals++;
+		}
+		if (Clickability.SMTK.intervals == 1) {
+			Clickability.SMTK.firstX = Clickability.SMTK.xPos;
+			Clickability.SMTK.firstY = Clickability.SMTK.yPos;
+		} else if (Clickability.SMTK.intervals == 2) {
+			clearInterval(Clickability.SMTK.myInterval);
+			calcDistance(Clickability.SMTK.firstX,Clickability.SMTK.firstY,newX,newY);
+		}
+	}
+	function calcDistance(aX,aY,bX,bY){
+		Clickability.SMTK.mT = Math.round(Math.sqrt(Math.pow(aX-bX,2)+Math.pow(aY-bY,2)));
+	}
+	function getFieldsForForm(){
+		var sT = new Date();
+		Clickability.SMTK.d = sT - Clickability.SMTK.aT;
+		var queryString = "&amp;";
+		queryString += "mT=" + Clickability.SMTK.mT;
+     	queryString += "&amp;d=" + Clickability.SMTK.d;
+     	queryString += "&amp;kP=" + Clickability.SMTK.kP;
+     	if(Clickability.SMTK.cid)queryString += "&amp;cid=" + Clickability.SMTK.cid;
+     	if(Clickability.SMTK.did)queryString += "&amp;did=" + Clickability.SMTK.did;
+     	queryString += "&amp;socialMedia=Y";
+	    return queryString;
+	}
+	function addFieldsToForm(formObj, redirect) {
+		var sT = new Date();
+		Clickability.SMTK.d = sT - Clickability.SMTK.aT;
+		var mTField = document.createElement('input');
+		var dField = document.createElement('input');
+		var kPField = document.createElement('input');
+  		var cidField = document.createElement('input');
+  		var didField = document.createElement('input');
+  		var socialMedia = document.createElement('input');
+  		socialMedia.setAttribute('name','socialMedia');
+		socialMedia.setAttribute('type', 'hidden');
+  		mTField.setAttribute('name','mT');
+		mTField.setAttribute('type', 'hidden');
+		dField.setAttribute('name', 'd');
+		dField.setAttribute('type', 'hidden');
+		kPField.setAttribute('name', 'kP');
+		kPField.setAttribute('type', 'hidden');
+		cidField.setAttribute('name', 'cid');
+		cidField.setAttribute('type', 'hidden');
+  		didField.setAttribute('name', 'did');
+  		didField.setAttribute('type', 'hidden');
+  		if(redirect != null) {
+  			var pathField = document.createElement('input');
+  			pathField.setAttribute('name', 'path');
+  			pathField.setAttribute('type', 'hidden');
+  			pathField.value = redirect;
+  			formObj.appendChild(pathField);
+  		}
+  		mTField.value = Clickability.SMTK.mT;
+		dField.value = Clickability.SMTK.d;
+		kPField.value = Clickability.SMTK.kP;
+		cidField.value = Clickability.SMTK.cid;
+		didField.value = Clickability.SMTK.did;
+		socialMedia.value = "Y";
+		formObj.appendChild(dField);
+		formObj.appendChild(kPField);
+		formObj.appendChild(mTField);
+		formObj.appendChild(cidField);
+		formObj.appendChild(didField);
+		formObj.appendChild(socialMedia);
+	}
+	//helper functions
+	function insertComment(form, isAjax, returnFunction, showError){
+		return submitToServer(Comment.insertComment, "Unable to insert comment", form, isAjax, returnFunction, showError);
+	}
+	function updateComment(form, isAjax, returnFunction, showError){
+		return submitToServer(Comment.updateComment, "Unable to update comment", form, isAjax, returnFunction, showError);
+	}
+	function deleteComment(form, isAjax, returnFunction, showError){
+		return submitToServer(Comment.deleteComment, "Unable to delete comment", form, isAjax, returnFunction, showError);
+	}
+	function createUser(form, isAjax, returnFunction, showError){
+		return submitToServer(User.createUser, "Unable to create user", form, isAjax, returnFunction, showError);
+	}
+	function updateUser(form, isAjax, returnFunction, showError){
+		return submitToServer(User.updateUser, "Unable to update user", form, isAjax, returnFunction, showError);
+	}
+	function loginUser(form, isAjax, returnFunction, showError){
+		return submitToServer(User.loginUser, "Unable to login user", form, isAjax, returnFunction, showError);
+	}
+	function insertUserContent(form, isAjax, returnFunction, showError){
+		return submitToServer(UserContent.insertContent, "Unable to insert content item", form, isAjax, returnFunction, showError);
+	}
+	function editUserContent(form, isAjax, returnFunction, showError){
+		return submitToServer(UserContent.editContent, "Unable to edit content item", form, isAjax, returnFunction, showError);
+	}
+	function insertProfilePic(form, isAjax, returnFunction, showError){
+		return submitToServer(User.insertProfilePic, "Unable to upload profile photo", form, isAjax, returnFunction, showError);
+	}
+	function addRating(form, isAjax, returnFunction, showError){
+		return submitToServer(Rating.addRating, "Unable to add rating", form, isAjax, returnFunction, showError);
+	}
+	function insertRating(form, isAjax, returnFunction, showError){
+		return submitToServer(Rating.insertRating, "Unable to insert rating", form, isAjax, returnFunction, showError);
+	}
+	function attachAction(form, isAjax, returnFunction, showError){
+		return submitToServer(Action.attachAction, "Unable to attach action", form, isAjax, returnFunction, showError);
+	}
+	function deleteAction(form, isAjax, returnFunction, showError){
+		return submitToServer(Action.deleteAction, "Unable to delete action", form, isAjax, returnFunction, showError);
+	}
+	function insertRanking(form, isAjax, returnFunction, showError){
+		return submitToServer(Ranking.insertRanking, "Unable to insert ranking", form, isAjax, returnFunction, showError);
+	}
+	function submitToServer(method, msg, form, isAjax, returnFunction, showError){
+		method(form, isAjax, returnFunction);
+		if(isAjax){
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+			flagSpam = function (formObj) {
+				var commentBody = formObj.field.value;
+
+				
+	
+				var htmlTest = /&lt;[^&gt;]*&gt;/g;
+				//alert('Before Flag | mT: ' + mT + ' | kP: ' + kP)
+				if(htmlTest.test(commentBody)){
+					mT = 0;
+					kP = 0;			
+					commentBody = commentBody.replace(/&lt;\/?[^&gt;]+(&gt;|$)/g, "");				
+					commentBody +=  ' (HTML deleted)';	
+				}
+															
+				commentBody = commentBody.replace(/\r\n/g,"&lt;br&gt;");
+				commentBody = commentBody.replace(/\n/g,"&lt;br&gt;");
+				commentBody = commentBody.replace(/\r/g,"&lt;br&gt;");   
+				             
+				formObj.field.value = commentBody;
+	
+				
+				//formObj.field.value = commentBody;	
+
+				//alert('After Flag | mT: ' + mT + ' | kP: ' + kP)								
+
+				return insertComment(formObj, true, updateComments, true);
+
+			};
+	
+ 
+		var ua;
+		ua = navigator.userAgent;
+		this.isMSIE = (navigator.appName == "Microsoft Internet Explorer");
+		this.isMSIE6 = this.isMSIE &amp;&amp; (ua.indexOf('MSIE 6') != -1);
+
+				rm = false;
+				userName = "";
+				userEmail = "";
+				userIdHere = "";
+
+&lt;!--
+
+function createCookie(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i &lt; ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+function eraseCookie(name) {
+	var expires = "";
+	createCookie(name,null,-1);
+	document.cookie = name+"="+value+expires;
+}
+
+function getUserName(){
+	document.write('&lt;scr'+'ipt language="JavaScript" type="text/javascript" src="http://www.philly.com/philly/userarea/?c=n&amp;d=0.809715300724424"&gt;&lt;/scr'+'ipt&gt;');
+}
+
+
+ // If the server has logged them in but they don't have a username or SID cookie set yet, call getUserName(), which will set all the login cookies.
+ // NOTE: since this runs on every page, provides a way of setting new cookies on already logged-in [persisted] user sessions
+if(readCookie("UID") &amp;&amp; (!readCookie("username") || !readCookie("SID") || !readCookie("7445598737"))){
+	getUserName();
+
+}
+
+
+
+if(readCookie("username") &amp;&amp; readCookie("username") !=""){
+	rm = true;
+	rname = readCookie("username");
+	userName = rname;
+	userEmail = readCookie("email");
+	userIdHere = readCookie("SID");
+}else{
+	rm = false;
+	if(!readCookie("splitGroup")) {
+			createCookie("splitGroup","b",30);
+		}
+}
+
+// Adding to make sure when a pending user signs out and comes back in, the regConfirmationCookie is properly cleared out.
+if(!readCookie("UID") &amp;&amp; readCookie("regConfirmationStatus")){
+	eraseCookie("regConfirmationStatus");
+}
+
+// Adding to make sure when a user signs out, the SID cookie is properly cleared out.
+if(!readCookie("UID") &amp;&amp; readCookie("SID")){
+	eraseCookie("SID");
+}
+
+
+
+// As long as regConfirmationStatus remains pending, call the /philly/userarea "determine login status" template (via getUserName()) to re- set the cookie values.
+if(readCookie("regConfirmationStatus") &amp;&amp; readCookie("regConfirmationStatus") == "pending") {
+	getUserName();
+}
+
+if(readCookie("regConfirmationStatus")){
+	var userStatus = readCookie("regConfirmationStatus");
+}
+
+
+
+if(!readCookie("splitGroup")) {
+
+
+	createCookie("splitGroup","b",30);
+
+
+}
+
+// --&gt;
+&lt;!--[if lt IE 7.]&gt;
+&lt;script defer type="text/javascript" src="http://www.philly.com/includes/pngfix.js"&gt;&lt;/script&gt;
+&lt;![endif]--&gt;
+&lt;!-- 
+
+	
+
+	
+
+	
+/* 175222231 */
+
+
+			#article h1 {font-size:150%;}
+	#article h2 {font-size:120%;}
+	
+
+
+	
+
+
+
+	
+
+
+
+	// --&gt;
+
+	var iPlatformOBJ = new Object;
+		iPlatformOBJ[9]	= navigator.platform;
+		if ((iPlatformOBJ[9] == "iPad")) 
+		{
+		   document.write("&lt;link rel='stylesheet' type='text/css' href='http://www.philly.com/includes/mobile_iPad_philly.css' /&gt;");
+		}
+&lt;!--googleoff: all--&gt;
+&lt;!-- SiteCatalyst code version: H.25.
+Copyright 1997-2008 Omniture, Inc. More info available at
+http://www.omniture.com --&gt;
+&lt;!--
+/* You may give each page an identifying name, server, and channel on
+the next lines. */
+
+  
+s.server="www.philly.com";
+
+
+
+	s.channel="news";
+	s.pageName="article: news: Never mind talent: Practice, practice, practice - 12/02/2012";
+
+
+
+
+
+	s.prop3="Article";
+
+										s.prop4="Inquirer Unknown";
+									
+
+
+ s.prop8=s.getTimeParting('d','-5','2012');  // set day of week 
+ s.prop9=s.getTimeParting('h','-5','2012');  // set hour of day 
+ s.prop10=s.getTimeParting('w','-5','2012'); // set weekend/weekday
+if (rm) {
+	s.prop30="logged in";
+
+} else {
+	s.prop30="logged out";
+}
+
+if(readCookie("userAge") &amp;&amp; readCookie("userAge") != "") {
+s.eVar41 = readCookie("userAge"); 
+}
+if(readCookie("gender") &amp;&amp; readCookie("gender") != "") {
+s.eVar42 = readCookie("gender"); 
+}
+
+if (readCookie("splitGroup") !="") {
+	s.eVar13=readCookie("splitGroup");
+}
+
+
+											
+
+s.prop21=s.getDaysSinceLastVisit();
+s.prop22=s.server;
+s.prop23="philly:opinion";
+ 
+s.prop1="Never mind talent: Practice, practice, practice";
+s.prop11="181637371";
+s.prop12="Never mind talent: Practice, practice, practice";
+s.prop13="";
+
+
+
+s.prop27="";
+
+/* Hierarchy Variables */
+
+
+s.prop5="philly,opinion,index";
+s.hier2="philly,philly,opinion,index";
+
+
+
+	s.prop60="news";
+	s.eVar60=s.prop60;
+					s.prop61="opinion";
+		s.eVar61=s.prop61;
+		
+
+
+
+s.hier1=s.prop5;
+
+s.events="event1,event4";
+
+/************* DO NOT ALTER ANYTHING BELOW THIS LINE ! **************/
+var s_code=s.t();if(s_code)document.write(s_code)//--&gt;
+&lt;!--
+if(navigator.appVersion.indexOf('MSIE')&gt;=0)document.write(unescape('%3C')+'\!-'+'-')
+//--&gt;&lt;!--/DO NOT REMOVE/--&gt;
+&lt;!-- End SiteCatalyst code version: H.17. --&gt;
+var _sf_startpt=(new Date()).getTime()
+
+
+	var userAge = readCookie("userAge");
+	var userGender = readCookie("gender");
+	  var LOTCC = LOTCC || { asyncBehaviors: {}, async: true };
+
+	  LOTCC.asyncBehaviors["age"] = [userAge]; 
+	  LOTCC.asyncBehaviors["gen"] = [userGender]; 
+
+	(function(){
+	     var lot = document.createElement('script');
+		 lot.src = 'http://tags.crwdcntrl.net/c/402/cc.js';
+		 lot.setAttribute('async', 'true');
+		 document.documentElement.firstChild.appendChild(lot);
+	  })();
+
+var js="0.0";js="1.0";js="1.1";js="1.2";js="1.3";js="1.4";js="1.5";js="1.6";js="1.7";js="1.8";js="1.9";
+&lt;!--
+var bb=new Image();var _ti=910;var _q="";var na=(navigator.appName=="Netscape");var ns=(navigator.appName.substring(0,9)=="Microsoft");var _qDate=new Date();var _r=(document.referrer.indexOf(getdomain(location))&gt;-1?"":document.referrer);_q+="&amp;5="+parseInt(_qDate.getTimezoneOffset());_q+="&amp;35="+parseInt(_qDate.toString().indexOf("aylight")&gt;-1?1:0);_q+="&amp;6=181637371";_q+="&amp;7=168261";_q+="&amp;8="+encodeURIComponent(document.location);_q+="&amp;9="+encodeURIComponent(_r);_q+="&amp;10="+encodeURIComponent(document.title);_q+="&amp;11="+encodeURIComponent(navigator.userAgent);_q+="&amp;12="+encodeURIComponent((na?navigator.language:navigator.userLanguage));_q+="&amp;13="+((navigator.javaEnabled()?'1':'0'));_q+="&amp;14="+encodeURIComponent(js);if(document.cookie.indexOf("cc")==-1)document.cookie="cc=t;";_q+="&amp;15="+((document.cookie.indexOf("cc")==-1)?"0":"1");_q+="&amp;16="+encodeURIComponent((screen.width+'x'+screen.height));_q+="&amp;17="+encodeURIComponent(((ns)?screen.colorDepth:screen.pixelDepth));_q+="&amp;18="+encodeURIComponent(Math.random());_q+="&amp;19="+_ti;bb.src="http://s.clickability.com/s?"+_q;
+function setonclicks(a,b){var i=0;var retval=true;while(document.links[i]!=a){i++;}if(b.li[i])retval=b.li[i].oldonclick();bye(a);return retval;}
+function newonld(){if(hasonload)oldonld();lnks=new Object();var sze=document.links.length;lnks.li=new Array(sze);for (var i=0; i&lt;sze; i++){if(document.links[i].onclick){lnks.li[i]=document.links[i];lnks.li[i].oldonclick=document.links[i].onclick;}eval("document.links[i].onclick=function(){return setonclicks(this,lnks);}");}}function bye(a){if(a.href.toLowerCase().indexOf('http')!=0)return true;if(getdomain(location)==getdomain(a))return true;if(a.href.toLowerCase().indexOf('http')!=0)return true;var _qc="http://s.clickability.com/s?19=912";_qc+="&amp;6=181637371";_qc+="&amp;7=168261";_qc+="&amp;18="+encodeURIComponent(Math.random());_qc+="&amp;100="+a.href;_qc+="&amp;101="+encodeURIComponent(a.text);var cc=new Image();if(na){cc.src=_qc;pc(100);}else cc.src=_qc;return true;}function pc(a){d = new Date(); while (1){m =new Date(); df = m-d;if( df &gt; a ) {break;}}}function getdomain(a){var i=a.host.indexOf(":");return (i&gt;=0)?a.host.substring(0,i):a.host;}if(self['setupalready']){var dosetup = false;alert('There are two $imware.tracker calls on this page. Please alert Client Services');}else{var dosetup = true;var hasonload=false;}if(dosetup &amp;&amp; ((window.screen)||((new Array()).toSource)||((new Array()).shift&amp;&amp;ns))&amp;&amp;(navigator.userAgent.indexOf('Mac')&lt;0)){if(window.onload){oldonld=window.onload;hasonload=true;}window.onload=newonld;var setupalready = true;}//--&gt;
+
+								if (rm) {
+					if (!readCookie("username") || readCookie("username") == "") {
+					document.write('&lt;div class="np-link"&gt;Welcome &lt;b&gt;' + rname + '&lt;/b&gt;&lt;/div&gt; ');
+					} else {
+					document.write('&lt;div class="np-link"&gt;Welcome &lt;b&gt;' + readCookie("username") + '&lt;/b&gt;&lt;/div&gt; ');
+					}
+					
+if(readCookie("regConfirmationStatus") &amp;&amp; readCookie("regConfirmationStatus") == "pending") {
+					document.write('&lt;div class=""&gt; &lt;a href="/s?action=editReg&amp;rurl=http%3A%2F%2Fwww.philly.com%2Fphilly%2Fopinion%2F181637371.html" id="myaccountlink" onclick="var s=s_gi(\'phillycom\');s.tl(this,\'o\',\' TopNav: Right: My Account\');"&gt;My Account&lt;/a&gt;&lt;/div&gt;');
+
+document.write('&lt;div class=""&gt; &lt;a href="/s?action=requestConfirmation" id="resendlink" onclick="var s=s_gi(\'phillycom\');s.tl(this,\'o\',\' TopNav: Right: Resend confirmation email\');"&gt;Resend confirmation email&lt;/a&gt;&lt;/div&gt;');
+					} else {
+document.write('&lt;div class=""&gt; &lt;a href="/philly/profiles/myprofile/" id="myprofilelink" onclick="var s=s_gi(\'phillycom\');s.tl(this,\'o\',\' TopNav: Right: My Profile\');"&gt;My Profile&lt;/a&gt; |&lt;/div&gt;');}
+
+if(readCookie("ssoUser") == "true"){ 
+document.write('&lt;div class=""&gt; &lt;form name="logoutSSO" method="post" action="/s" style="display:inline;"&gt;&lt;input type="hidden" name="action" value="doLogout"&gt;&lt;a href="#" id="signoutlink" onclick="var s=s_gi(\'phillycom\');s.tl(this,\'o\',\' TopNav: Right: Sign Out\');javascript:logFBUser();"&gt; Sign Out &lt;/a&gt;&lt;/form&gt;&lt;/div&gt;'); 
+} else {
+					document.write('&lt;div class=""&gt; &lt;a href="/s?action=doLogout&amp;rurl=/s?action=login" id="signoutlink" onclick="var s=s_gi(\'phillycom\');s.tl(this,\'o\',\' TopNav: Right: Sign Out\');javascript:eraseCookie(\'username\');return true;"&gt; Sign Out &lt;/a&gt;&lt;/div&gt;');
+}
+
+
+				} else {
+										document.write('	&lt;div class=""&gt; &lt;a href="/s?action=login&amp;requested=y&amp;rurl=http%3A%2F%2Fwww.philly.com%2Fphilly%2Fopinion%2F181637371.html" id="signinlink" onclick="var s=s_gi(\'phillycom\');s.tl(this,\'o\',\' TopNav: Right: Sign In\');"&gt; Sign In&lt;/a&gt; |&lt;/div&gt;&lt;div class=""&gt; &lt;a href="/s?action=reg&amp;requested=y&amp;rurl=http%3A%2F%2Fwww.philly.com%2Fphilly%2Fopinion%2F181637371.html" id="registerlink" onclick="var s=s_gi(\'phillycom\');s.tl(this,\'o\',\' TopNav: Right: Register\');"&gt;Register&lt;/a&gt;&lt;/div&gt;');
+								}
+
+		var myOBJ	= new Object;
+		myOBJ[9]	= navigator.platform;		
+				
+		if ((myOBJ[9] == "iPhone")||(myOBJ[9] == "iPod")||(myOBJ[9] == "iPad")) {
+			document.getElementById("inquirerDigitalLink").href = "http://www.philly.com/inquirer/digital";
+		}
+
+jQuery(document).ready(function () {
+     var e = 92;
+     var t = "http://api.wunderground.com/api/" + e + "eee246b6ecdf9b/conditions/astronomy/alerts/q/pa/19017.json?callback=?";
+     var n = 18;
+     jQuery.getJSON(t, function (e) {
+         var t = JSON.stringify(e.current_observation.temp_f);
+         var r = e.moon_phase.current_time.hour;
+         if (t.length &lt;= 4) {
+             var i = t.slice(0, 2)
+         } else {
+             var i = t.slice(0, 3)
+         }
+         if (r &gt;= n &amp;&amp; r &lt;= e.moon_phase.sunrise.hour) {
+             isDay = "nt_"
+         } else {
+             isDay = ""
+         }
+         jQuery("#temp").append(i + "&amp;deg;");
+         jQuery("#condition").append(e.current_observation.weather);
+         jQuery("#link").append("&lt;a href='http://weather.philly.com/cgi-bin/findweather/getForecast?query=" + e.current_observation.display_location.zip + "'&gt;Forecast&amp;nbsp;&amp;raquo;&lt;/a&gt;");
+         jQuery("&lt;img&gt;").attr("src", "http://media.philly.com/storage/philly/weather/philly_icons/" + isDay + e.current_observation.icon + ".png").appendTo(".iconWeather");
+         if (e.alerts[0]) {
+             jQuery("#alert").append("Weather Alert!")
+         }
+     })
+ });
+ Monday, December 3, 2012
+
+	function searchFormSubmit2(form) {
+
+		qfield = jQuery("#gsaphilly").val();
+		if(qfield != null) {
+				if(qfield == "" || qfield == "What are you looking for?")
+				{
+				alert('You must enter a search phrase');
+				return false;
+				}
+				return true;
+		}
+
+	}		
+
+#pageTopCorner #search {top:45px;}
+News
+Sports
+Holidays 2012
+Entertainment
+Business
+Food
+Lifestyle
+Health
+Marketplace
+Philadelphia News
+South Jersey
+Communities and Culture
+Politics
+Education
+Obituaries
+Nation/World
+Weather
+Traffic
+Lottery
+
+
+if(rm &amp;&amp; readCookie("regConfirmationStatus") &amp;&amp; readCookie("regConfirmationStatus") == "pending") {
+document.write('&lt;div style="padding:5px 0px 10px 30px; color:#990000;"&gt;&lt;b&gt;NOTE: You still need to confirm your registration before you can fully access our site features.&lt;br&gt;Please go to the email we sent you at ' + userEmail + ' and click on the confirm link.&lt;br  /&gt;&lt;br  /&gt;&lt;a href="/s?action=requestConfirmation"&gt;Click here to resend the confirmation email.&lt;/a&gt;&lt;/b&gt;&lt;/div&gt;');
+document.write("&lt;link rel="stylesheet" type="text/css" href="http://media.philly.com/storage/philly/registration/registration.css"&gt;");
+}
+
+ 
+var dartCCKey = "ccaud";
+   var dartCC = "";
+   if (typeof(ccauds) != 'undefined') {
+      for (var cci = 0; cci &lt; ccauds.Profile.Audiences.Audience.length; cci++) {
+         if (cci &gt; 0) dartCC += ";";
+         dartCC += dartCCKey + "=" + ccauds.Profile.Audiences.Audience[cci].abbr;
+      }
+   }
+
+
+document.write('&lt;script language="JavaScript1.1" type="text/javascript" src="http://ad.doubleclick.net/adj/ph.news/opinion;art=inq;type=article;dcopt=ist;pos=slider;tile=1;sz=972x30,1x1,972x75,728x90,970x250;'+dartCC+';ord='+_phDartOrd+'?"&gt;&lt;\/SCRIPT&gt;');
+&lt;!-- &lt;h3&gt;Default Page Layout - p-com redesign 2012 - DO NOT DELETE!&lt;/h3&gt; --&gt;
+&lt;!-- &lt;hr&gt;
+4915
+Paragraph total: 15
+&lt;hr&gt; --&gt;
+&lt;!--startclickprintexclude--&gt;
+
+
+			 				var showMeARR = new Array();
+				showMeARR['font'] = Array(275,"TEXT SIZE:&lt;a style=\"font-size: 11px;\" href=\"?text=reg&amp;c=y\"&gt;A&lt;\/a&gt;&lt;a style=\"font-size: 15px;\" href=\"?text=med&amp;c=y\"&gt;A&lt;\/a&gt;&lt;a style=\"font-size: 18px;\" href=\"?text=lg&amp;c=y\"&gt;A&lt;\/a&gt;&lt;a style=\"font-size: 21px;\" href=\"?text=xlg&amp;c=y\"&gt;A&lt;\/a&gt;");
+			
+
+				var siteURL= "http://www.philly.com/philly/opinion/181637371.html";
+				var pageTitle= "Never mind talent: Practice, practice, practice"; 
+																var sourceTitle= "philly.com";
+																			var shortTitle= "via @phillydotcom http://philly.com/u/?w=168261&amp;i=181637371 "; 
+				var pageDesc= "Karen Rile\nteaches creative writing\nat the University of Pennsylvania\nMe, I want to be a natural. I want to show up at the first class and discover I have a knack for whatever it is we\'re going to study - pottery, Japanese calligraphy, racquetball, oil painting, flute. I don\'t mind work, as long as it comes easily, with gua";
+				var shortURL= "Never mind talent: Practice, practice, practice";
+
+	var clickURL = "http://www.philly.com/philly/opinion/20121202_Never_mind_talent__Practice__practice__practice.html"; 
+	var clickTitle = "Never mind talent: Practice, practice, practice";
+var trkcid=181637371;var partnerID=168261; var _hb=1;
+0
+comments
+
+  FB.init({
+	appId: '359929829260', //philly appID
+    status : true, // check login status
+    cookie : true, // enable cookies to allow the server to access the session
+    xfbml  : true  // parse XFBML
+  });
+    
+Tweet
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+&lt;!-- Place this tag where you want the share button to render. --&gt;
+&lt;!-- Place this tag after the last share tag. --&gt;
+
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+@
+&lt;!--end topToolsNav--&gt;
+&lt;!--endclickprintexclude--&gt;
+ 
+var dartCCKey = "ccaud";
+   var dartCC = "";
+   if (typeof(ccauds) != 'undefined') {
+      for (var cci = 0; cci &lt; ccauds.Profile.Audiences.Audience.length; cci++) {
+         if (cci &gt; 0) dartCC += ";";
+         dartCC += dartCCKey + "=" + ccauds.Profile.Audiences.Audience[cci].abbr;
+      }
+   }
+
+
+document.write('&lt;script language="JavaScript1.1" type="text/javascript" src="http://ad.doubleclick.net/adj/ph.news/opinion;art=inq;type=article;pos=mrec;tile=5;sz=300x250,300x600;'+dartCC+';ord='+_phDartOrd+'?"&gt;&lt;\/SCRIPT&gt;');
+Advertise Here
+Never mind talent: Practice, practice, practice
+KAREN RILE
+From that first Suzuki lesson, a pursuit of excellence began. Lauren Rile Smith, at 7, and Madeline Rile Smith, 4, in 1993.
+Gallery: Never mind talent: Practice, practice, practice
+ 
+var dartCCKey = "ccaud";
+   var dartCC = "";
+   if (typeof(ccauds) != 'undefined') {
+      for (var cci = 0; cci &lt; ccauds.Profile.Audiences.Audience.length; cci++) {
+         if (cci &gt; 0) dartCC += ";";
+         dartCC += dartCCKey + "=" + ccauds.Profile.Audiences.Audience[cci].abbr;
+      }
+   }
+
+
+document.write('&lt;script language="JavaScript1.1" type="text/javascript" src="http://ad.doubleclick.net/adj/ph.news/opinion;art=inq;type=article;pos=tower;tile=3;sz=160x600;'+dartCC+';ord='+_phDartOrd+'?"&gt;&lt;\/SCRIPT&gt;');
+&lt;!-- article byline --&gt;
+
+	
+
+			Posted: 
+			Sunday, December 2, 2012, 3:01 AM
+Karen Rile teaches creative writing at the University of Pennsylvania
+Me, I want to be a natural. I want to show up at the first class and discover I have a knack for whatever it is we're going to study - pottery, Japanese calligraphy, racquetball, oil painting, flute. I don't mind work, as long as it comes easily, with guaranteed results. But I'm usually the class dunce, or at least that's what it feels like as I struggle to keep up after the going gets tough. Eventually I quit, loath to spend precious effort on what could be a mediocre outcome.
+Sound familiar?
+But my four daughters turned out differently. They don't think about talent, because it's beside the point. Like the proverbial tortoise, they make slow and steady strides in disciplines that are difficult for them, eventually surpassing more gifted hares. They weren't born this way. Their approach to learning came about as a lucky accident.
+&lt;!-- default: 175222231 --&gt;
+&lt;!-- actual page layout: 175222231 --&gt;
+&lt;!-- faux page layout: 172818801 --&gt;
+&lt;!-- Array reset to circumvent mem-cache version --&gt;
+&lt;!-- debug 173678461 (actual) --&gt;
+From the News Desk
+Latest Videos
+&lt;!-- Begin Brightcove --&gt;
+opinion: container - media promo - 173678181: autoplay - OFF: continuous - ON: tpltID - 1897076382001: playlistID - 20784181001
+
+  	This content requires the Adobe Flash Player and a browser with JavaScript enabled.
+  	Get Flash
+&lt;!-- End Brightcove --&gt;
+Latest News Stories
+&amp;#160;
+			
+							Philadelphia Judge Adam Beloff reportedly kills self
+&amp;#160;
+			
+							John Cage&amp;#0146;s &amp;#0145;Song Book&amp;#0146; in thoughtful renditions at Christ Church
+&amp;#160;
+			
+							&amp;#0145;Mrs. Cratchit&amp;#0146; falls flat in latest Durang spoof
+&amp;#160;
+			
+							Nutter, local leaders tour Philadelphia&amp;#0146;s sister city, Tianjin
+&amp;#160;
+			
+							Paulsboro evacuees can't return home this week
+More News &amp;#187;
+ &lt;!-- end headlines-digest --&gt;
+ &lt;!-- end container --&gt;
+News Blogs
+&amp;#160;
+PhillyPharma:   PhillyPharma back on Dec. 10
+
+					 			   
+	
+	
+			
+	 		
+	
+								
+																	24 minutes ago
+										
+		
+	
+	
+	
+
+&amp;#160;
+Attytood:   A nation of derp
+
+					 			   
+	
+	
+			
+	 		
+	
+					 12/02/2012		
+	
+	
+	
+
+Stay Connected
+Get the latest news and events delivered to your email. Sign up now!
+ 
+var dartCCKey = "ccaud";
+   var dartCC = "";
+   if (typeof(ccauds) != 'undefined') {
+      for (var cci = 0; cci &lt; ccauds.Profile.Audiences.Audience.length; cci++) {
+         if (cci &gt; 0) dartCC += ";";
+         dartCC += dartCCKey + "=" + ccauds.Profile.Audiences.Audience[cci].abbr;
+      }
+   }
+
+
+document.write('&lt;script language="JavaScript1.1" type="text/javascript" src="http://ad.doubleclick.net/adj/ph.news/opinion;art=inq;type=article;pos=rail;tile=11;sz=300x250;'+dartCC+';ord='+_phDartOrd+'?"&gt;&lt;\/SCRIPT&gt;');
+When they were little, I encouraged them to dabble in the usual lineup of Saturday kiddie activities. When the oldest was in kindergarten, she had a whim to play the violin, so I signed her up for lessons at the neighborhood Suzuki school. Some musicians I knew warned me that "no great violinist has ever come from the Suzuki tradition." Fine by me - I wasn't looking to raise a violinist, just a well-rounded kid.
+Gradually, inexorably, those violin lessons took over our lives. The younger one wanted to copy everything her big sister did, and soon we had a 2-year-old strutting around with a tiny violin case, like a miniature mafioso. I was pregnant at the time, so the baby learned her Twinkle Variations in the womb. As soon as that baby could talk, she, too, demanded a violin. And so it escalated, until we were juggling four weekly private lessons, four group classes, and hours of practicing every day of the week. The house was littered with violins. I learned to play piano so I could accompany them as they practiced. I wasn't even sure why we were doing all this, only that it seemed crucial in some way I could not define.
+Let me be clear: My family was not naturally suited for immersion in the Suzuki method. We're not joiners. My oldest, an inquisitive and highly verbal child, asked so many questions during lessons that her teacher suggested we have her tested for ADHD. (We declined.) The little ones had meltdowns in group class, or refused to open their instrument cases at their lessons. They did not exactly embrace the idea of daily practice.
+But we stuck it out. They practiced every day and, lo and behold, progressed. Two of our four turned out to be musically gifted and before long were shuttled out of Suzuki to hard-core classical violin teachers. The baby, by age 6, was so in love with music that she was practicing for hours every morning before school. Her new teacher put her on a steady diet of dry 19th-century &amp;eacute;tudes to reform her technique. This difficult work she embraced with joy, because the habit of daily practice and steady, incremental progress had been ingrained in her from infancy. I doubt that she or I would have had the heart to steady that rigorous course without the foundation laid out for both of us by our accidental immersion in the Suzuki world. She's now a violin performance major at Juilliard.
+Flash-forward 20 years from that first Suzuki lesson, and three of my four kids have put away their violins in favor of other pursuits. But those early lessons stuck. All four have had the courage to embrace long-term, large-scale projects outside the realm of their formal academic training. All of them credit their Suzuki days for ingraining in them the habit of patient practice that has seen them through the long, slow development of mastery.
+Sure, talent matters. Talent is the difference between good art and great art, between proficiency and virtuosity. But talent alone is rarely enough to get by. In our culture, we have romantic notions of the artist as a formidable, congenital genius. Obsessive focus on talent alone creates a hobbling anxiety of failure. How many of us are discouraged from trying because we were told we are "tone deaf" or "can't draw a straight line"?
+So forget about talent. If I had a nickel for every parent who told me her own kid was a "natural" at music, dance, or whatever, but never got anywhere because he didn't like to practice, I could take everybody out for lunch. Teach your kids to practice. Practice something difficult and complex, where the rewards come slowly over time. And it doesn't matter if they're naturals; the lesson's more profound when they are not.
+&amp;nbsp;
+E-mail Karen Rile at karen.rile@gmail.com.
+&lt;!-- AD UNIT--&gt;
+ 
+var dartCCKey = "ccaud";
+   var dartCC = "";
+   if (typeof(ccauds) != 'undefined') {
+      for (var cci = 0; cci &lt; ccauds.Profile.Audiences.Audience.length; cci++) {
+         if (cci &gt; 0) dartCC += ";";
+         dartCC += dartCCKey + "=" + ccauds.Profile.Audiences.Audience[cci].abbr;
+      }
+   }
+
+
+document.write('&lt;script language="JavaScript1.1" type="text/javascript" src="http://ad.doubleclick.net/adj/ph.news/opinion;art=inq;type=article;pos=half;tile=4;sz=234x60;'+dartCC+';ord='+_phDartOrd+'?"&gt;&lt;\/SCRIPT&gt;');
+&lt;!--startclickprintexclude--&gt;
+
+
+			 				var showMeARR = new Array();
+				showMeARR['font'] = Array(275,"TEXT SIZE:&lt;a style=\"font-size: 11px;\" href=\"?text=reg&amp;c=y\"&gt;A&lt;\/a&gt;&lt;a style=\"font-size: 15px;\" href=\"?text=med&amp;c=y\"&gt;A&lt;\/a&gt;&lt;a style=\"font-size: 18px;\" href=\"?text=lg&amp;c=y\"&gt;A&lt;\/a&gt;&lt;a style=\"font-size: 21px;\" href=\"?text=xlg&amp;c=y\"&gt;A&lt;\/a&gt;");
+			
+
+				var siteURL= "http://www.philly.com/philly/opinion/181637371.html";
+				var pageTitle= "Never mind talent: Practice, practice, practice"; 
+																var sourceTitle= "philly.com";
+																			var shortTitle= "via @phillydotcom http://philly.com/u/?w=168261&amp;i=181637371 "; 
+				var pageDesc= "Karen Rile\nteaches creative writing\nat the University of Pennsylvania\nMe, I want to be a natural. I want to show up at the first class and discover I have a knack for whatever it is we\'re going to study - pottery, Japanese calligraphy, racquetball, oil painting, flute. I don\'t mind work, as long as it comes easily, with gua";
+				var shortURL= "Never mind talent: Practice, practice, practice";
+
+	var clickURL = "http://www.philly.com/philly/opinion/20121202_Never_mind_talent__Practice__practice__practice.html"; 
+	var clickTitle = "Never mind talent: Practice, practice, practice";
+var trkcid=181637371;var partnerID=168261; var _hb=1;
+0
+comments
+
+  FB.init({
+	appId: '359929829260', //philly appID
+    status : true, // check login status
+    cookie : true, // enable cookies to allow the server to access the session
+    xfbml  : true  // parse XFBML
+  });
+    
+Tweet
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+&lt;!-- Place this tag where you want the +1 button to render. --&gt;
+&lt;!-- Place this tag after the last +1 button tag. --&gt;
+
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+email
+&lt;!--endclickprintexclude--&gt;
+Previous Story:
+How to tackle entitlements and avoid the cliff
+Next Story:
+Karen Heller: Tireless advocate for youth had 'real and genuine passion'
+You May Also Like
+ 
+var dartCCKey = "ccaud";
+   var dartCC = "";
+   if (typeof(ccauds) != 'undefined') {
+      for (var cci = 0; cci &lt; ccauds.Profile.Audiences.Audience.length; cci++) {
+         if (cci &gt; 0) dartCC += ";";
+         dartCC += dartCCKey + "=" + ccauds.Profile.Audiences.Audience[cci].abbr;
+      }
+   }
+
+
+document.write('&lt;script language="JavaScript1.1" type="text/javascript" src="http://ad.doubleclick.net/adj/ph.news/opinion;art=inq;type=article;pos=smallblade;tile=12;sz=300x360;'+dartCC+';ord='+_phDartOrd+'?"&gt;&lt;\/SCRIPT&gt;');
+ &lt;!-- closes supercontainer --&gt;
+&lt;!-- true : active comments? // macro active (from article level "freeze"/"unfreeze" comments)? true --&gt;
+
+	var rm = false;
+	var userName = "";
+	var userEmail = "";
+	var userIdHere = "";
+
+&lt;!--
+
+function createCookie(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i &lt; ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+function eraseCookie(name) {
+	var expires = "";
+	createCookie(name,"",-1);
+	document.cookie = name+"="+value+expires;
+}
+
+function getUserName(){
+	document.write('&lt;scr'+'ipt language="JavaScript" type="text/javascript" src="http://www.philly.com/philly/userarea/?c=n&amp;d=0.4062294487637389"&gt;&lt;/scr'+'ipt&gt;');
+}
+
+if(readCookie("UID") &amp;&amp; !readCookie("username")){
+	getUserName();
+}
+
+
+
+if(readCookie("username") &amp;&amp; readCookie("username") !=""){
+	rm = true;
+	userName = readCookie("username");
+	userEmail = readCookie("email");
+	userIdHere = readCookie("SID");
+}else{
+	rm = false;
+	userName = "";
+	userEmail = "";
+	userIdHere = "";
+}
+
+if(readCookie("regConfirmationStatus")){
+	var userStatus = readCookie("regConfirmationStatus");
+}
+
+// --&gt;
+Comments &amp;#160;(0)
+ &lt;!-- end headline --&gt;
+
+						if (rm &amp;&amp; userStatus == "pending") {
+					document.write('Verify your email address to post a comment');
+				} else if (rm &amp;&amp; userName &amp;&amp; userName != "") {
+					document.write('&lt;a href="#comment"&gt;Post your comment&lt;/a&gt;');
+				} else if(rm) {
+					document.write('&lt;a href="/s?action=editReg&amp;rurl=http%3A%2F%2Fwww.philly.com%2Fphilly%2Fopinion%2F181637371.html"&gt;Select a username&lt;/a&gt; to post a comment.');
+				} else {
+					document.write('&lt;a href="#signInAnchor"&gt;Sign in to post a comment&lt;/a&gt;');
+				}
+						document.write(' ');
+&lt;!-- USER SUBMITTED CONTENT // COMMENTS --&gt;
+ Post your comment
+
+						function updateComments() {
+							//alert('Error: ' + Comment.error);
+							var refreshURL = "http://www.philly.com/philly/opinion/20121202_Never_mind_talent__Practice__practice__practice.html?c=0.60167093516486&amp;posted=y&amp;viewAll=y#comments";
+							if(Comment.comment != "") {
+							//alert('comment flagged ' + Comment.flagged); 
+								if(Comment.flagged) {
+									refreshURL = "http://www.philly.com/philly/opinion/20121202_Never_mind_talent__Practice__practice__practice.html?c=0.8656353862032898&amp;posted=n#comments"
+								}
+								//alert('Refresh URL = ' + refreshURL);
+								//alert('Comment Status: ' + Comment.status);
+								window.location = refreshURL;
+							}
+						}
+						
+												function countChar(txtBox)
+						    {
+						        try
+						        {
+
+						            count = txtBox.value.length;
+						            if (count &lt; 2000)
+						            {
+						                charLeft = 2000 - count;
+										if (charLeft &lt;= 500)
+										{
+						                	txt = "You have " + charLeft + " characters remaining";
+						                	document.getElementById('characterCount').innerHTML="&lt;span class='callout_green'&gt;" + txt + "&lt;/span&gt;";
+										}
+										else
+										{
+											document.getElementById('characterCount').innerHTML="";
+										}
+						            }
+						            else
+						            {
+						                document.getElementById('characterCount').innerHTML="&lt;span class="callout_red"&gt;Comment must be 2000 characters or less&lt;/span&gt;";
+						            }
+						         }
+					            catch ( e )
+					            {
+
+					            }
+						    }
+
+
+			if (userName) {
+		document.write('&lt;div class="comment_inputName"&gt;You are logged in as &lt;b&gt;' + userName + '&lt;/b&gt;.&lt;/div&gt;&lt;input type="hidden" name="name" value="' + userName + '"&gt;');
+			} else {
+		document.write('&lt;div class="comment_inputName"&gt;&lt;div class="minitext"&gt;&lt;b&gt;Name&lt;/b&gt;&amp;#160;&amp;#160;&lt;input size="35" class="comment_inputName" name="name" value=""&gt;&lt;/div&gt;&lt;/div&gt;');
+			}
+
+			if (rm) {
+		document.write('&lt;input size="35" type="hidden" name="email" value="'+userEmail+'"  /&gt;');
+			} else {
+		document.write('&lt;input size="35" type="hidden" name="email" value=""  /&gt;');
+			}
+ &lt;!-- end toggleForm --&gt;
+ 		Because your contributions are currently under review, no comments can be made at this time.
+ Philly.com comments are intended to be civil, friendly conversations. Please treat other participants with respect and in a way that you would want to be treated. You are responsible for what you say. And please, stay on topic.
+			
+			If you see an objectionable post, please report it to us using the "Report Abuse" button. More About Philly.com comments.
+About your comments: These comments are monitored by  Philly.com staff. We reserve the right at all times to remove any information or materials that are unlawful, threatening, abusive, libelous, defamatory, obscene, vulgar, pornographic, profane, indecent or otherwise objectionable.
+			
+			Personal attacks, especially on other participants, are not permitted. We reserve the right to permanently block any user who violates these terms and conditions. Comments that are very long, have multiple paragraph breaks, or include coding may not be posted.
+
+		function setStyleByClass(t,c,p,v){
+			var elements;
+			if(t == '*') {
+				// '*' not supported by IE/Win 5.5 and below
+				elements = (ie) ? document.all : document.getElementsByTagName('*');
+			} else {
+				elements = document.getElementsByTagName(t);
+			}
+			for(var i = 0; i &lt; elements.length; i++){
+				var node = elements.item(i);
+				for(var j = 0; j &lt; node.attributes.length; j++) {
+					if(node.attributes.item(j).nodeName == 'class') {
+						if(node.attributes.item(j).nodeValue == c) {
+							eval('node.style.' + p + " = '" +v + "'");
+						}
+					}
+				}
+			}
+		}
+		
+				if(rm &amp;&amp; readCookie("username") &amp;&amp; readCookie("username") != "" &amp;&amp; readCookie("7445598737") &amp;&amp; readCookie("7445598737").length == "93848121".length) {
+			setStyleByClass('div','toggleReportAbuse','display','none');
+			// Case 16928: also suppress form to banned users.
+			setStyleByClass('div','toggleForm','display','none');
+			setStyleByClass('div','toggleBannedUserMessage','display','block');			
+		}
+
+ Register to comment
+		
+			 	Why are we asking you to register?  We've made some changes to increase the quality of the user experience and dialogue, and reduce the number of inappropriate or offensive posts. You're now required to have a registered username and account before adding a comment. This will improve the experience for everyone. We apologize for the inconvenience. Join the conversation!
+Already Registered? Sign In
+
+		function checkForm(formToBeChecked){
+			errorMessage = confirmEmailField(formToBeChecked.email)
+			if(errorMessage.length &gt; 0){
+				alert(errorMessage);
+				return false;
+			}
+			otherError = confirmFieldNotEmpty(formToBeChecked.password)
+			if(otherError.length &gt; 0){
+				alert("Please enter your password.");
+				return false;
+			}	
+		}
+Email address
+Password
+Forgot Password?
+Account Update Needed
+			You must select a username in order to post a comment.
+Edit your account information
+Account Update Needed
+			You must indicate your year of birth in order to post a comment.
+Edit your account information
+
+						According to our terms of service, you are not yet of legal age to be able to contribute to this site. Please read our policy.
+Account Verification Needed
+Thank you for registering!
+Please note that your registration will not be considered fully complete until you confirm by following the link we have provided in a confirmation email that was just sent to document.write(userEmail);.  Until you follow the link in that confirmation email, you may log in but will not be able to comment, so make sure to check your inbox for a message from register@philly.com.
+
+		if (rm &amp;&amp; readCookie("regConfirmationStatus") &amp;&amp; readCookie("regConfirmationStatus") == "pending") {
+						var toggleDiv = document.getElementById('toggleConfirmEmailDiv');
+			if(toggleDiv) {
+				toggleDiv.style.display = 'block';
+			}
+			setStyleByClass('div','reportAbuseConfirmReg','display','block');
+		} else if (rm &amp;&amp; readCookie("ageRange") &amp;&amp; readCookie("ageRange") == "Under 13") {
+						var toggleDiv = document.getElementById('toggleTOS');
+			if(toggleDiv) {
+				toggleDiv.style.display = 'block';
+			}
+			setStyleByClass('div','reportAbuseConfirmReg','display','block');
+		} else if (rm &amp;&amp; readCookie("ageRange") &amp;&amp; readCookie("ageRange") == "unconfirmed") {
+						var toggleDiv = document.getElementById('toggleConfirmYear');
+			if(toggleDiv) {
+				toggleDiv.style.display = 'block';
+			}
+			setStyleByClass('div','reportAbuseConfirmReg','display','block');
+		} else if (rm &amp;&amp; readCookie("username") &amp;&amp; readCookie("username") != "") {
+						var toggleDiv = document.getElementById('toggleCommentsDiv');
+			if(toggleDiv) {
+				toggleDiv.style.display = 'block';
+			}
+			setStyleByClass('div','reportAbuseOK','display','block');
+		} else if (rm) {
+						var toggleDiv = document.getElementById('toggleUsernameMsgDiv');
+			if(toggleDiv) {
+				toggleDiv.style.display = 'block';
+			}
+			setStyleByClass('div','reportAbuseSelectUsername','display','block');
+		} else if (!rm) {
+						var toggleSigninDiv = document.getElementById('toggleSigninDiv');
+			if(toggleSigninDiv) {
+				toggleSigninDiv.style.display = 'block';
+			}
+			setStyleByClass('div','reportAbuseSignIn','display','block');
+		}
+				window.setInterval(timedMousePos,250);
+var mobileOS = typeof orientation != 'undefined' ? true : false;
+var touchOS = ('ontouchstart' in document.documentElement) ? true : false;
+if (mobileOS &amp;&amp; touchOS) {
+   // do nothing
+   console.log("mobileOS and touchOS detected");
+} else {
+window.Meebo||function(c){function p(){return["&lt;",i,' onload="var d=',g,";d.getElementsByTagName('head')[0].",
+j,"(d.",h,"('script')).",k,"='//cim.meebo.com/cim?iv=",a.v,"&amp;",q,"=",c[q],c[l]?
+"&amp;"+l+"="+c[l]:"",c[e]?"&amp;"+e+"="+c[e]:"","'\"&gt;&lt;/",i,"&gt;"].join("")}var f=window,
+a=f.Meebo=f.Meebo||function(){(a._=a._||[]).push(arguments)},d=document,i="body",
+m=d[i],r;if(!m){r=arguments.callee;return setTimeout(function(){r(c)},100)}a.$=
+{0:+new Date};a.T=function(u){a.$[u]=new Date-a.$[0]};a.v=4;var j="appendChild",
+h="createElement",k="src",l="lang",q="network",e="domain",n=d[h]("div"),v=n[j](d[h]("m")),
+b=d[h]("iframe"),g="document",o,s=function(){a.T("load");a("load")};f.addEventListener?
+f.addEventListener("load",s,false):f.attachEvent("onload",s);n.style.display="none";
+m.insertBefore(n,m.firstChild).id="meebo";b.frameBorder="0";b.id="meebo-iframe";
+b.allowTransparency="true";v[j](b);try{b.contentWindow[g].open()}catch(w){c[e]=
+d[e];o="javascript:var d="+g+".open();d.domain='"+d.domain+"';";b[k]=o+"void(0);"}try{var t=
+b.contentWindow[g];t.write(p());t.close()}catch(x){b[k]=o+'d.write("'+p().replace(/"/g,
+'\\"')+'");d.close();'}a.T(1)}({network:"philly"});
+}
+ 
+var dartCCKey = "ccaud";
+   var dartCC = "";
+   if (typeof(ccauds) != 'undefined') {
+      for (var cci = 0; cci &lt; ccauds.Profile.Audiences.Audience.length; cci++) {
+         if (cci &gt; 0) dartCC += ";";
+         dartCC += dartCCKey + "=" + ccauds.Profile.Audiences.Audience[cci].abbr;
+      }
+   }
+
+
+document.write('&lt;script language="JavaScript1.1" type="text/javascript" src="http://ad.doubleclick.net/adj/ph.news/opinion;art=inq;type=article;pos=leader_btf;tile=16;sz=728x90;'+dartCC+';ord='+_phDartOrd+'?"&gt;&lt;\/SCRIPT&gt;');
+News
+
+
+									
+ | Sports
+
+
+									
+ | Entertainment
+
+
+									
+ | Business
+
+
+									
+ | Food
+
+
+									
+ | Lifestyle
+
+
+									
+ | Health
+
+				Classifieds:
+Jobs
+
+
+									
+ | Cars
+
+
+									
+ | Real Estate
+
+
+									
+ | Rentals
+
+
+									
+ | Marketplace
+
+
+									
+ | Celebrations
+
+
+									
+ | Business Directory
+
+
+									
+ | PATestDrive.com
+
+				Site Services:
+Advertise on Philly.com
+
+
+									
+ | Mobile Site
+
+
+									
+ | Apps
+ &amp;#160;The Inquirer Digital Edition
+ &amp;#160;Subscriber Services
+ &amp;#160;Daily News Digital Edition
+ &amp;#160;Subscriber Services
+&lt;!-- 2 / 3 --&gt;
+
+				Partners:
+ &amp;#160;Phrequency
+ &amp;#160;Philadelphia City Paper
+ &amp;#160;Philly DealYo
+ &amp;#160;Parade Magazine
+ &lt;!-- closes supercontainer --&gt;
+&lt;!-- closing custom CSS --&gt;
+&lt;!--&lt;a href="http://www.philly.com/philly/about/pnl/"&gt;Philadelphia Newspapers' Reorganization&lt;/a&gt;  | --&gt;About Philly.com | Contact Us | 
+			Terms of Use &amp;amp; Privacy Statement |
+			Copyright 2012
+	
+		&amp;#169; Copyright 2012 Interstate General Media, LLC
+
+
+
+window.fbAsyncInit = function() { 
+FB.init({appId: '359929829260', status: true, cookie: true, xfbml: true}); 
+}; 
+(function() { 
+var e = document.createElement('script'); e.async = true; e.src = document.location.protocol + '//connect.Facebook.net/en_US/all.js'; document.getElementById('fb-root').appendChild(e);}() 
+); 
+ 
+	
+function getUserData(){ 
+FB.api('/me', function(response) { 
+//alert(response.id);
+document.forms['ssoLogin'].elements['externalSSOProfId'].value=response.id;
+document.forms['ssoLogin'].elements['externalEmail'].value=response.email;
+document.forms['ssoLogin'].submit();
+}); 
+} 
+
+
+		
+	
+function logFBUser(){ 
+document.forms['logoutSSO'].submit();
+FB.logout(function(response) { 
+//alert("FB User Logged Out");
+}); 
+}
+
+var _sf_async_config={uid:12719,domain:"philly.com",path:"/philly/opinion/20121202_Never_mind_talent__Practice__practice__practice.html"};
+_sf_async_config.sections = s.prop5;
+if(s.prop13 !="") {
+_sf_async_config.authors = s.prop13;
+} else {
+_sf_async_config.authors = "";
+}
+(function(){
+	function loadChartbeat() {
+	window._sf_endpt=(new Date()).getTime();
+	var f = document.createElement('script');
+	f.setAttribute('language', 'javascript');
+	f.setAttribute('type', 'text/javascript');
+	f.setAttribute('src',
+    (("https:" == document.location.protocol) ? "https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/" : "http://static.chartbeat.com/") +
+    "js/chartbeat_rm.js");
+document.body.appendChild(f);
+}
+var oldonload = window.onload;
+window.onload = (typeof window.onload != 'function') ?
+loadChartbeat : function() { oldonload(); loadChartbeat(); };
+})();
+    Meebo('setDefaultThumbnail', {thumbnail:'http://media.philly.com/designimages/phillydotcom70x70.gif', width:70, height:70 });
+    Meebo('domReady');
+setTimeout(function(){var a=document.createElement("script");
+var b=document.getElementsByTagName('script')[0];
+a.src=document.location.protocol+"//dnn506yrbagrg.cloudfront.net/pages/scripts/0011/7552.js";
+a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+&lt;!-- Begin comScore Tag --&gt;
+ 
+	var _comscore = _comscore || []; 
+	_comscore.push({ c1: "2", c2: "6034697", c3: "", c4: "www.philly.com/philly/opinion/181637371.html", c5: "" }); 
+		
+	function comscoreTracking() 
+	{ 
+		var s_comscore = document.createElement("script"), el = document.getElementsByTagName("script")[0]; s_comscore.async = true; s_comscore.src = (document.location.protocol == "https:" ? "https://sb" : "http://b") + ".scorecardresearch.com/beacon.js"; el.parentNode.insertBefore(s_comscore, el); 
+	}; 
+	
+	comscoreTracking(_comscore);
+&lt;!-- End comScore Tag --&gt;
+&lt;!-- Begin Google Analytics Tag --&gt;
+
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-1605085-6']);
+  _gaq.push(['_setDomainName', 'philly.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var sGoogleAnalytics = document.getElementsByTagName('script')[0]; sGoogleAnalytics.parentNode.insertBefore(ga, sGoogleAnalytics);
+  })();
+
+&lt;!-- End Google Analytics Tag --&gt;
+&lt;!-- Tag for Activity Group: IP122969, Activity Name: IP122969_News section front~IP122969, Activity ID: 1140392 --&gt;
+&lt;!-- Expected URL: http://www.philly.com/philly/news/ --&gt;
+&lt;!--
+Activity ID: 1140392
+Activity Name: IP122969_News section front~IP122969 Activity Group Name: IP122969
+--&gt;
+&lt;!--
+Start of DoubleClick Floodlight Tag: Please do not remove Activity name of this tag: IP122969_News section front~IP122969 URL of the webpage where the tag is expected to be placed:
+http://www.philly.com/philly/news/
+This tag must be placed between the &lt;body&gt; and &lt;/body&gt; tags, as close as possible to the opening tag.
+Creation Date: 10/22/2012
+--&gt;
+var axel = Math.random() + "";
+var a = axel * 10000000000000;
+document.write('&lt;iframe
+src="http://2716780.fls.doubleclick.net/activityi;src=2716780;type=ip122161;cat=ip122808;ord='
++ a + '?" width="1" height="1" frameborder="0"
+style="display:none"&gt;&lt;/iframe&gt;');
+&lt;!-- End of DoubleClick Floodlight Tag: Please do not remove --&gt;
+  </p>
+</body>
+</html>

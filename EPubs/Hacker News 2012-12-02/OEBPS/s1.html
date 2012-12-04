@@ -1,0 +1,428 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Notch trying jsFiddle</title>
+  <style type="text/css">
+h1 { text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>Notch trying jsFiddle</h1>
+  <p>
+    &lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+Edit this Fiddle - jsFiddle
+	// switch this to false once on production
+	var disqus_developer = false;
+	// uniqie shell ID
+	var disqus_identifier = 'uzMPU';
+	// title
+	var disqus_title = '';
+&lt;!--meta name="viewport" content="width=device-width, maximum-scale=0.5" /--&gt;
+&lt;!--[if lte IE 6]&gt;
+    &lt;link rel="stylesheet" type="text/css" href="/mooshellmedia/css/ie-hacks.css" /&gt;
+  &lt;![endif]--&gt;
+    var csspath = "/css/",
+      jspath = "/js/",
+      imgpath = "/img/",
+      mediapath = "/mooshellmedia/",
+      codemirrorpath = "/codemirror/",
+      panel_html = 'html',
+      panel_css = 'css',
+      panel_js = 'javascript',
+      makefavouritepath = "/_make_favourite/",
+      example_server = "http://jsfiddle.net",
+      username = "",
+      mooshell,
+      preload_resources;
+    Layout.skin = "";// "light"
+    window.addEvent('domready', function() {
+      if (panel_js != 'javascript' &amp;&amp; $('jslint')) {
+        $('jslint').getParent('li').hide();
+      }
+      $extend(Layout, new Events());
+      mooshell = new MooShellActions({
+        example_id: '11720747',
+        exampleURL: "http://jsfiddle.net/uzMPU/",
+        exampleSaveUrl: '/_save/',
+        loadDependenciesURL: '/_get_dependencies/{lib_id}/',
+        loadLibraryVersionsURL: '/_get_library_versions/{group_id}/'
+      });
+      new MooShellEditor.JS($('id_code_js'), {language: panel_js}); // add user defined parameters
+      new MooShellEditor.HTML($('id_code_html'), {language: panel_html}); // add user defined parameters
+      new MooShellEditor.CSS($('id_code_css'), {language: panel_css}); // add user defined parameters
+      Layout.render();
+    });
+    window.addEvent('load', function() {
+    });
+jsFiddle (alpha)
+Hide sidebar
+Run
+Update
+Fork
+Reset
+TidyUp
+JSLint
+Show JS
+Share
+Share link
+Share full screen result
+Embed on your page
+Share on Twitter
+Post to Facebook
+Login/Sign up
+  Please read the documentation.
+  For updates please follow our blog,
+  tweets
+  or become a fan.
+  Close
+  var DP;
+  window.addEvent('domready', function(){
+    var infoBox = $('info'),
+      closeBox = $('info-close');
+    if (infoBox) {
+      if (!Cookie.read('infoBoxStatus')){
+        infoBox.setStyle('display', 'block');
+      }
+      closeBox.addEvent('click', function(e){
+        e.stop();
+        Cookie.write('infoBoxStatus', 'hide', {
+          domain: 'jsfiddle.net',
+          duration: '5'
+        });
+        infoBox.dissolve();
+      });
+    }
+      DP = new Dropdown();
+  });
+Choose Framework
+no wrap (head)
+no wrap (body)
+onDomReady
+onLoad
+Mootools 1.4.5 (compat)
+Mootools 1.4.5
+Mootools 1.3.2 (compat)
+Mootools 1.3.2
+Mootools 1.2.5
+Mootools 1.1.2
+Mootools (edge)
+jQuery 1.8.2
+jQuery 1.7.2
+jQuery 1.6.4
+jQuery (edge)
+Prototype 1.7
+Prototype 1.6.1.0
+YUI 3.7.3
+YUI 3.6.0
+YUI 3.5.0
+YUI 3.4.1 simple
+YUI 3.4.1
+YUI 2.8.0r4
+Glow 1.7.7 (core.debug)
+No-Library (pure JS)
+Dojo 1.8.1
+Dojo 1.7.4
+Dojo 1.6
+Dojo 1.5
+Dojo (nightly)
+Processing.js 1.3.6
+Processing.js 1.2.3
+Processing.js 1.0.0
+ExtJS 4.1.1
+ExtJS 4.1.0
+ExtJS 3.4.0
+ExtJS 3.1.0
+ExtJS 3.0.0
+Raphael 2.0
+Raphael 1.5.2 (min)
+Raphael 1.4
+RightJS 2.1.1
+Three.js r50
+Zepto 0.8
+Enyo 2.1
+Enyo 2.0.1
+Enyo (nightly)
+Shipyard 0.2
+Shipyard (nightly)
+Knockout.js 2.2.0
+Knockout.js 2.1.0
+Knockout.js 2.0.0
+The X Toolkit edge
+AngularJS 1.0.2
+AngularJS 1.0.1
+Ember 0.9
+Underscore 1.3.3
+Bonsai 0.4.1
+KineticJS 4.0.5
+FabricJS 0.9
+qooxdoo 2.1
+qooxdoo 2.0.3
+Mootools More 1.4.0.1
+PowerTools 1.1.1
+            Library tag attributes (?)
+Normalized CSS
+  window.addEvent('load', function() {
+    $('js_lib').addEvent('change', function() {
+      mooshell.loadDependencies(this.value);
+    })
+    if ($('library_group')) $('library_group').addEvent('change', function() {
+      mooshell.loadLibraryVersions(this.value);
+    })
+  });
+Panels
+HTML
+CSS
+SCSS
+JavaScript
+CoffeeScript
+JavaScript 1.7
+Results
+	Add Resources
+Add
+var resources = [];
+	var default_text = 'JavaScript/CSS URL',
+		add_external_resource_url = "/_add_external_resource/";
+Info
+          Title
+          Description
+          Body Tag
+DTD
+XHTML 1.0 Strict
+XHTML 1.0 Transitional
+HTML 5
+HTML 4.01 Strict
+HTML 4.01 Transitional
+HTML 4.01 Frameset
+Testing Ajax requests
+Echo apis are created to simulate Ajax calls:
+        /echo/json/ for JSON,
+        http://jsfiddle.net/echo/jsonp/ for JSONP,
+        /echo/html/ for HTML and
+        /echo/xml/ for XML.
+Please read API documentation and follow
+        examples.
+Legal stuff and credits
+Created and maintained by Piotr and Oskar.
+Hosted by DigitalOcean.
+It wouldn't exist without MooTools community.
+License
+All code belongs to the poster and no license is enforced.
+We are not responsible or liable for any loss or damage of any kind during the usage of provided code.
+          Read our documentation
+Keyboard shortcuts
+&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;&amp;lt;title&amp;gt;ChamberedTest&amp;lt;/title&amp;gt;&amp;lt;/head&amp;gt;
+&amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;js/chambered.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;style type=&amp;quot;text/css&amp;quot;&amp;gt;
+    canvas, img {
+        image-rendering: optimizeSpeed;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: optimize-contrast;
+        -ms-interpolation-mode: nearest-neighbor;
+        width:848px;
+        height:480px;
+    }
+&amp;lt;/style&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;canvas id=&amp;quot;game&amp;quot; width=&amp;quot;424&amp;quot; height=&amp;quot;240&amp;quot;&amp;gt;&amp;lt;/canvas&amp;gt;
+&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;init();&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+HTML
+var ctx;
+var pixels;
+var w = 212 * 2;
+var h = 120 * 2;
+var map = new Array(64 * 64 * 64);
+var texmap = new Array(16 * 16 * 3 * 16);
+function init() {
+    for ( var i = 1; i &amp;lt; 16; i++) {
+        var br = 255 - ((Math.random() * 96) | 0);
+        for ( var y = 0; y &amp;lt; 16 * 3; y++) {
+            for ( var x = 0; x &amp;lt; 16; x++) {
+                var color = 0x966C4A;
+                if (i == 4)
+                    color = 0x7F7F7F;
+                if (i != 4 || ((Math.random() * 3) | 0) == 0) {
+                    br = 255 - ((Math.random() * 96) | 0);
+                }
+                if ((i == 1 &amp;amp;&amp;amp; y &amp;lt; (((x * x * 3 + x * 81) &amp;gt;&amp;gt; 2) &amp;amp; 3) + 18)) {
+                    color = 0x6AAA40;
+                } else if ((i == 1 &amp;amp;&amp;amp; y &amp;lt; (((x * x * 3 + x * 81) &amp;gt;&amp;gt; 2) &amp;amp; 3) + 19)) {
+                    br = br * 2 / 3;
+                }
+                if (i == 7) {
+                    color = 0x675231;
+                    if (x &amp;gt; 0 &amp;amp;&amp;amp; x &amp;lt; 15
+                            &amp;amp;&amp;amp; ((y &amp;gt; 0 &amp;amp;&amp;amp; y &amp;lt; 15) || (y &amp;gt; 32 &amp;amp;&amp;amp; y &amp;lt; 47))) {
+                        color = 0xBC9862;
+                        var xd = (x - 7);
+                        var yd = ((y &amp;amp; 15) - 7);
+                        if (xd &amp;lt; 0)
+                            xd = 1 - xd;
+                        if (yd &amp;lt; 0)
+                            yd = 1 - yd;
+                        if (yd &amp;gt; xd)
+                            xd = yd;
+                        br = 196 - ((Math.random() * 32) | 0) + xd % 3 * 32;
+                    } else if (((Math.random() * 2) | 0) == 0) {
+                        br = br * (150 - (x &amp;amp; 1) * 100) / 100;
+                    }
+                }
+                if (i == 5) {
+                    color = 0xB53A15;
+                    if ((x + (y &amp;gt;&amp;gt; 2) * 4) % 8 == 0 || y % 4 == 0) {
+                        color = 0xBCAFA5;
+                    }
+                }
+                if (i == 9) {
+                    color = 0x4040ff;
+                }
+                var brr = br;
+                if (y &amp;gt;= 32)
+                    brr /= 2;
+                if (i == 8) {
+                    color = 0x50D937;
+                    if (((Math.random() * 2) | 0) == 0) {
+                        color = 0;
+                        brr = 255;
+                    }
+                }
+                var col = (((color &amp;gt;&amp;gt; 16) &amp;amp; 0xff) * brr / 255) &amp;lt;&amp;lt; 16
+                        | (((color &amp;gt;&amp;gt; 8) &amp;amp; 0xff) * brr / 255) &amp;lt;&amp;lt; 8
+                        | (((color) &amp;amp; 0xff) * brr / 255);
+                texmap[x + y * 16 + i * 256 * 3] = col;
+            }
+        }
+    }
+    ctx = document.getElementById(&amp;#39;game&amp;#39;).getContext(&amp;#39;2d&amp;#39;);
+    for ( var x = 0; x &amp;lt; 64; x++) {
+        for ( var y = 0; y &amp;lt; 64; y++) {
+            for ( var z = 0; z &amp;lt; 64; z++) {
+                var i = z &amp;lt;&amp;lt; 12 | y &amp;lt;&amp;lt; 6 | x;
+                var yd = (y - 32.5) * 0.4;
+                var zd = (z - 32.5) * 0.4;
+                map[i] = (Math.random() * 16) | 0;
+                if (Math.random() &amp;gt; Math.sqrt(Math.sqrt(yd * yd + zd * zd)) - 0.8)
+                    map[i] = 0;
+            }
+        }
+    }
+    pixels = ctx.createImageData(w, h);
+    for ( var i = 0; i &amp;lt; w * h; i++) {
+        pixels.data[i * 4 + 3] = 255;
+    }
+    setInterval(clock, 1000 / 100);
+};
+function clock() {
+    renderMinecraft();
+    ctx.putImageData(pixels, 0, 0);
+};
+var f = 0;
+function renderMinecraft() {
+    var xRot = Math.sin(Date.now() % 10000 / 10000 * Math.PI * 2) * 0.4
+            + Math.PI / 2;
+    var yRot = Math.cos(Date.now() % 10000 / 10000 * Math.PI * 2) * 0.4;
+    var yCos = Math.cos(yRot);
+    var ySin = Math.sin(yRot);
+    var xCos = Math.cos(xRot);
+    var xSin = Math.sin(xRot);
+    var ox = 32.5 + Date.now() % 10000 / 10000 * 64;
+    var oy = 32.5;
+    var oz = 32.5;
+    f++;
+    for ( var x = 0; x &amp;lt; w; x++) {
+        var ___xd = (x - w / 2) / h;
+        for ( var y = 0; y &amp;lt; h; y++) {
+            var __yd = (y - h / 2) / h;
+            var __zd = 1;
+            var ___zd = __zd * yCos + __yd * ySin;
+            var _yd = __yd * yCos - __zd * ySin;
+            var _xd = ___xd * xCos + ___zd * xSin;
+            var _zd = ___zd * xCos - ___xd * xSin;
+            var col = 0;
+            var br = 255;
+            var ddist = 0;
+            var closest = 32;
+            for ( var d = 0; d &amp;lt; 3; d++) {
+                var dimLength = _xd;
+                if (d == 1)
+                    dimLength = _yd;
+                if (d == 2)
+                    dimLength = _zd;
+                var ll = 1 / (dimLength &amp;lt; 0 ? -dimLength : dimLength);
+                var xd = (_xd) * ll;
+                var yd = (_yd) * ll;
+                var zd = (_zd) * ll;
+                var initial = ox - (ox | 0);
+                if (d == 1)
+                    initial = oy - (oy | 0);
+                if (d == 2)
+                    initial = oz - (oz | 0);
+                if (dimLength &amp;gt; 0)
+                    initial = 1 - initial;
+                var dist = ll * initial;
+                var xp = ox + xd * initial;
+                var yp = oy + yd * initial;
+                var zp = oz + zd * initial;
+                if (dimLength &amp;lt; 0) {
+                    if (d == 0)
+                        xp--;
+                    if (d == 1)
+                        yp--;
+                    if (d == 2)
+                        zp--;
+                }
+                while (dist &amp;lt; closest) {
+                    var tex = map[(zp &amp;amp; 63) &amp;lt;&amp;lt; 12 | (yp &amp;amp; 63) &amp;lt;&amp;lt; 6 | (xp &amp;amp; 63)];
+                    if (tex &amp;gt; 0) {
+                        var u = ((xp + zp) * 16) &amp;amp; 15;
+                        var v = ((yp * 16) &amp;amp; 15) + 16;
+                        if (d == 1) {
+                            u = (xp * 16) &amp;amp; 15;
+                            v = ((zp * 16) &amp;amp; 15);
+                            if (yd &amp;lt; 0)
+                                v += 32;
+                        }
+                        var cc = texmap[u + v * 16 + tex * 256 * 3];
+                        if (cc &amp;gt; 0) {
+                            col = cc;
+                            ddist = 255 - ((dist / 32 * 255) | 0);
+                            br = 255 * (255 - ((d + 2) % 3) * 50) / 255;
+                            closest = dist;
+                        }
+                    }
+                    xp += xd;
+                    yp += yd;
+                    zp += zd;
+                    dist += ll;
+                }
+            }
+            var r = ((col &amp;gt;&amp;gt; 16) &amp;amp; 0xff) * br * ddist / (255 * 255);
+            var g = ((col &amp;gt;&amp;gt; 8) &amp;amp; 0xff) * br * ddist / (255 * 255);
+            var b = ((col) &amp;amp; 0xff) * br * ddist / (255 * 255);// + (255 -
+            pixels.data[(x + y * w) * 4 + 0] = r;
+            pixels.data[(x + y * w) * 4 + 1] = g;
+            pixels.data[(x + y * w) * 4 + 2] = b;
+        }
+    }
+}
+init();
+JavaScript
+CSS
+Result
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+      try {
+        var pageTracker = _gat._getTracker('UA-366077-13');
+        pageTracker._trackPageview();
+      } catch(err) {}
+setTimeout(function(){var a=document.createElement("script");
+var b=document.getElementsByTagName("script")[0];
+a.src=document.location.protocol+"//dnn506yrbagrg.cloudfront.net/pages/scripts/0012/8885.js?"+Math.floor(new Date().getTime()/3600000);
+a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+  </p>
+</body>
+</html>

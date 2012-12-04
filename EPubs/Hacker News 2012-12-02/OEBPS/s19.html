@@ -1,0 +1,539 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>How the embeddability of Lua impacted its design</title>
+  <style type="text/css">
+h1 { text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>How the embeddability of Lua impacted its design</h1>
+  <p>
+    &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+/* &lt;![CDATA[ */_cf_loadingtexthtml="&lt;img alt=' ' src='/CFIDE/scripts/ajax/resources/cf/images/loading.gif' /&gt;";
+_cf_contextpath="";
+_cf_ajaxscriptsrc="/CFIDE/scripts/ajax";
+_cf_jsonprefix='//';
+/* ]]&gt; */
+Passing a Language through the Eye of a Needle - ACM Queue
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-6562869-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+&lt;!-- Google PlusOne button --&gt;
+&lt;!-- Google Analytics Social Button Tracking --&gt;
+_ga.trackFacebook();
+
+function plusone_vote( obj ) {
+_gaq.push(['_trackEvent','plusone',obj.state]);
+}
+/* &lt;![CDATA[ */
+	ColdFusion.Ajax.importTag('CFWINDOW');
+/* ]]&gt; */
+/* &lt;![CDATA[ */
+	var _cf_window_init_1354513674008=function()
+	{
+		_cf_bind_init_1354513674009=function()
+		{
+			ColdFusion.Bind.register([],{'bindTo':'morethemes_body','bindExpr':['pullthemes.cfm']},ColdFusion.Bind.urlBindHandler,false);
+		};ColdFusion.Event.registerOnLoad(_cf_bind_init_1354513674009);var _cf_window=ColdFusion.Window.create('morethemes','','pullthemes.cfm',{ modal:false, closable:true, divid:'cf_window1354513674007', draggable:true, resizable:true, fixedcenter:false, width:350, height:350, shadow:true, bodystyle:'text-align: left; font: 96% Verdana, Arial, sans-serif; list-style: none; color:#3281A1;', callfromtag:true, minwidth:0, minheight:0, initshow:false, destroyonclose:true, x:225, y:175});
+	};ColdFusion.Event.registerOnLoad(_cf_window_init_1354513674008);
+/* ]]&gt; */
+/* &lt;![CDATA[ */
+			ColdFusion.Ajax.importTag('CFFORM');
+		/* ]]&gt; */
+/* &lt;![CDATA[ */
+			if (window.ColdFusion) ColdFusion.required['add_email']=true;
+		/* ]]&gt; */
+&lt;!--
+    _CF_checkCFForm_1 = function(_CF_this)
+    {
+        //reset on submit
+        _CF_error_exists = false;
+        _CF_error_messages = new Array();
+        _CF_error_fields = new Object();
+        _CF_FirstErrorField = null;
+        //form element add_email required check
+        if( _CF_hasValue(_CF_this['add_email'], "TEXT", false ) )
+        {
+            //form element add_email 'EMAIL' validation checks
+            if (!_CF_checkEmail(_CF_this['add_email'].value, true))
+            {
+                _CF_onError(_CF_this, "add_email", _CF_this['add_email'].value, "Please enter a properly formatted E-mail address");
+                _CF_error_exists = true;
+            }
+        }else {
+            _CF_onError(_CF_this, "add_email", _CF_this['add_email'].value, "Please enter a properly formatted E-mail address");
+            _CF_error_exists = true;
+        }
+        //display error messages and return success
+        if( _CF_error_exists )
+        {
+            if( _CF_error_messages.length &gt; 0 )
+            {
+                // show alert() message
+                _CF_onErrorAlert(_CF_error_messages);
+                // set focus to first form error, if the field supports js focus().
+                if( _CF_this[_CF_FirstErrorField].type == "text" )
+                { _CF_this[_CF_FirstErrorField].focus(); }
+            }
+            return false;
+        }else {
+            return true;
+        }
+    }
+//--&gt;
+/* &lt;![CDATA[ */
+			if (window.ColdFusion) ColdFusion.required['add_email']=true;
+		/* ]]&gt; */
+&lt;!--
+    _CF_checkCFForm_2 = function(_CF_this)
+    {
+        //reset on submit
+        _CF_error_exists = false;
+        _CF_error_messages = new Array();
+        _CF_error_fields = new Object();
+        _CF_FirstErrorField = null;
+        //form element add_email required check
+        if( _CF_hasValue(_CF_this['add_email'], "TEXT", false ) )
+        {
+            //form element add_email 'EMAIL' validation checks
+            if (!_CF_checkEmail(_CF_this['add_email'].value, true))
+            {
+                _CF_onError(_CF_this, "add_email", _CF_this['add_email'].value, "Please enter a properly formatted E-mail address");
+                _CF_error_exists = true;
+            }
+        }else {
+            _CF_onError(_CF_this, "add_email", _CF_this['add_email'].value, "Please enter a properly formatted E-mail address");
+            _CF_error_exists = true;
+        }
+        //display error messages and return success
+        if( _CF_error_exists )
+        {
+            if( _CF_error_messages.length &gt; 0 )
+            {
+                // show alert() message
+                _CF_onErrorAlert(_CF_error_messages);
+                // set focus to first form error, if the field supports js focus().
+                if( _CF_this[_CF_FirstErrorField].type == "text" )
+                { _CF_this[_CF_FirstErrorField].focus(); }
+            }
+            return false;
+        }else {
+            return true;
+        }
+    }
+//--&gt;
+/* &lt;![CDATA[ */
+			if (window.ColdFusion) ColdFusion.required['username']=true;
+		/* ]]&gt; */
+/* &lt;![CDATA[ */
+			if (window.ColdFusion) ColdFusion.required['email']=true;
+		/* ]]&gt; */
+/* &lt;![CDATA[ */
+			if (window.ColdFusion) ColdFusion.required['body_text']=true;
+		/* ]]&gt; */
+/* &lt;![CDATA[ */
+			var _cf_SUBMIT_init_1354513674012=function()
+			{
+				ColdFusion.setSubmitClicked('edit_form','discussion_reply:method');
+			};ColdFusion.Event.registerOnLoad(_cf_SUBMIT_init_1354513674012);
+		/* ]]&gt; */
+&lt;!--
+    _CF_submit_status["edit_form"]=null;
+    _CF_checkedit_form = function(_CF_this)
+    {
+        //return false if form submit button has already been pressed once
+        if( _CF_submit_status[_CF_this.name] == "submitting" ) return false;
+        //reset on submit
+        _CF_submit_status[_CF_this.name] = "submitting";
+        _CF_error_exists = false;
+        _CF_error_messages = new Array();
+        _CF_error_fields = new Object();
+        _CF_FirstErrorField = null;
+        //form element Creator required check
+        if( !_CF_hasValue(_CF_this['Creator'], "TEXT", false ) )
+        {
+            _CF_onError(_CF_this, "Creator", _CF_this['Creator'].value, "Name is required.");
+            _CF_error_exists = true;
+        }
+        //form element email required check
+        if( _CF_hasValue(_CF_this['email'], "TEXT", false ) )
+        {
+            //form element email 'EMAIL' validation checks
+            if (!_CF_checkEmail(_CF_this['email'].value, true))
+            {
+                _CF_onError(_CF_this, "email", _CF_this['email'].value, "Please enter a properly formatted E-mail address");
+                _CF_error_exists = true;
+            }
+        }else {
+            _CF_onError(_CF_this, "email", _CF_this['email'].value, "Please enter a properly formatted E-mail address");
+            _CF_error_exists = true;
+        }
+        //form element body_text required check
+        if( !_CF_hasValue(_CF_this['body_text'], "TEXTAREA", false ) )
+        {
+            _CF_onError(_CF_this, "body_text", _CF_this['body_text'].value, "Please enter your Comment, (HTML is not allowed)");
+            _CF_error_exists = true;
+        }
+        //display error messages and return success
+        if( _CF_error_exists )
+        {
+            if( _CF_error_messages.length &gt; 0 )
+            {
+                // show alert() message
+                _CF_onErrorAlert(_CF_error_messages);
+                // set focus to first form error, if the field supports js focus().
+                if( _CF_this[_CF_FirstErrorField].type == "text" )
+                { _CF_this[_CF_FirstErrorField].focus(); }
+                _CF_submit_status[_CF_this.name] = null;
+            }
+            return false;
+        }else {
+            return true;
+        }
+    }
+//--&gt;
+ACM QueueArchitecting Tomorrow's Computing
+A Special Offer to Join ACM
+		&amp;nbsp; &amp;nbsp; &amp;nbsp;
+		Why Join ACM?
+Search
+Search
+Home
+Audiocasts
+Videos
+Blogs
+Site Feeds
+
+		&amp;nbsp; &amp;nbsp; Queue Blog
+Twitter feed
+Facebook
+Browse Topics
+Web Security
+Distributed Computing
+Development
+File Systems and Storage
+Open Source
+Web Services
+Full List of Topics
+Columns
+The Bikeshed
+Kode Vicious
+Curmudgeon
+Opinion
+Discussions
+CTO Roundtables
+Case Studies
+Interviews
+Latest Comments
+
+				- &amp;quot;As a long time user of all kinds of Unices in the Eighties, and
+...&amp;quot;
+				A Generation Lost in the Bazaar
+
+				- &amp;quot;i2p is a better darknet, like tor but without the Achilles heel
+...&amp;quot;
+				Splinternet Behind the Great Firewall of China
+
+				- &amp;quot;The blogroll is open to authors who have contributed to Queue....&amp;quot;
+				Vote Early, Vote Often
+&lt;!-- Tech Pack block starts here --&gt;
+Tech Packs
+Security
+Business Intelligence
+Cloud Computing
+Enterprise Architecture
+Mobility
+Parallel Computing
+&lt;!-- Tech Pack block ends here --&gt;
+Archive
+Current Issue
+Past Issues
+Articles&amp;nbsp;(Full Listing)
+other acm Links
+CACM
+ACM TechNews
+Washington Updates
+RISKS Forum
+Sign up for QueueNews
+Our free weekly newsletter showcases all of ACM Queue's latest articles and columns.
+&lt;!--
+	          &lt;label for="add_email"&gt;Your Email&lt;/label&gt;
+--&gt;
+	          Your Email:
+Sign Up
+Sign up for Queue-Updates
+Stay up to date on the latest developments at ACM Queue, including announcements about contests, interviews, and more.
+&lt;!--
+	          &lt;label for="add_email"&gt;Your Email&lt;/label&gt;
+--&gt;
+	          Your Email:
+Sign Up
+&lt;!-- SharePoint TechCon Mar 3-6 --&gt;
+
+          
+          &amp;nbsp; &amp;nbsp; &amp;nbsp;
+		  view issue
+Passing a Language through the Eye of a Needle
+&lt;!-- // Check for existence of associated MP3 file--&gt;
+by Roberto Ierusalimschy, Luiz Henrique de Figueiredo, Waldemar Celes |
+May 12, 2011
+Topic:
+	        		Programming Languages
+&lt;!-- /.meta --&gt;
+&lt;!-- these get hooked up to js events --&gt;
+
+	addthis_pub             = 'acm';
+	addthis_logo            = 'http://queue.acm.org/img/logo_queue_small.gif';
+	addthis_logo_background = '#ffffff';
+	addthis_logo_color      = '000000';
+	addthis_brand           = 'ACM Queue';
+	addthis_options         = 'reddit, slashdot, facebook, favorites, email, delicious, digg, technorati, blinklist, furl, myspace, google, live, more';
+&lt;!-- FB Like --&gt;
+View&amp;nbsp;Comments
+Print
+&lt;!-- ADDTHIS BUTTON BEGIN
+			&lt;a href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', 'http://queue.acm.org/detail.cfm?id=1983083', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()"&gt;&lt;img src="http://s9.addthis.com/button1-share.gif" width="125" height="16" border="0" alt=""  /&gt;&lt;/a&gt;
+			&lt;script type="text/javascript" src="http://s7.addthis.com/js/152/addthis_widget.js"&gt;&lt;/script&gt;
+			 ADDTHIS BUTTON END --&gt;
+
+FB.Event.subscribe('edge.create', function(targetUrl) {
+  _gaq.push(['_trackSocial', 'facebook', 'like', targetUrl]);
+});
+&lt;!--
+			&lt;div class="fb-like" data-send="true" data-width="320" data-show-faces="true"&gt;&lt;/div&gt;
+--&gt;
+&lt;!--lead --&gt;
+&lt;!-- EMail Link--&gt;
+New Queue Content on Slashdot
+- CPU DB: Looking at 40 Years of Processor Improvements
+Mark Horowitz
+- A Taxonomy of Visualization Techniques
+Jeffrey Heer
+- Bufferbloat: Dark Buffers in the Internet
+Jim Gettys
+Related Content
+A New Objective-C Runtime: from Research to Production
+Backward compatibility always trumps new features.
+David Chisnall
+&lt;!-- /.meta --&gt;
+Why LINQ Matters:Cloud Composability Guaranteed
+The benefits of composability are becoming clear in software engineering.
+Brian Beckman
+&lt;!-- /.meta --&gt;
+Creating Languages in Racket
+Sometimes you just have to make a better mousetrap.
+Matthew Flatt
+&lt;!-- /.meta --&gt;
+Postmortem Debugging in Dynamic Environments
+Modern dynamic languages lack tools for understanding software failures.
+David Pacheco
+&lt;!-- /.meta --&gt;
+Browse this Topic:
+Programming Languages
+Passing a Language through the Eye of a Needle
+How the embeddability of Lua impacted its design
+Roberto Ierusalimschy, Luiz Henrique de Figueiredo, and Waldemar Celes, lua.org
+Scripting languages are an important element in the current landscape of programming languages. A key feature of a scripting language is its ability to integrate with a system language.7 This integration takes two main forms: extending and embedding. In the first form, you extend the scripting language with libraries and functions written in the system language and write your main program in the scripting language. In the second form, you embed the scripting language in a host program (written in the system language) so that the host can run scripts and call functions defined in the scripts; the main program is the host program. In this setting, the system language is usually called the host language.
+Many languages (not necessarily scripting languages) support extending through an FFI (foreign function interface). An FFI is not enough to allow a function in the system language to do all that a function in the script can do. Nevertheless, in practice FFI covers most common needs for extending, such as access to external libraries and system calls. Embedding, on the other hand, is harder to support, because it usually demands closer integration between the host program and the script, and an FFI alone does not suffice.
+In this article we discuss how embeddability can impact the design of a language, and in particular how it impacted the design of Lua from day one. Lua3,4 is a scripting language with a particularly strong emphasis on embeddability. It has been embedded in a wide range of applications and is a leading language for scripting games.2
+The Eye of a Needle
+At first sight, the embeddability of a scripting language seems to be a feature of the implementation of its interpreter. Given any interpreter, we can attach an API to it to allow the host program and the script to interact. The design of the language itself, however, has a large influence on the way it can be embedded. Conversely, if you design a language with embeddability in mind, this mindset will have a large influence on the final language.
+The typical host language for most scripting languages is C, and APIs for these languages are therefore mostly composed of functions plus some types and constants. This imposes a natural but narrow restriction on the design of an API for a scripting language: it must offer access to language features through this eye of a needle. Syntactical constructs are particularly difficult to get through. For example, in a scripting language where methods must be written lexically inside their classes, the host language cannot add methods to a class unless the API offers suitable mechanisms. Similarly, it is difficult to pass lexical scoping through an API, because host functions cannot be lexically inside scripting functions.
+A key ingredient in the API for an embeddable language is an eval function, which executes a piece of code. In particular, when a scripting language is embedded, all scripts are run by the host calling eval. An eval function also allows a minimalist approach for designing an API. With an adequate eval function, a host can do practically anything in the script environment: it can assign to variables (eval&amp;quot;a = 20&amp;quot;), query variables (eval&amp;quot;return a&amp;quot;), call functions (eval&amp;quot;foo(32,'stat')&amp;quot;), etc. Data structures such as arrays can be constructed and decomposed by evaluating proper code. For example, again assuming a hypothetical eval function, the following C code would copy a C array of integers into the script:
+void copy (int ar[], int n) {
+ &amp;nbsp; &amp;nbsp; int i;
+ &amp;nbsp; &amp;nbsp; eval(&amp;quot;ar = {}&amp;quot;); /* create an empty array */
+ &amp;nbsp; &amp;nbsp; for (i =0; i &amp;lt;n; i++){
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; char buff[100];
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; sprintf(buff, &amp;quot;ar[%d] = %d&amp;quot;, i + 1, ar[i]);
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; eval(buff); /* assign i-th element */
+ &amp;nbsp; &amp;nbsp; }
+}
+Despite its satisfying simplicity and completeness, an API composed of a single eval function has two drawbacks: it is too inefficient to be used intensively, because of the cost of parsing and interpreting a chunk at each interaction; and it is too cumbersome to use, because of the string manipulation needed to create commands in C and the need to serialize all data that goes through the API. Nevertheless, this approach is often used in real applications. Python calls it "Very High-Level Embedding."8
+For a more efficient and easier-to-use API, we need more complexity. Besides an evalfunction for executing scripts, we need direct ways to call functions defined by scripts, to handle errors in scripts, to transfer data between the host program and the scripting environment, etc. In the following sections, we discuss these various aspects of an API for an embeddable language and how they have affected and been affected by the design of Lua, but first we discuss how the simple existence of such an API can affect a language.
+Given an embeddable language with its API, it is not difficult to write a library in the host language that exports the API back into the scripting language. So, we have an interesting form of reflection, with the host language acting as a mirror. Several mechanisms in Lua use this technique. For example, Lua offers a function called type to query the type of a given value. This function is implemented in C outside the interpreter, through an external library. The library simply exports to Lua a C function (called luaB_type) that calls the Lua API to get the type of its argument.
+On the one hand, this technique simplifies the implementation of the interpreter; once a mechanism is available to the API, it can easily be made available to the language. On the other hand, it forces language features to pass through the eye of the needle, too. We will see a concrete example of this trade-off when we discuss exception handling.
+Control
+The first problem related to control that every scripting language must solve is the "who-has-the-main-function" problem. When we use the scripting language embedded in a host, we want the language to be a library, with the main function in the host. For many applications, however, we want the language as a stand-alone program with its own internal main function.
+Lua solves this problem with the use of a separate stand-alone program. Lua itself is entirely implemented as a library, with the goal of being embedded in other applications. The Lua command-line program is just a small application that uses the Lua library like any other host to run pieces of Lua code. The following code is a bare-bones version of this application. The real application, of course, is longer than that, as it has to handle options, errors, signals, and other real-life details, but it still has fewer than 500 lines of C code.
+#include &amp;lt;stdio.h&amp;gt;
+#include &amp;quot;luaxlib.h&amp;quot;
+#include &amp;quot;lualib.h&amp;quot;
+int main (void) {
+ &amp;nbsp; &amp;nbsp; char line[256];
+ &amp;nbsp; &amp;nbsp; lua_State *L = luaL_newstate(); /* create a new state */
+ &amp;nbsp; &amp;nbsp; luaL_openlibs(L); /* open the standard libraries */
+ &amp;nbsp; &amp;nbsp; /* reads lines and executes them */
+ &amp;nbsp; &amp;nbsp; while (fgets(line, sizeof(line), stdin) != NULL) {
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; luaL_loadstring(L, line); /* compile line to a function */
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; lua_pcall(L, 0, 0, 0); /* call the function */
+ &amp;nbsp; &amp;nbsp; }
+ &amp;nbsp; &amp;nbsp; lua_close(L);
+ &amp;nbsp; &amp;nbsp; return 0;
+}
+Although function calls form the bulk of control communication between Lua and C, there are other forms of control exposed through the API: iterators, error handling, and coroutines. Iterators in Lua allow constructions such as the following, which iterates over all lines of a file:
+for line in io.lines(file) do
+ &amp;nbsp; &amp;nbsp; print(line)
+end
+Although iterators present a new syntax, they are built on top of first-class functions. In our example, the call io.lines(file) returns an iteration function, which returns a new line from the file each time it is called. So, the API does not need anything special to handle iterators. It is easy both for Lua code to use iterators written in C (as in the case of io.lines) and for C code to iterate using an iterator written in Lua. For this case there is no syntactic support; the C code must do explicitly all that the for construct does implicitly in Lua.
+Error handling is another area where Lua has suffered a strong influence from the API. All error handling in Lua is based on the longjump mechanism of C. It is an example of a feature exported from the API to the language.
+The API supports two mechanisms for calling a Lua function: unprotected and protected. An unprotected call does not handle errors: any error during the call longjumps through this code to land in a protected call farther down the call stack. A protected call sets a recovery point using setjmp, so that any error during the call is captured; the call always returns with a proper error code. Such protected calls are very important in an embedded scenario where a host program cannot afford to abort because of occasional errors in a script. The bare-bones application just presented uses lua_pcall (protected call) to call each compiled line in protected mode.
+The standard Lua library simply exports the protected-call API function to Lua under the name of pcall. With pcall, the equivalent of a try-catch in Lua looks like this:
+local ok, errorobject = pcall(function()
+ &amp;nbsp; &amp;nbsp; --here goes the protected code
+ &amp;nbsp; &amp;nbsp; ...
+end)
+if not ok then
+ &amp;nbsp; &amp;nbsp; --here goes the error handling code
+ &amp;nbsp; &amp;nbsp; --(errorobject has more information about the error)
+ &amp;nbsp; &amp;nbsp; ...
+end
+This is certainly more cumbersome than a try-catch primitive mechanism built into the language, but it has a perfect fit with the C API and a very light implementation.
+The design of coroutines in Lua is another area where the API had a great impact. Coroutines come in two flavors: symmetric and asymmetric.1 Symmetric coroutines offer a single control-transfer primitive, typically called transfer, that acts like a goto: it can transfer control from any coroutine to any other. Asymmetric coroutines offer two control-transfer primitives, typically called resume and yield, that act like a pair call-return: a resume can transfer control to any other coroutine; a yield stops the current coroutine and goes back to the one that resumed the one yielding.
+It is easy to think of a coroutine as a call stack (a continuation) that encodes which computations a program must do to finish that coroutine. The transfer primitive of symmetric coroutines corresponds to replacing the entire call stack of the running coroutine by the call stack of the transfer target. On the other hand, the resume primitive adds the target stack on top of the current one.
+A symmetric coroutine is simpler than an asymmetric one but poses a big problem for an embeddable language such as Lua. Any active C function in a script must have a corresponding activation register in the C stack. At any point during the execution of a script, the call stack may have a mix of C functions and Lua functions. (In particular, the bottom of the call stack always has a C function, which is the host program that initiated the script.) A program cannot remove these C entries from the call stack, however, because C does not offer any mechanism for manipulating its call stack. Therefore, the program cannot make any transfer.
+Asymmetric coroutines do not have this problem, because the resume primitive does not affect the current stack. There is still a restriction that a program cannot yield across a C call&amp;mdash;that is, there cannot be a C function in the stack between the resume and the yield. This restriction is a small price to pay for allowing portable coroutines in Lua.
+Data
+One of the main problems with the minimalist eval approach for an API is the need to serialize all data as either a string or a code segment that rebuilds the data. A practical API should therefore offer other more efficient mechanisms to transfer data between the host program and the scripting environment.
+When the host calls a script, data flows from the host program to the scripting environment as arguments, and it flows in the opposite direction as results. When the script calls a host function, we have the reverse. In both cases, data must be able to flow in both directions. Most issues related to data transfer are therefore relevant both for embedding and for extending.
+To discuss how the Lua-C API handles this flow of data, let's start with an example of how to extend Lua. The following code shows the implementation of the function io.getenv, which accesses environment variables of the host program.
+static int os_getenv (lua_State *L) {
+ &amp;nbsp; &amp;nbsp; const char *varname = luaL_checkstring(L, 1);
+ &amp;nbsp; &amp;nbsp; const char *value = getenv(varname);
+ &amp;nbsp; &amp;nbsp; lua_pushstring(L, value);
+ &amp;nbsp; &amp;nbsp; return 1;
+}
+For a script to be able to call this function, we must register it in the script environment. We will see how to do this in a moment; for now, let us assume that it has been registered as a global variable getenv, which can be used like this:
+print(getenv(&amp;quot;PATH&amp;quot;))
+The first thing to note in this code is the prototype of os_getenv. The only parameter of that function is a Lua state. The interpreter passes the actual arguments to the function (in this example, the name of the environment variable) through a data structure inside this state. This data structure is a stack of Lua values; given its importance, we refer to it as the stack.
+When the Lua script calls getenv, the Lua interpreter calls os_getenv with the stack containing only the arguments given to getenv, with the first argument at position 1 in the stack. The first thing os_getenv does is to call luaL_checkstring, which checks whether the Lua value at position 1 is really a string and returns a pointer to the corresponding C string. (If the value is not a string, luaL_checkstring signals an error using a longjump, so that it does not return to os_getenv.)
+Next, the function calls getenv from the C library, which does the real work. Then it calls lua_pushstring, which converts the C string value into a Lua string and pushes that string onto the stack. Finally, os_getenv returns 1. This return tells the Lua interpreter how many values on the top of the stack should be considered the function results. (Functions in Lua may return multiple results.)
+Now let's return to the problem of how to register os_getenv as getenv in the scripting environment. One simple way is by changing our previous example of the basic stand-alone Lua program as follows:
+ &amp;nbsp; lua_State *L = luaL_newstate(); /* creates a new state */
+ &amp;nbsp; luaL_openlibs(L); /* opens the standard libraries */
++ lua_pushcfunction(L, os_getenv);
++ lua_setglobal(L, &amp;quot;getenv&amp;quot;);
+The first added line is all the magic we need to extend Lua with host functions. The function lua_pushcfunction receives a pointer to a C function and pushes on the stack a (Lua) function that, when called, calls its corresponding C function. Because functions in Lua are first-class values, the API does not need extra facilities to register global functions, local functions, methods, etc. The API needs only the single injection function lua_pushcfunction. Once created as a Lua function, this new value can be manipulated just like any other Lua value. The second added line in the new code calls lua_setglobal to set the value on the top of the stack (the new function) as the value of the global variable getenv.
+Besides being first-class values, functions in Lua are always anonymous. A declaration such as
+function inc (x) return x + 1 end
+is syntactic sugar for an assignment:
+inc = function (x) return x + 1 end
+The API code we used to register the function getenv does exactly the same thing as a declaration in Lua: it creates an anonymous function and assigns it to a global variable.
+In the same vein, the API does not need different facilities to call different kinds of Lua functions, such as global functions, local functions, methods, etc. To call any function, the host first uses the regular data-manipulation facilities of the API to push the function onto the stack, and then pushes the arguments. Once the function (as a first-class value) and the arguments are in the stack, the host can call it with a single API primitive, regardless of where the function came from.
+One of the most distinctive features of Lua is its pervasive use of tables. A table is essentially an associative array. Tables are the only data-structure mechanisms in Lua, so they play a much larger role than in other languages with similar constructions. Lua uses tables not only for all its data structures (records, arrays, etc.), but also for other language mechanisms, such as modules, objects, and environments.
+The next example illustrates the manipulation of tables through the API. The function os_environ creates and returns a table with all environment variables available to a process. The function assumes access to the environ array, which is predefined in Posix systems; each entry in this array is a string of the form NAME=VALUE, describing an environment variable.
+extern char **environ;
+static int os_environ (lua_State *L) {
+ &amp;nbsp; &amp;nbsp; int i;
+ &amp;nbsp; &amp;nbsp; /* push a new table onto the stack */
+ &amp;nbsp; &amp;nbsp; lua_newtable(L);
+ &amp;nbsp; &amp;nbsp; /* repeat for each environment variable */
+ &amp;nbsp; &amp;nbsp; for (i = 0; environ[i] != NULL; i++) {
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; /* find the '=' in NAME=VALUE */
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; char *eq = strchr(environ[i], '=');
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; if (eq) {
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; /* push name */
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; lua_pushlstring(L, environ[i], eq -environ[i]);
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; /* push value */
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; lua_pushstring(L, eq + 1);
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; /* table[name] = value */
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; lua_settable(L, -3);
+ &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; }
+ &amp;nbsp; &amp;nbsp; }
+ &amp;nbsp; &amp;nbsp; /* result is the table */
+ &amp;nbsp; &amp;nbsp; return 1;
+}
+The first step of os_environ is to create a new table on the top of the stack by calling lua_newtable. Then the function traverses the array environ to build a table in Lua reflecting the contents of that array. For each entry in environ, the function pushes the variable name on the stack, pushes the variable value, and then calls lua_settable to store the pair in the new table. (Unlike lua_pushstring, which assumes a zero-terminated string, lua_pushlstring receives an explicit length.)
+ The function lua_settable assumes that the key and the value for the new entry are on the top of the stack; the argument -3 in the call tells where the table is in the stack. (Negative numbers index from the top, so -3 means three slots from the top.)
+ The function lua_settable pops both the key and the value, but leaves the table where it was in the stack. Therefore, after each iteration, the table is back on the top. The final return 1 tells Lua that this table is the only result of os_environ.
+A key property of the Lua API is that it offers no way for C code to refer directly to Lua objects; any value to be manipulated by C code must be on the stack. In our last example, the function os_environ creates a Lua table, fills it with some entries, and returns it to the interpreter. All the time, the table remains on the stack.
+We can contrast this approach with using some kind of C type to refer to values of the language. For example, Python has the type PyObject; JNI (Java Native Interface) has jobject. Earlier versions of Lua also offered something similar: a lua_Object type. After some time, however, we decided to change the API.6
+The main problem of a lua_Object type is the interaction with the garbage collector. In Python, the programmer is responsible for calling macros such as Py_INCREF and DECREF to increment and decrement the reference count of objects being manipulated by the API. This explicit counting is both complex and error prone. In JNI (and in earlier versions of Lua), a reference to an object is valid until the function where it was created returns. This approach is simpler and safer than a manual counting of references, but the programmer loses control of the lifetime of objects. Any object created in a function can be released only when the function returns. In contrast, the stack allows the programmer to control the lifetime of any object in a safe way. While an object is in the stack, it cannot be collected; once out of the stack, it cannot be manipulated. Moreover, the stack offers a natural way to pass parameters and results.
+The pervasive use of tables in Lua has a clear impact on the C API. Anything in Lua represented as a table can be manipulated with exactly the same operations. As an example, modules in Lua are implemented as tables. A Lua module is nothing more than a table containing the module functions and occasional data. (Remember, functions are first-class values in Lua.) When you write something like math.sin(x), you think of it as calling the sin function from the math module, but you are actually calling the contents of field "sin" in the table stored in the global variable math. Therefore, it is very easy for the host to create modules, to add functions to existing modules, to "import" modules written in Lua, and the like.
+Objects in Lua follow a similar pattern. Lua uses a prototype-based style for object-oriented programming, where objects are represented by tables. Methods are implemented as functions stored in prototypes. Similarly to modules, it is very easy for the host to create objects, to call methods, etc. In class-based systems, instances of a class and its subclasses must share some structure. Prototype-based systems do not have this requirement, so host objects can inherit behavior from scripting objects and vice versa.
+eval and Environments
+A primary characteristic of a dynamic language is the presence of an eval construction, which allows the execution of code built at runtime. As we discussed, an eval function is also a basic element in an API for a scripting language. In particular, eval is the basic means for a host to run scripts.
+Lua does not directly offer an eval function. Instead, it offers a load function. (The code in the bare-bones Lua example above uses the luaL_loadstring function, which is a variant of load.) This function does not execute a piece of code; instead, it produces a Lua function that, when called, executes the given piece of code.
+Of course, it is easy to convert eval into load and vice versa. Despite this equivalence, we think load has some advantages over eval. Conceptually, load maps the program text to a value in the language instead of mapping it to an action. An eval function is usually the most complex function in an API. By separating "compilation" from execution, it becomes a little simpler; in particular, unlike eval, load never has side effects.
+The separation between compilation and execution also avoids a combinatorial problem. Lua has three different load functions, depending on the source: one for loading strings, one for loading files, and one for loading data read by a given reader function. (The former two functions are implemented on top of the latter.)
+ Because there are two ways to call functions (protected and unprotected), we would need six different eval functions to cover all possibilities.
+Error handling is also simpler, as static and dynamic errors occur separately. Finally, load ensures that all Lua code is always inside some function, which gives more regularity to the language.
+Closely related to the eval function is the concept of environment. Every Turing-complete language can interpret itself; this is a hallmark of Turing machines. What makes eval special is that it executes dynamic code in the same environment as the program that is using it. In other words, an eval construction offers some level of reflection. For example, it is not too difficult to write a C interpreter in C. But faced with a statement such as x=1, this interpreter has no way of accessing variable x in the program, if there is one. (Some non-ANSI facilities, such as those related to dynamic-linking libraries, allow a C program to find the address of a given global symbol, but the program still cannot find anything about its type.)
+An environment in Lua is simply a table. Lua offers only two kinds of variables: local variables and table fields. Syntactically, Lua also offers global variables: any name not bound to a local declaration is considered global. Semantically, these unbound names refer to fields in a particular table associated with the enclosing function; this table is called the environment of that function. In a typical program, most (or all) functions share a single environment table, which then plays the role of a global environment.
+Global variables are easily accessible through the API. Because they are table fields, they can be accessed through the regular API to manipulate tables. For example, function lua_setglobal, which appears in the bare-bones Lua application code shown earlier, is actually a simple macro written on top of table-manipulation primitives.
+Local variables, on the other hand, follow strict lexical-scoping rules, so they do not take part in the API at all. Because C code cannot be lexically nested inside Lua code, C code cannot access local variables in Lua (except through some debug facilities). This is practically the only mechanism in Lua that cannot be emulated through the API.
+There are several reasons for this exception. Lexical scoping is an old and powerful concept that should follow the standard behavior. Moreover, because local variables cannot be accessed from outside their scopes, lexical scoping offers programmers a foundation for access control and encapsulation. For example, any file of Lua code can declare local variables that are visible only inside the file. Finally, the static nature of local variables allows the compiler to place all local variables in registers in the register-based virtual machine of Lua.5
+Conclusion
+We have argued that providing an API to the outside world is not a detail in the implementation of a scripting language, but instead is a decision that may affect the entire language. We have shown how the design of Lua was affected by its API and vice versa.
+The design of any programming language involves many such trade-offs. Some language attributes, such as simplicity, favor embeddability, while others, such as static verification, do not. The design of Lua involves several trade-offs around embeddability. The support for modules is a typical example. Lua supports modules with a minimum of extra mechanisms, favoring simplicity and embeddability at the expense of some facilities such as unqualified imports. Another example is the support for lexical scoping. Here we chose better static verification at the expense of embeddability. We are happy with the balance of trade-offs in Lua, but it was a learning experience for us to pass through the eye of that needle.Q
+References
+1. Lucia de Moura, A., Ierusalimschy, R. 2009. Revisiting coroutines. ACM Transactions on Programming Languages and Systems 31(2): 6.1-6.31.
+2. DeLoura, M. 2009. The engine survey: general results. Gamasutra; http://www.gamasutra.com/blogs/MarkDeLoura/20090302/581/The_Engine_Survey_General_results.php.
+3. Ierusalimschy, R. 2006. Programming in Lua, second edition. Lua.org, Rio de Janeiro, Brazil.
+4. Ierusalimschy, R., de Figueiredo, L. H., Celes, W. 1996. Lua&amp;mdash;an extensible extension language. Software: Practice and Experience 26(6): 635-652.
+5. Ierusalimschy, R., de Figueiredo, L. H., Celes, W. 2005. The implementation of Lua 5.0.  Journal of Universal Computer Science 11(7): 1159-1176.
+6. Ierusalimschy, R., de Figueiredo, L. H., Celes, W. 2007. The evolution of Lua. In the Third ACM SIGPLAN Conference on History of Programming Languages: 2.1-2.26, San Diego, CA (June).
+7. Ousterhout, J. K. 1998. Scripting: higher-level programming for the 21st century. IEEE Computer, 31(3): 23-30.
+8. Python Software Foundation. 2011. Extending and embedding the Python interpreter, release 2.7 (April); http://docs.python.org/extending/.
+LOVE IT, HATE IT? LET US KNOW
+feedback@queue.acm.org
+Roberto Ierusalimschy is an associate professor of computer science at PUC-Rio (Pontifical Catholic University of Rio de Janeiro), where he works on programming language design and implementation. He is the leading architect of the Lua programming language and the author of  Programming in Lua (now in its second edition).
+Luiz Henrique de Figueiredo holds a D.Sc. in mathematics from the National Institute for Pure and Applied Mathematics in Rio de Janeiro, where he is a full researcher and a member of the Vision and Graphics Laboratory. He is also a consultant for geometric modeling and software tools at Tecgraf, the Computer Graphics Technology Group of PUC-Rio, where he helped create Lua.
+Waldemar Celes is an assistant professor in the computer science department at PUC-Rio (Pontifical Catholic University of Rio de Janeiro) and a former postdoctoral associate at the Program of Computer Graphics, Cornell University. His current research interests include realtime rendering, scientific visualization, physical simulation, and distributed graphics applications. He is part of the computer graphics technology group of PUC-Rio, where he coordinates the visualization group. He is also one of the authors of the Lua programming language.
+&amp;copy; 2011 ACM 1542-7730/11/0500 $10.00
+Originally published in Queue vol. 9, no. 5&amp;#8212;
+ 	
+	see this item in the ACM Digital Library
+&lt;!-- EMail Link--&gt;
+Back to top
+&lt;!-- /content --&gt;
+&lt;!-- tags --&gt;
+&lt;!-- /content-tags --&gt;
+Comments
+Larry
+           			 |
+          			  Fri, 20 May 2011 23:24:36 UTC
+Lua is impressive, and far more ubiquitous than many realize.
+Thanks for the article.
+Russell Sullivan
+           			 |
+          			  Wed, 09 Nov 2011 05:16:39 UTC
+Lua truly nailed embed-ablity and is a good example of programming with a goal in mind and creating an API that models reality of computer execution over friendliness-to-developers. I applaud its authors for that difficult and bold choice.
+shcoked
+           			 |
+          			  Fri, 19 Oct 2012 10:46:50 UTC
+gosh is it 1975 already
+Leave this field empty
+Post a Comment:
+Name
+(Required)
+E-Mail
+(Required)
+Comment
+(Required - 4,000 character limit - HTML syntax is not allowed and will be removed)
+&lt;!-- /content-comments --&gt;
+&lt;!-- /primary --&gt;
+&lt;!-- /wrapper --&gt;
+About Queue
+Author Guidelines
+Editorial Board
+Join ACM
+Advertising
+RSS Feeds
+Privacy Policy
+Contact us
+LOVE IT, HATE IT? LET US KNOW
+&amp;#169; 2012 ACM, Inc. All Rights
+        Reserved.
+&lt;!-- /footer --&gt;
+  </p>
+</body>
+</html>

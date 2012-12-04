@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<opf:package xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" unique-identifier="bookid" version="2.0">
+  <opf:metadata>
+    <dc:identifier id="bookid">urn:uuid:e792a124-3dc1-11e2-a18e-0025bce5a8aa</dc:identifier>
+    <dc:language>en-US</dc:language>
+    <dc:title>Hacker News 2012-12-03</dc:title>
+    <dc:creator opf:role="aut">Sam Calvert</dc:creator>
+  </opf:metadata>
+  <opf:manifest>
+    <opf:item id="ncxtoc" media-type="application/x-dtbncx+xml" href="toc.ncx"/>
+    <opf:item id="html_1" media-type="application/xhtml+xml" href="title-page.html"/>
+    <opf:item id="html_2" media-type="application/xhtml+xml" href="toc.html"/>
+    <opf:item id="html_3" media-type="application/xhtml+xml" href="s1.html"/>
+  </opf:manifest>
+  <opf:spine toc="ncxtoc">
+    <opf:itemref idref="html_1" linear="yes"/>
+    <opf:itemref idref="html_2" linear="no"/>
+    <opf:itemref idref="html_3" linear="yes"/>
+  </opf:spine>
+  <opf:guide>
+    <opf:reference href="title-page.html" type="title-page" title="Title Page"/>
+    <opf:reference href="toc.html" type="toc" title="Table of Contents"/>
+  </opf:guide>
+</opf:package>

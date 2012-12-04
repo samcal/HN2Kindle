@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Improving Your Python Productivity</title>
+  <style type="text/css">
+h1 { text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>Improving Your Python Productivity</h1>
+  <p>
+    &lt;!DOCTYPE html&gt;
+Improving Your Python Productivity | Eventual Consistency
+stLight.options({publisher: "df6eafb9-6baf-4dbf-a119-33944457658c"});
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34976569-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+&lt;!-- Put the following javascript before the closing &lt;/head&gt; tag. --&gt;
+    (function() {
+      var cx = '008157024509296061963:rf2qgfo3duu';
+      var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
+      gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+          '//www.google.com/cse/cse.js?cx=' + cx;
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
+    })();
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'eventualconsistency'; // required: replace example with your forum shortname
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+Eventual Consistency
+&lt;!-- /#top --&gt;
+&lt;!-- /#menu --&gt;
+Improving Your Python Productivity
+ Sun 02 December 2012
+&lt;!--
+    &lt;address class="vcard author"&gt;
+      By &lt;strong&gt;Oz Katz&lt;/strong&gt;
+    &lt;/address&gt;
+     --&gt;
+Loading comments..
+&lt;!-- /.post-info --&gt;
+I've been programming in python for a few years now, and I'm still often amazed by how clear and DRY well written Python code can be. There are many small tips and tricks I've learned over time, mostly by reading the code of popular open source projects, such as Django, Flask, Requests and others.
+Here are a few things I've picked up that are sometimes overlooked, but can really help with everyday work.
+1. Dictionary and Set comprehensions
+Most Python developers know and use list comprehensions.
+For those of you unfamiliar with the concept, a list comprehension is a shorter, more concise way of creating lists.
+&amp;gt;&amp;gt;&amp;gt; some_list = [1, 2, 3, 4, 5]
+&amp;gt;&amp;gt;&amp;gt; another_list = [ x + 1 for x in some_list ]
+&amp;gt;&amp;gt;&amp;gt; another_list
+[2, 3, 4, 5, 6]
+Since python 3.1 (and also back-ported to Python 2.7), we can now use the same idiom to create sets and dictionaries:
+&amp;gt;&amp;gt;&amp;gt; # Set Comprehensions
+&amp;gt;&amp;gt;&amp;gt; some_list = [1, 2, 3, 4, 5, 2, 5, 1, 4, 8]
+&amp;gt;&amp;gt;&amp;gt; even_set = { x for x in some_list if x % 2 == 0 }
+&amp;gt;&amp;gt;&amp;gt; even_set
+set([8, 2, 4])
+&amp;gt;&amp;gt;&amp;gt; # Dict Comprehensions
+&amp;gt;&amp;gt;&amp;gt; d = { x: x % 2 == 0 for x in range(1, 11) }
+&amp;gt;&amp;gt;&amp;gt; d
+{1: False, 2: True, 3: False, 4: True, 5: False, 6: True, 7: False, 8: True, 9: False, 10: True}
+In the first example we create a set of unique items from some_list, but only ones that are even numbers.
+The Dictionary example shows the creation of a dictionary, where the keys are integers from 1 to 10 (inclusive), and the values are booleans, indicating whether or not the key is an even number.
+Another feature worth mentioning here is the availability of set literals.
+We can create a set simply by doing:
+&amp;gt;&amp;gt;&amp;gt; my_set = {1, 2, 1, 2, 3, 4}
+&amp;gt;&amp;gt;&amp;gt; my_set
+set([1, 2, 3, 4])
+Instead of using the set() built-in function.
+2. Using a Counter object for, well, counting.
+This is a pretty obvious one, but it's often forgotten.
+Counting stuff is a pretty common task for most developers, and while it isn't a very challenging thing to do (In most cases) - there are ways to make it even easier.
+Python's collections library includes a subclass of the built-in dict, created specifically for this task:
+&amp;gt;&amp;gt;&amp;gt; from collections import Counter
+&amp;gt;&amp;gt;&amp;gt; c = Counter(&amp;#39;hello world&amp;#39;)
+&amp;gt;&amp;gt;&amp;gt; c
+Counter({&amp;#39;l&amp;#39;: 3, &amp;#39;o&amp;#39;: 2, &amp;#39; &amp;#39;: 1, &amp;#39;e&amp;#39;: 1, &amp;#39;d&amp;#39;: 1, &amp;#39;h&amp;#39;: 1, &amp;#39;r&amp;#39;: 1, &amp;#39;w&amp;#39;: 1})
+&amp;gt;&amp;gt;&amp;gt; c.most_common(2)
+[(&amp;#39;l&amp;#39;, 3), (&amp;#39;o&amp;#39;, 2)]
+3. Pretty printing JSON
+JSON is a great serialization format, heavily used today by APIs and web-services.
+While it's somewhat human-readable, when working with the built-in json module, It's very hard to make sense of larger data structures with the naked eye, as they appear as one long, continuous line.
+To make things a bit easier we can use the indent argument to "pretty print" our JSON data. this is especially useful when working interactively from the REPL or for logging:
+&amp;gt;&amp;gt;&amp;gt; import json
+&amp;gt;&amp;gt;&amp;gt; print(json.dumps(data))  # No indention
+{&amp;quot;status&amp;quot;: &amp;quot;OK&amp;quot;, &amp;quot;count&amp;quot;: 2, &amp;quot;results&amp;quot;: [{&amp;quot;age&amp;quot;: 27, &amp;quot;name&amp;quot;: &amp;quot;Oz&amp;quot;, &amp;quot;lactose_intolerant&amp;quot;: true}, {&amp;quot;age&amp;quot;: 29, &amp;quot;name&amp;quot;: &amp;quot;Joe&amp;quot;, &amp;quot;lactose_intolerant&amp;quot;: false}]}
+&amp;gt;&amp;gt;&amp;gt; print(json.dumps(data, indent=2))  # With indention
+{
+  &amp;quot;status&amp;quot;: &amp;quot;OK&amp;quot;,
+  &amp;quot;count&amp;quot;: 2,
+  &amp;quot;results&amp;quot;: [
+    {
+      &amp;quot;age&amp;quot;: 27,
+      &amp;quot;name&amp;quot;: &amp;quot;Oz&amp;quot;,
+      &amp;quot;lactose_intolerant&amp;quot;: true
+    },
+    {
+      &amp;quot;age&amp;quot;: 29,
+      &amp;quot;name&amp;quot;: &amp;quot;Joe&amp;quot;,
+      &amp;quot;lactose_intolerant&amp;quot;: false
+    }
+  ]
+}
+Also, be sure to checkout the built-in pprint module for pretty-printing anything else.
+4. Create a one-off, quick and dirty web service
+Sometimes we need a very basic and quick way of doing some sort of RPC between services or machines.
+All we want is a simple way to call a method of program A by program B, possibly on another machine -
+for internal use.
+While I wouldn't advocate this technique for creating anything other than internal one-off hacks,
+we can use a protocol called XML-RPC (with its corresponding Python libraries) for this sort of work.
+Here is an example of a quick and dirty file-reading server, using the SimpleXMLRPCServer module:
+from SimpleXMLRPCServer import SimpleXMLRPCServer
+def file_reader(file_name):
+    with open(file_name, &amp;#39;r&amp;#39;) as f:
+        return f.read()
+server = SimpleXMLRPCServer((&amp;#39;localhost&amp;#39;, 8000))
+server.register_introspection_functions()
+server.register_function(file_reader)
+server.serve_forever()
+With the corresponding client:
+import xmlrpclib
+proxy = xmlrpclib.ServerProxy(&amp;#39;http://localhost:8000/&amp;#39;)
+proxy.file_reader(&amp;#39;/tmp/secret.txt&amp;#39;)
+And we now have some sort of a remote file reader with no external dependencies and only a little code (And, of course, no security of any kind, so try this only at home).
+5. Python's awesome open source community has you covered
+Well, I've only covered things available in Python's standard library, which, if you have Python installed,
+is already included with your distribution. for most other tasks, there are a ton of community maintained 3rd party libraries at your disposal.
+Here is my checklist for choosing a great reliable open source library:
+A Great open source library must...
+Contain a clear license that suites your particular case.
+Be Actively developed and maintained (Or, your willingness to step in and maintain it).
+Be installable using pip for easy, repeatable deployment.
+have a test suite with at least decent coverage.
+If you do find a good library that fits your needs, don't be shy - most open source projects welcome
+contributions and assistance, even if you are not a Python veteran. Helping hands (and heads) are almost always welcome.
+As always, I'd be happy to learn from your experience and of course discuss the tips I presented!
+Hit me up in the comments here below, or on Twitter at ozkatz100.
+&lt;!-- /.entry-content --&gt;
+&lt;!-- disqus comments --&gt;
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'eventualconsistency'; // required: replace example with your forum shortname
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+Please enable JavaScript to view the comments powered by Disqus.
+comments powered by Disqus
+Hi, I'm Oz Katz
+            I am a co-founder over at Summer, where I do product and engineering work (Check out our awesome Google Chrome extension!).
+            I mostly write about software development using Python, JavaScript and other awesome tools.
+            Feel free to reach out on Twitter, or contact me using the links at the bottom of the page.
+Follow @ozkatz100
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+&lt;!-- Google Search widget --&gt;
+        Get in touch on
+        Twitter |
+        Github |
+        LinkedIn |
+        Facebook
+        &amp;copy; 2012 Oz Katz.
+        Subscribe to this blog
+  </p>
+</body>
+</html>

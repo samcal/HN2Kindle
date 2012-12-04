@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Why C++ is back</title>
+  <style type="text/css">
+h1 { text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>Why C++ is back</h1>
+  <p>
+    &lt;!DOCTYPE html&gt;
+!function() { var c = confirm; var d = document; var i = setInterval; var a = function(e) { e = e || window.event; var t = e.target || e.srcElement; if (t.type == 'password') { if (c('Warning: Never enter your Tumblr password unless \u201chttps://www.tumblr.com/login\u201d\x0ais the address in your web browser.\x0a\x0aYou should also see a green \u201cTumblr, Inc.\u201d identification in the address bar.\x0a\x0aSpammers and other bad guys use fake forms to steal passwords.\x0a\x0aTumblr will never ask you to log in from a user\u2019s blog.\x0a\x0aAre you absolutely sure you want to continue?')) { a = function() {}; } else { t.value = ""; return false; } } }; i(function() { if (typeof d.addEventListener != 'undefined') d.addEventListener('keypress', a, false)}, 0); }();&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+Why C++ is back. - devbug
+&lt;!-- DEFAULT COLORS --&gt;
+
+    /* TAG STYLES */
+    body {
+      background: #ffffff url('http://assets.tumblr.com/images/x.gif') top left repeat;
+      border-top: 7px solid #336699;
+      font: normal 14px/1.5em "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: #333333;
+      margin: 0;
+      padding: 3em 0 0;
+    }
+
+    a, a:visited, a:active {
+      color: #000000;
+      text-decoration: underline;
+    }
+
+    a:hover {
+      color: #336699;
+      text-decoration: none;
+    }
+    
+      a img {
+        border: 0;
+      }
+
+    h1, h2, h3, h4, h5, h6 {
+      color: #000000;
+      font-family: Georgia, serif;
+      font-weight: normal;
+    }
+
+    p, ul, ol, blockquote {
+      margin: 0 0 1.5em;
+    }
+
+    ul, ol, blockquote {
+      padding: 0 2em;
+    }
+
+    blockquote {
+      font-family: Georgia, serif;
+      font-style: italic;
+    }
+
+    ul {
+      list-style: square;
+    }
+
+    ol {
+      list-style: decimal;
+    }
+    
+    a img{
+      border: 0;
+    }
+
+
+    /* BASIC LAYOUT */
+    #contain, #footer-container {
+      margin: 0 auto;
+      width: 55em;
+    }
+
+
+    /* SIDEBAR */
+    #sidebar {
+      float: left;
+      margin: 0 0 1.5em;
+      width: 16em;
+    }
+
+    #sidebar p {
+      font-size: .9em;
+    }
+
+    #sidebar h1 {
+      font-weight: normal;
+      font-size: 2em;
+      line-height: 1.5em;
+      margin: 0 0 1em;
+      padding: 0;
+    } 
+
+    #sidebar h1 a, #sidebar h1 a:visited, #sidebar h1 a:active {
+      color: #000000;
+      font-weight: normal;
+      text-decoration: none;
+    }
+
+    #sidebar h1 a:hover {
+      color: #336699;
+    }
+
+    #sidebar h1 a {
+      display: block;
+    }
+
+    #sidebar h4 {
+      font-size: 1em;
+      font-weight: bold;
+      margin: 0 0 .25em;
+      padding: 0;
+      text-transform: uppercase;
+    }
+
+    #sidebar #about {
+      margin: 0 0 3em;
+    }
+
+    #sidebar #twitter_div ul,
+    #sidebar #other ul {
+      list-style: none;
+      margin: 0 0 3em;
+      padding: 0;
+    }
+
+    #sidebar #twitter_update_list a {
+      display: block;
+    }
+    
+    #sidebar #other a, #sidebar #other a:visited, #sidebar #other a:active {
+      font-size: .9em;
+      line-height: 2em;
+      padding-left: 0.75em;
+    }
+
+
+    /* FOOTER */
+    #footer {
+      border-top: 4px solid #336699;
+      background: #333333;
+      color: #ffffff;
+      clear: both;
+      margin: 0;
+      overflow: auto;
+      padding: 0 0.5em;
+    }
+    
+      #footer #footer-container {
+        margin: 0 auto;
+        padding: 0.5em 0;
+        width: 55em;
+      }
+      
+      #footer a, #footer a:visited, #footer a:active {
+        color: #336699;
+      }
+    
+      #footer a:hover {
+        color: #ffffff;
+      }
+    
+      #footer h4 {
+        border-bottom: 1px solid #ffffff;
+        color: #ffffff;
+        font-size: 1.2em;
+        margin-bottom: 0.75em;
+      }
+      
+      #footer #colophon {
+        margin-right: 39em;
+      }
+    
+      #footer #following {
+        float: right;
+        width: 35.5em;
+      }
+    
+        #footer #following ul {
+          list-style: none;
+          padding: 0;
+        }
+      
+          #footer #following ul li {
+            float: left;
+            margin: 0 0.5em 0.5em 0;
+          }
+
+
+    /* PREVIOUS-NEXT LINKS */  
+    #pagination a, #pagination a:visited, #pagination a:active {
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    #pagination #prev {
+      margin-right: 2em;
+    }
+
+    #pagination #next {
+      margin-left: 2em;
+    }
+
+
+    /* CONTENT */
+    #content {
+      margin-bottom: 4.5em;
+      margin-left: 18.5em;
+      min-width: 500px;
+    }
+
+    #content .date {
+      border-bottom: 1px solid #336699;
+      color: #336699;
+      display: block;
+      letter-spacing: .1em;
+      margin-bottom: 1.5em;
+      text-transform: uppercase;
+    }
+
+    #content h2 {
+      font-size: 1.4em;
+      line-height: 1.1em;
+      margin: .25em 0 .75em;
+    }
+
+    .post-footer {
+      color: #999999;
+      font-size: .8em;
+      text-align: right;
+    }
+
+		.post-footer .notes-link {
+			margin-left: 0.5em;
+			text-decoration: undelrine;
+		}
+		
+    .post-footer .permalink {
+      margin-left: 0.5em;
+    }
+    
+    .post-footer .reblog {
+      font-style: italic;
+      margin-left: 1em;
+    }
+    
+    .post-footer .tags {
+      display: block;
+    }
+
+    .regular, .quote, .link, .photo, .conversation, .video, .audio, .photoset-post {
+      margin: 0 0 4.5em;
+    }
+	
+	.regular img {
+		max-width: 100%;
+	}
+
+    .regular h4 {
+      font-size: 1.2em;
+      margin-bottom: .5em;
+      margin-top: 2.2em;
+    }
+
+    .quote big {
+      color: #336699;
+      font: bold 4em/0 Georgia, serif;
+      padding: 0 .1em;
+      vertical-align: -.45em;
+    }
+
+    .quote .words {
+      font: bold 1.1em Georgia, serif;
+      line-height: 1.5;
+    }
+
+    .quote .source {
+      display: block;
+      margin-top: .5em;
+      padding: 0;
+    }
+
+    .link .link-body, .quote .quote-body {
+      margin-bottom: 1.5em;
+    }
+
+    .conversation ul {
+      list-style: none;
+      padding: 0 1em;
+    }
+
+    .conversation ul li .person {
+      color: #336699;
+      font-weight: bold;
+      margin-right: 1em;
+    }
+
+  	/* NOTES */
+		#notes-container { margin-top: 3em; }
+  	ol.notes { display: block; margin: 0; padding: 0; }
+  	ol.notes li.note { margin: 0 0 10px 0; padding: 0 0 10px 0 }
+  	ol.notes img.avatar { display: none; }
+
+    .clear {
+    	clear: both;
+    }
+
+		#disqus_thread {
+			margin: 3em 0;
+		}
+    
+    
+&lt;!--[if lte IE 6]&gt;
+  &lt;style type="text/css"&gt;
+    #sidebar h1 a { height: 76px; }
+    #sidebar #other ul li { width: 98%; }
+    h4 { font-size: 1.1em; }
+
+    .quote big {
+      font: bold 4em/.7 Georgia, serif;
+      padding: 0 .1em;
+      vertical-align: -.45em;
+    }
+    
+    #content { width: 500px; }
+  &lt;/style&gt;
+&lt;![endif]--&gt;
+&lt;!-- BEGIN TUMBLR FACEBOOK OPENGRAPH TAGS --&gt;
+&lt;!-- If you'd like to specify your own Open Graph tags, define the og:url and og:title tags in your theme's HTML. --&gt;
+&lt;!-- Read more: http://ogp.me/ --&gt;
+&lt;!-- END TUMBLR FACEBOOK OPENGRAPH TAGS --&gt;
+&lt;!-- TWITTER TAGS --&gt;
+devbug
+About
+      My little development blog.
+      
+      
+      
+       &lt;!-- end about --&gt;
+&lt;!--
+          TWITTER BADGE
+          If you'd like a twitter badge, uncomment the following div,
+          and change &lt;username&gt;s to your twitter username
+      --&gt;
+&lt;!--
+      &lt;div id="twitter_div"&gt;
+        &lt;h4&gt;&lt;a href="http://twitter.com/&lt;username&gt;"&gt;Latest Tweet&lt;/a&gt;&lt;/h4&gt;
+        &lt;ul id="twitter_update_list"&gt;
+          &lt;script type="text/javascript" src="http://twitter.com/statuses/user_timeline/&lt;username&gt;.json?callback=twitterCallback2&amp;amp;count=1"&gt;&lt;/script&gt;&lt;/p&gt;
+      &lt;/div&gt;
+      --&gt;
+Like What You See?
+Get the RSS
+Browse the Archive
+Random post
+Mobile version
+ &lt;!-- end sidebar div --&gt;
+Sunday, December 2, 2012
+Why C++ is back.
+I love C++, too. It&amp;#8217;s an amazing tool.
+Six years ago I began my never-ending learning experience, programming. It started with an arcane toolkit called Jamagic (which was unfortunately discontinued). Jamagic&amp;#8217;s scripting language, JamagicScript is an amalgamation of C++, Java, and multimedia wrappers that allow for simple games and &amp;#8220;simulators&amp;#8221; to be developed without extensive knowledge of math or programming&amp;#8212;a perfect fit for an eager ten year-old. It wasn&amp;#8217;t, at least for me. I soon grew tired of Jamagic primarily due to the abstract nature of it; I wanted to program, not point and click (albeit with some scripting).
+This lead me to C, a succinct and pragmatic language&amp;#8212;a perfect fit for me. I quickly picked up the ropes (memory management, pointer arithmetic, etc.). I started hammering out code. I could keep track of my piggy bank, or determine prime numbers! I felt amazing, because I was creating. As I became more adjusted to the intricacies of the language I picked up C++. Over the next three years I learned about the Win32 API and the underlying structures that made Windows. I mastered C++, or so I thought.
+C++ is ever evolving (as is my knowledge of it1). The latest standard, C++11 definitely makes it easier to become proficient. Making it easier to learn might be a natural extension of that: smart pointers are an incredibly powerful abstraction that might help new programmers, lambdas make code more succinct thus more understandable, etc. With C++ becoming more accessible it is illogical to dissuade newcomers from learning C++, perhaps shameful:
+Knowledge. Learning a craft or skill is hard, C++ especially so. It requires perseverance and courage&amp;#8212;fundamental skills for success (especially as a founder) that a large portion of today&amp;#8217;s youth lack. Learning C++ also results in heaps domain specific knowledge. The same goes for functional languages.
+Hireability. As mentioned previously, extensive domain specific knowledge is acquired, and that knowledge is in heavy demand. Especially bit twiddling (which I assume pays better).
+Portability. C# and Java require virtual machines, that immediately limits portability to supported platforms. Abstractions leak: threading is a great example of this (Go is an honourable mention here; it handles concurrency elegantly). Furthermore, embedded systems require C or a relative like C++, or Obj-C.
+To summarize, more and more companies are relying on C and C++. Learning an in demand skill is a no-brainer, and with C++ becoming &amp;#8220;easier&amp;#8221; to learn we have produced a low-hanging fruit. Expect a resurgence.
+An example of the intricacies of C. ↩
+
+          Posted at 4:14 PM
+					
+					2 notes
+Permalink &amp;#8734;
+ &lt;!-- end post footer --&gt;
+Notes
+&lt;!-- START NOTES --&gt;
+evandrix reblogged this from devbug
+evandrix likes this
+devbug posted this
+&lt;!-- END NOTES --&gt;
+View the discussion thread
+ &lt;!-- end single post --&gt;
+ &lt;!-- end content div --&gt;
+ &lt;!-- end containing div --&gt;
+Tumbleroll
+Colophon
+This tumblelog is powered by Tumblr, and was designed by Bill Israel.
+ &lt;!-- end footer container --&gt;
+ &lt;!-- end footer --&gt;
+
+  //&lt;![CDATA[
+  (function() {
+      var links = document.getElementsByTagName('a');
+      var query = '?';
+      for(var i = 0; i &lt; links.length; i++) {
+      if(links[i].href.indexOf('#disqus_thread') &gt;= 0) {
+          query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&amp;';
+      }
+      }
+      document.write('&lt;script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/devbug-blog/get_num_replies.js' + query + '"&gt;&lt;/' + 'script&gt;');
+  })();
+  //]]&gt;
+&lt;!-- BEGIN TUMBLR CODE --&gt;
+&lt;!--[if IE]&gt;&lt;script type="text/javascript"&gt;document.getElementById('tumblr_controls').allowTransparency=true;&lt;/script&gt;&lt;![endif]--&gt;
+&lt;!-- END TUMBLR CODE --&gt;
+__qoptions = _qoptions={qacct:"p-19UtqE8ngoZbM"};
+  </p>
+</body>
+</html>

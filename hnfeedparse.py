@@ -22,7 +22,7 @@ def parse_article(article):
 
 def all_sections():
 	sections = []
-	for article in hn_articles()[:1]:
+	for article in hn_articles():
 		clean_article = parse_article(article)
 		if clean_article:
 			section = ez_epub.Section()

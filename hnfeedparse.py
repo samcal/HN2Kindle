@@ -6,7 +6,12 @@ import urllib
 import readability
 from datetime import date
 
-header_re = re.compile(r'h[1-6]')
+html_codes = {
+	'quot':"'",
+	'amp':'&',
+	'copy':'copyright',
+	'nbsp':' '
+}
 
 def hn_articles():
 	hn = feedparser.parse('http://news.ycombinator.com/rss')
@@ -14,9 +19,18 @@ def hn_articles():
 
 def parse_article(article):
 	html = urllib.urlopen(article['link']).read()
-	text = readability.Document(html).summary()
+	d = readability.Document(html)
+	if not d: return None
+	try:
+		text = d.summary()
+	except:
+		return None
 	text = re.sub(r'<[^>]+>', '', text)
 	text = re.sub(r'&#(\d+);', lambda m:unichr(int(m.group(1))), text)
+	def others(m):
+		if m.group(1) in html_codes: return html_codes[m.group(1)]
+		else: return m.group(0)
+	text = re.sub(r'&#(.+);', others, text)
 
 	return (article['title'], text)
 

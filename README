@@ -1,8 +1,0 @@
-HN2Kindle
-Takes the current Hacker News and formats it to the Kindle.
-
-Dependencies:
-- <a href='http://code.google.com/p/python-epub-builder/'>python-epub-builder</a>
-- feedparser
-- python-readability
-- callibre command line tools

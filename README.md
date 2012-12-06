@@ -2,7 +2,7 @@
 
 HN2Kindle is a conglomeration of resources that allow for the downloading of all articles in Hacker News and converting them to the MOBI format, which is compatible with the Kindle.
 
-The script takes ~6 min to run.
+The script takes ~6 minutes to run.
 
 ## Dependencies
 <ul>

@@ -20,8 +20,8 @@ then add the line:
 Dependencies
 ------------
 
-- <a href='http://code.google.com/p/python-epub-builder/'>python-epub-builder</a>
-- <a href='http://code.google.com/p/feedparser/'>feedparser</a>
-- <a href='http://lxml.de'>lxml</a>
-- <a href='http://genshi.edgewall.org/'>genshi</a>
-- <a href='http://calibre-ebook.com/'>Calibre</a> command line tools
+- [python epub builder](http://code.google.com/p/python-epub-builder/)
+- [feedparser](http://code.google.com/p/feedparser/)
+- [lxml](http://lxml.de)
+- [genshi](http://genshi.edgewall.org/)
+- [Calibre](http://calibre-ebook.com/) command line tools

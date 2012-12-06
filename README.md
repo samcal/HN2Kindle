@@ -9,4 +9,4 @@ The script takes ~6 minutes to run.
 - <a href='http://code.google.com/p/feedparser/'>feedparser</a>
 - <a href='http://lxml.de'>lxml</a>
 - <a href='http://genshi.edgewall.org/'>genshi</a>
-
+- <a href='http://calibre-ebook.com/'>Calibre</a> command line tools

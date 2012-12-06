@@ -5,9 +5,8 @@ HN2Kindle is a conglomeration of resources that allow for the downloading of all
 The script takes ~6 minutes to run.
 
 ## Dependencies
-<ul>
-<li><a href='http://code.google.com/p/python-epub-builder/'>python-epub-builder</a></li>
-<li><a href='http://code.google.com/p/feedparser/'>feedparser</a></li>
-<li><a href='http://lxml.de'>lxml</a></li>
-<li><a href='http://genshi.edgewall.org/'>genshi</a></li>
-</ul>
+- <a href='http://code.google.com/p/python-epub-builder/'>python-epub-builder</a>
+- <a href='http://code.google.com/p/feedparser/'>feedparser</a>
+- <a href='http://lxml.de'>lxml</a>
+- <a href='http://genshi.edgewall.org/'>genshi</a>
+

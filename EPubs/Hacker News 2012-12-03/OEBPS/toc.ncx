@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
   <head>
-    <meta name="dtb:uid" content="urn:uuid:e792a124-3dc1-11e2-a18e-0025bce5a8aa"/>
+    <meta name="dtb:uid" content="urn:uuid:6ec429ee-3dc5-11e2-ba59-0025bce5a8aa"/>
     <meta name="dtb:depth" content="1"/>
     <meta name="dtb:totalPageCount" content="0"/>
     <meta name="dtb:maxPageNumber" content="0"/>
@@ -13,6 +13,114 @@
     <navPoint id="navPoint-1" playOrder="1">
       <navLabel><text>Thinking of Selling on eBay using Paypal? Think Again</text></navLabel>
       <content src="s1.html"/>
+    </navPoint>
+    <navPoint id="navPoint-2" playOrder="2">
+      <navLabel><text>Apple - Think Twice</text></navLabel>
+      <content src="s2.html"/>
+    </navPoint>
+    <navPoint id="navPoint-3" playOrder="3">
+      <navLabel><text>Vice.com Reveals John McAfee's Location In iPhone Metadata</text></navLabel>
+      <content src="s3.html"/>
+    </navPoint>
+    <navPoint id="navPoint-4" playOrder="4">
+      <navLabel><text>Site44 turns Dropbox folders into websites</text></navLabel>
+      <content src="s4.html"/>
+    </navPoint>
+    <navPoint id="navPoint-5" playOrder="5">
+      <navLabel><text>Voyager 1 spots new region at the edge of the Solar System</text></navLabel>
+      <content src="s5.html"/>
+    </navPoint>
+    <navPoint id="navPoint-6" playOrder="6">
+      <navLabel><text>Show HN: 2u.fm is a social music discovery site, my side project for over a year</text></navLabel>
+      <content src="s6.html"/>
+    </navPoint>
+    <navPoint id="navPoint-7" playOrder="7">
+      <navLabel><text>Command &amp; Conquer in HTML5 with multiplayer</text></navLabel>
+      <content src="s7.html"/>
+    </navPoint>
+    <navPoint id="navPoint-8" playOrder="8">
+      <navLabel><text>Microsoft Is Disappearing Before Our Very Eyes</text></navLabel>
+      <content src="s8.html"/>
+    </navPoint>
+    <navPoint id="navPoint-9" playOrder="9">
+      <navLabel><text>Shimming your way to Linux on Windows 8 PCs</text></navLabel>
+      <content src="s9.html"/>
+    </navPoint>
+    <navPoint id="navPoint-10" playOrder="10">
+      <navLabel><text>Quartz on Jolla</text></navLabel>
+      <content src="s10.html"/>
+    </navPoint>
+    <navPoint id="navPoint-11" playOrder="11">
+      <navLabel><text>Steam releases Big Picture mode</text></navLabel>
+      <content src="s11.html"/>
+    </navPoint>
+    <navPoint id="navPoint-12" playOrder="12">
+      <navLabel><text>Masonry, infinite scrolling and Django</text></navLabel>
+      <content src="s12.html"/>
+    </navPoint>
+    <navPoint id="navPoint-13" playOrder="13">
+      <navLabel><text>Shell Gamification (how I learn to use my shell aliases)</text></navLabel>
+      <content src="s13.html"/>
+    </navPoint>
+    <navPoint id="navPoint-14" playOrder="14">
+      <navLabel><text>Movie Studios Ask Google To Censor Their Own Films, Facebook and Wikipedia</text></navLabel>
+      <content src="s14.html"/>
+    </navPoint>
+    <navPoint id="navPoint-15" playOrder="15">
+      <navLabel><text>Tidying up after Pull Requests</text></navLabel>
+      <content src="s15.html"/>
+    </navPoint>
+    <navPoint id="navPoint-16" playOrder="16">
+      <navLabel><text>Explorations in Unix</text></navLabel>
+      <content src="s16.html"/>
+    </navPoint>
+    <navPoint id="navPoint-17" playOrder="17">
+      <navLabel><text>Show HN: PinPigeon for Pinterest - Send pins as postcards</text></navLabel>
+      <content src="s17.html"/>
+    </navPoint>
+    <navPoint id="navPoint-18" playOrder="18">
+      <navLabel><text>PyCon US 2013 Accepted Talks</text></navLabel>
+      <content src="s18.html"/>
+    </navPoint>
+    <navPoint id="navPoint-19" playOrder="19">
+      <navLabel><text>How we used Twitter ads to generate word-of-mouth hype</text></navLabel>
+      <content src="s19.html"/>
+    </navPoint>
+    <navPoint id="navPoint-20" playOrder="20">
+      <navLabel><text>Don't read TechCrunch</text></navLabel>
+      <content src="s20.html"/>
+    </navPoint>
+    <navPoint id="navPoint-21" playOrder="21">
+      <navLabel><text>Notch trying jsFiddle</text></navLabel>
+      <content src="s21.html"/>
+    </navPoint>
+    <navPoint id="navPoint-22" playOrder="22">
+      <navLabel><text>How I made money with TeeSpring</text></navLabel>
+      <content src="s22.html"/>
+    </navPoint>
+    <navPoint id="navPoint-23" playOrder="23">
+      <navLabel><text>Show HN: Introducing the Pack Store. The App Store for hardware.</text></navLabel>
+      <content src="s23.html"/>
+    </navPoint>
+    <navPoint id="navPoint-24" playOrder="24">
+      <navLabel><text>Airbnb Tech Talk: Ilya Grigorik - HTTP 2.0 for Fun and Profit</text></navLabel>
+      <content src="s24.html"/>
+    </navPoint>
+    <navPoint id="navPoint-25" playOrder="25">
+      <navLabel><text>Feudal Security</text></navLabel>
+      <content src="s25.html"/>
+    </navPoint>
+    <navPoint id="navPoint-26" playOrder="26">
+      <navLabel><text>Touché</text></navLabel>
+      <content src="s26.html"/>
+    </navPoint>
+    <navPoint id="navPoint-27" playOrder="27">
+      <navLabel><text>Aisle50 (YCS11) seeks non-hacker customer service guru - Chicago</text></navLabel>
+      <content src="s27.html"/>
+    </navPoint>
+    <navPoint id="navPoint-28" playOrder="28">
+      <navLabel><text>Three fundamental tricks for developers writing distributed systems</text></navLabel>
+      <content src="s28.html"/>
     </navPoint>
   </navMap>
 </ncx>

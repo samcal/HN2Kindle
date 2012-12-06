@@ -30,7 +30,7 @@ def parse_article(article):
 	def others(m):
 		if m.group(1) in html_codes: return html_codes[m.group(1)]
 		else: return m.group(0)
-	text = re.sub(r'&#(.+);', others, text)
+	text = re.sub(r'&(.+);', others, text)
 
 	return (article['title'], text)
 

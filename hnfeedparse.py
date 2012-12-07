@@ -6,10 +6,12 @@ import readability
 from datetime import date
 
 html_codes = {
-	'quot':"'",
+	'quot':'"',
 	'amp':'&',
 	'copy':'copyright',
-	'nbsp':' '
+	'nbsp':' ',
+	'lt':'<',
+	'gt':'>',
 }
 
 def hn_articles():
